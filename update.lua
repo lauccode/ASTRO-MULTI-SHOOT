@@ -2,17 +2,16 @@ require("utils")
 
 local TIMER_LIMIT = 60                   -- tempo key push
 local KEY_TIMER_LIMIT = 10               -- tempo key push
-local SHOOT_TIMER_LIMIT = 20             --
-local SHOOT_MACHINE_GUN_TIMER_LIMIT = 10 -- shot speed
-local SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 5
 local updateTimer = 0
+local floorUpdateTimer = 0
 local weaponCycleLateral = 0
 local weaponCycleBigger = 0
 local weaponCycleQuicker = 0
 
 function timerUpdate(dt)
-    updateTimer = updateTimer + 1
-    if (updateTimer > TIMER_LIMIT) then updateTimer = 0 end
+    updateTimer = updateTimer + (1+dt)
+    floorUpdateTimer = math.floor(updateTimer)
+    if (floorUpdateTimer > TIMER_LIMIT) then updateTimer = 0 end
 end
 
 function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
@@ -26,12 +25,12 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
 
     -- MENU KEYBOARD UPDATE
     if love.keyboard.isDown("up") then
-        if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+        if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
             menu.positionMenu = menu.positionMenu - 1
         end
     end
     if love.keyboard.isDown("down") then
-        if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+        if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
             menu.positionMenu = menu.positionMenu + 1
         end
     end
@@ -43,7 +42,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
             menu.selectionMenu = menu.menuValues[menu.TUTO]
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TOGGLE_DEBUG]) then
-            if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+            if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                 if (toggleDebug == true) then
                     toggleDebug = false
                 else
@@ -97,7 +96,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
 
         if (toggleDebug == true) then
             if love.keyboard.isDown("d") then
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if DEBUG_MODE == true then
                         DEBUG_MODE = false
                     elseif DEBUG_MODE == false then
@@ -107,7 +106,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("w") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleLateral == 0) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleLateral == 1) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_LATERAL end
                     if (weaponCycleLateral == 2) then vaisseaux[1].missilePackLateral = vaisseaux[1]
@@ -118,7 +117,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("x") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleBigger == 0) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleBigger == 1) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_BIGGER end
                     if (weaponCycleBigger == 2) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_MUCH_BIGGER end
@@ -128,7 +127,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("c") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleQuicker == 0) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_QUICKER end
                     if (weaponCycleQuicker == 2) then vaisseaux[1].missilePackQuicker = vaisseaux[1]
@@ -139,7 +138,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("v") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleQuicker == 0) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_LASER_SIGHT end
                     weaponCycleQuicker = weaponCycleQuicker + 1
@@ -148,7 +147,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("b") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleQuicker == 0) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_SINUS end
                     weaponCycleQuicker = weaponCycleQuicker + 1
@@ -157,7 +156,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
 
             if love.keyboard.isDown("n") then 
-                if (updateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
+                if (floorUpdateTimer % KEY_TIMER_LIMIT + 1 == KEY_TIMER_LIMIT) then
                     if (weaponCycleQuicker == 0) then vaisseaux[1].shield = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then
                         -- vaisseaux[1].shield = vaisseaux[1].SHIELD
@@ -170,18 +169,18 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         end
 
         -- Manage timer of shoot
-        local shoot_timer_limit_to_use = SHOOT_TIMER_LIMIT
+        local shoot_timer_limit_to_use = vaisseaux[1].SHOOT_TIMER_LIMIT
         if (vaisseaux[1].missilePackQuicker == vaisseaux[1].MSL_PKG_QUICKER) then
-            shoot_timer_limit_to_use = SHOOT_MACHINE_GUN_TIMER_LIMIT
+            shoot_timer_limit_to_use = vaisseaux[1].SHOOT_MACHINE_GUN_TIMER_LIMIT
         elseif (vaisseaux[1].missilePackQuicker == vaisseaux[1].MSL_PKG_MUCH_QUICKER) then
-            shoot_timer_limit_to_use = SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT
+            shoot_timer_limit_to_use = vaisseaux[1].SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT
         end
 
         local missileType = { vaisseaux[1].MSL_PKG_STD, vaisseaux[1].missilePackBigger, vaisseaux[1].missilePackQuicker,
             vaisseaux[1].missileSinus }
 
         if love.keyboard.isDown("space") then
-            if (updateTimer % shoot_timer_limit_to_use + 1 == shoot_timer_limit_to_use) then
+            if (floorUpdateTimer % shoot_timer_limit_to_use + 1 == shoot_timer_limit_to_use) then
                 if (vaisseaux[1].missilePackLateral == vaisseaux[1].MSL_PKG_STD) then
                     love.audio.stop(shootSound)
                     local missile = vaisseaux[1].shoot(missileType)
