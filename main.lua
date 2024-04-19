@@ -103,7 +103,10 @@ end
 
 
 function love.update(dt) -- 60 fps by defaut
-    timerUpdate()
+
+    local fps = 60
+    dt = dt * fps
+    timerUpdate(dt)
 
     if (menu.selectionMenu == menu.MENU) then
         DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
@@ -124,11 +127,11 @@ function love.update(dt) -- 60 fps by defaut
             asteroids = level.levelManager(vaisseaux, asteroids)
             level.levelDone = true
         end
-        DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug)
+        DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
 
         asteroidsUpdate(dt, asteroids)
         missilesUpdate(dt, missiles)
-        particlesUpdate(dt, particles)
+        particlesUpdate(dt/fps, particles)
 
         -----------------------------------------
         -- COLLISSION MANAGER (FACTORIZED) --
@@ -156,7 +159,7 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.PRESENT_STAGE) then
-        particlesTransitionStage:update(dt)
+        particlesTransitionStage:update(dt/fps)
         if love.keyboard.isDown("s") then
             menu.isPresentStageDone = true
             menu.selectionMenu = menu.menuValues[menu.START]

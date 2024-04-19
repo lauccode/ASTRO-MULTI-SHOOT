@@ -57,7 +57,7 @@ GameObject.new = function()
             sign = -1
             self.rotateRightorLeft = "left"
         end
-        self.angle = (self.angle + (self.maneuverability * sign) / 10) % (2 * math.pi)
+        self.angle = (self.angle + (self.maneuverability * sign *dt) / 10) % (2 * math.pi)
         if (previousAngle == self.angle) then
             self.rotateRightorLeft = "neutral"
         end
@@ -65,8 +65,8 @@ GameObject.new = function()
     end
 
     function self.move(dt)
-        self.X_pos = (self.X_pos + self.speedX)
-        self.Y_pos = (self.Y_pos + self.speedY)
+        self.X_pos = self.X_pos + self.speedX * dt
+        self.Y_pos = self.Y_pos + self.speedY * dt
 
         -- no collision, this is movement
         if ((self.X_pos > SCREEN_WIDTH and self.speedX > 0) or (self.speedX < 0 and self.X_pos < 0)) then
@@ -634,11 +634,11 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
             current_distance = amplitude * math.sin(self.timeInMilliSecond * frequency + phase);
             self.X_pos = self.X_pos + (math.cos(beta) * current_distance)
             self.Y_pos = self.Y_pos + (math.sin(beta) * current_distance)
-            self.X_pos = (self.X_pos + self.speedX)
-            self.Y_pos = (self.Y_pos + self.speedY)
+            self.X_pos = (self.X_pos + self.speedX * dt)
+            self.Y_pos = (self.Y_pos + self.speedY * dt)
         else
-            self.X_pos = (self.X_pos + self.speedX)
-            self.Y_pos = (self.Y_pos + self.speedY)
+            self.X_pos = (self.X_pos + self.speedX * dt)
+            self.Y_pos = (self.Y_pos + self.speedY * dt)
         end
     end
 

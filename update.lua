@@ -10,7 +10,7 @@ local weaponCycleLateral = 0
 local weaponCycleBigger = 0
 local weaponCycleQuicker = 0
 
-function timerUpdate()
+function timerUpdate(dt)
     updateTimer = updateTimer + 1
     if (updateTimer > TIMER_LIMIT) then updateTimer = 0 end
 end
@@ -64,7 +64,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
     return DEBUG_MODE, toggleDebug
 end
 
-function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug)
+function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
     if love.keyboard.isDown("r") then -- restart game
         love.audio.stop(gameSound)
         menu.selectionMenu = menu.MENU
@@ -227,7 +227,8 @@ end
 function asteroidsUpdate(dt, asteroids)
     for asteroids_it = 1, #asteroids do
         asteroids[asteroids_it].move(dt)
-        asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, asteroids[asteroids_it].MANEUVERABILITY, dt)
+        -- asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, asteroids[asteroids_it].MANEUVERABILITY, dt)
+        asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, dt)
     end
 end
 
