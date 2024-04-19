@@ -1,6 +1,6 @@
 require("utils")
 
-local TIMER_LIMIT = 60                   -- tempo key push
+-- local TIMER_LIMIT = 60                   -- tempo key push
 local KEY_TIMER_LIMIT = 10               -- tempo key push
 local updateTimer = 0
 local floorUpdateTimer = 0
@@ -11,7 +11,7 @@ local weaponCycleQuicker = 0
 function timerUpdate(dt)
     updateTimer = updateTimer + (1+dt)
     floorUpdateTimer = math.floor(updateTimer)
-    if (floorUpdateTimer > TIMER_LIMIT) then updateTimer = 0 end
+    -- if (floorUpdateTimer > TIMER_LIMIT) then updateTimer = 0 end
 end
 
 function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
