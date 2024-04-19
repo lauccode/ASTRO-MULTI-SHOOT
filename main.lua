@@ -104,9 +104,9 @@ end
 
 function love.update(dt) -- 60 fps by defaut
 
+    timerUpdate(dt)
     local fps = 60
     dt = dt * fps
-    timerUpdate(dt)
 
     if (menu.selectionMenu == menu.MENU) then
         DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
