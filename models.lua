@@ -201,9 +201,9 @@ Vaisseau.new = function(level)
     local nameMissilePack = { "DISABLED", "LATERAL", "TRIPLE", "BIGGER", "MUCH BIGGER", "MACHINE GUN",
         "SUPER MACHINE GUN", "LASER_SIGHT", "SHIELD", "MSL_SINUS" }
 
-	self.SHOOT_TIMER_LIMIT = 20             --
-	self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 10 -- shot speed
-	self.SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 5
+	self.SHOOT_TIMER_LIMIT = 30             --
+	self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20 -- shot speed
+	self.SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 10
 
     local widthImage = 0
     local heightImage = 0

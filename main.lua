@@ -104,7 +104,7 @@ end
 
 function love.update(dt) -- 60 fps by defaut
 
-    timerUpdate(dt)
+    timerUpdate(dt, vaisseaux)
     local fps = 60
     dt = dt * fps
 
