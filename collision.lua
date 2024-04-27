@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(level, objects, objects2)
+function collisionManager(dt, level, objects, objects2)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -58,10 +58,10 @@ function collisionManager(level, objects, objects2)
                 local speedX_Object2 = objects[objects_to_manage[objects_moved_it]].speedX
                 local speedY_Object2 = objects[objects_to_manage[objects_moved_it]].speedY
 
-                local X_posObject1 = (objects[objects_to_manage[objects_moved_it]].X_pos + speedX_Object1)
-                local Y_posObject1 = (objects[objects_to_manage[objects_moved_it]].Y_pos + speedY_Object1)
-                local X_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].X_pos + speedX_Object2)
-                local Y_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].Y_pos + speedY_Object2)
+                local X_posObject1 = (objects[objects_to_manage[objects_moved_it]].X_pos + speedX_Object1*dt)
+                local Y_posObject1 = (objects[objects_to_manage[objects_moved_it]].Y_pos + speedY_Object1*dt)
+                local X_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].X_pos + speedX_Object2*dt)
+                local Y_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].Y_pos + speedY_Object2*dt)
                 local dx = X_posObject2 - X_posObject1
                 local dy = Y_posObject2 - Y_posObject1
                 local newDist = math.sqrt(dx * dx + dy * dy)

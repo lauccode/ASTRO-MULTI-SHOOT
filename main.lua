@@ -134,9 +134,9 @@ function love.update(dt) -- 60 fps by defaut
         -----------------------------------------
         -- COLLISSION MANAGER (FACTORIZED) --
         -----------------------------------------
-        collisionManager(level, asteroids, asteroids)
-        collisionManager(level, missiles, asteroids)
-        local gameOver = collisionManager(level, vaisseaux, asteroids)
+        collisionManager(dt, level, asteroids, asteroids)
+        collisionManager(dt, level, missiles, asteroids)
+        local gameOver = collisionManager(dt, level, vaisseaux, asteroids)
         if (gameOver) then
             menu.selectionMenu = menu.GAMEOVER
             love.audio.stop(gameSound)
