@@ -128,7 +128,7 @@ function love.update(dt) -- 60 fps by defaut
         DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
 
         asteroidsUpdate(dt, asteroids)
-        missilesUpdate(dt, missiles)
+        missilesUpdate(dt, vaisseaux, missiles)
         particlesUpdate(dt, particles)
 
         -----------------------------------------

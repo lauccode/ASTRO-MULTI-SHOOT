@@ -110,9 +110,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             vaisseaux[1].rotateRightorLeft = "neutral"
         end
         if love.keyboard.isDown("up") then
-            vaisseaux[1].accelerate(dt, 3, 0.1)
+            vaisseaux[1].accelerate(dt,vaisseaux[1].acceleration, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("down") then
-            vaisseaux[1].accelerateBack(dt, 3, 0.1)
+            vaisseaux[1].accelerateBack(dt,vaisseaux[1].acceleration, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("s") then
             vaisseaux[1].accelerateBack(dt, 0, 0.1)
             vaisseaux[1].accelerateFWorWW = "neutral"
@@ -257,9 +257,9 @@ function asteroidsUpdate(dt, asteroids)
     end
 end
 
-function missilesUpdate(dt, missiles)
+function missilesUpdate(dt, vaisseaux, missiles)
     for missiles_it = 1, #missiles do
-        missiles[missiles_it].accelerate(dt, 5, 1)
+        missiles[missiles_it].accelerate(dt, vaisseaux[1].missileAcceleration, vaisseaux[1].missileAccelerationMax)
         missiles[missiles_it].move(dt)
     end
 end

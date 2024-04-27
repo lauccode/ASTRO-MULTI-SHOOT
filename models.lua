@@ -13,8 +13,8 @@ GameObject.new = function()
     self.accelerateFWorWW = "neutral"
     self.rotateRightorLeft = "neutral"
 
-    self.maxSpeedX = 0
-    self.maxSpeedY = 0
+    self.accelerationX = 0
+    self.accelerationY = 0
 
     self.imageRadius = 0
 
@@ -64,9 +64,9 @@ GameObject.new = function()
         previousAngle = self.angle
     end
 
-    function self.move()
-        self.X_pos = self.X_pos + self.speedX 
-        self.Y_pos = self.Y_pos + self.speedY 
+    function self.move(dt)
+        self.X_pos = self.X_pos + self.speedX*dt
+        self.Y_pos = self.Y_pos + self.speedY*dt
 
         -- no collision, this is movement
         if ((self.X_pos > SCREEN_WIDTH and self.speedX > 0) or (self.speedX < 0 and self.X_pos < 0)) then
@@ -81,9 +81,9 @@ GameObject.new = function()
         self.speedY = 0
     end
 
-    function self.accelerateBack(dt, maxSpeed, accelerationMax)
+    function self.accelerateBack(dt, acceleration, accelerationMax)
         local goBack = true
-        self.accelerate(dt, maxSpeed, accelerationMax, goBack)
+        self.accelerate(dt, acceleration, accelerationMax, goBack)
     end
 
     function self.collisionWith(Object, startLevel)
@@ -107,7 +107,7 @@ GameObject.new = function()
         return dist
     end
 
-    function self.accelerate(dt, maxSpeed, accelerationMax, goBack)
+    function self.accelerate(dt, acceleration, accelerationMax, goBack)
         goBack = goBack or false
 
         if (goBack) then
@@ -125,21 +125,21 @@ GameObject.new = function()
             local cosinus = self.speedX / math.sqrt(math.pow(self.speedX, 2) + math.pow(self.speedY, 2))
             local sinus = self.speedY / math.sqrt(math.pow(self.speedX, 2) + math.pow(self.speedY, 2))
 
-            self.maxSpeedX = cosinus * maxSpeed
-            self.maxSpeedY = sinus * maxSpeed
-            self.absMaxSpeedX = math.abs(self.maxSpeedX)
-            self.absMaxSpeedY = math.abs(self.maxSpeedY)
+            self.accelerationX = cosinus * acceleration
+            self.accelerationY = sinus * acceleration
+            self.absMaxSpeedX = math.abs(self.accelerationX)
+            self.absMaxSpeedY = math.abs(self.accelerationY)
         end
 
         if ((self.speedX ~= 0) and (self.speedY ~= 0)) then
             -- fully needed to avoid "diagonal effect"
             if (math.abs(self.speedX) >= self.absMaxSpeedX) then
                 -- self.speedX = clamp(-self.absMaxSpeedX, self.speedX, self.absMaxSpeedX)
-                self.speedX = self.maxSpeedX
+                self.speedX = self.accelerationX
             end
             if (math.abs(self.speedY) >= self.absMaxSpeedY) then
                 -- self.speedY = clamp(-self.absMaxSpeedY, self.speedY, self.absMaxSpeedY)
-                self.speedY = self.maxSpeedY
+                self.speedY = self.accelerationY
             end
         end
     end
@@ -153,16 +153,16 @@ GameObject.new = function()
             'Y: ' .. string.format("%5.1f", self.Y_pos),
             'SpeedX: ' .. string.format("%5.1f", self.speedX),
             'SpeedY: ' .. string.format("%5.1f", self.speedY),
-            'MAXSpeedX: ' .. string.format("%5.1f", self.maxSpeedX),
-            'MAXSpeedY: ' .. string.format("%5.1f", self.maxSpeedY),
+            'MAXSpeedX: ' .. string.format("%5.1f", self.accelerationX),
+            'MAXSpeedY: ' .. string.format("%5.1f", self.accelerationY),
         }, '\n'), printX, printY)
     end
 
     function self.graphic_infos()
         local factor = 20
         love.graphics.setColor(255, 0, 0)
-        love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.maxSpeedX * factor),
-            self.Y_pos + (self.maxSpeedY * factor))
+        love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.accelerationX * factor),
+            self.Y_pos + (self.accelerationY * factor))
         love.graphics.setColor(0, 255, 0)
         love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.speedX * factor),
             self.Y_pos + (self.speedY * factor))
@@ -243,6 +243,11 @@ Vaisseau.new = function(level)
     self.imageRatioRef = 0.35
 
     self.toggleShootLeftRight = false
+
+	self.acceleration = 180
+	self.accelerationMax = 6
+	self.missileAcceleration = 5*60
+	self.missileAccelerationMax = 60
 
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
@@ -545,6 +550,8 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
 
     type_missile = type_missile or self.STD
 
+	-- self.accelerate = 300
+
     local LATERAL_TAB = 1
     local BIGGER_TAB = 2
     local QUICKER_TAB = 3
@@ -638,11 +645,11 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
             current_distance = amplitude * math.sin(self.timeInMilliSecond * frequency + phase);
             self.X_pos = self.X_pos + (math.cos(beta) * current_distance)
             self.Y_pos = self.Y_pos + (math.sin(beta) * current_distance)
-            self.X_pos = (self.X_pos + self.speedX )
-            self.Y_pos = (self.Y_pos + self.speedY )
+            self.X_pos = (self.X_pos + self.speedX*dt)
+            self.Y_pos = (self.Y_pos + self.speedY*dt)
         else
-            self.X_pos = (self.X_pos + self.speedX )
-            self.Y_pos = (self.Y_pos + self.speedY )
+            self.X_pos = (self.X_pos + self.speedX*dt)
+            self.Y_pos = (self.Y_pos + self.speedY*dt)
         end
     end
 
@@ -706,12 +713,12 @@ Asteroid.new = function()
     end
 
     self.CLOCKWISE = randomBool()
-    self.maneuverability = 0.3 * love.math.random()
+    self.maneuverability = 1 * love.math.random()
 
     self.X_pos = SCREEN_WIDTH * love.math.random()
     self.Y_pos = SCREEN_HIGH * love.math.random()
     self.angle = 2 * math.pi * love.math.random()
-    local MAX_SPEED = 5 * love.math.random()
+    local MAX_SPEED = 300 * love.math.random()
     self.speedX = MAX_SPEED * randomSign() * love.math.random()
     self.speedY = MAX_SPEED * randomSign() * love.math.random()
     return self
