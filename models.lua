@@ -153,8 +153,8 @@ GameObject.new = function()
             'Y: ' .. string.format("%5.1f", self.Y_pos),
             'SpeedX: ' .. string.format("%5.1f", self.speedX),
             'SpeedY: ' .. string.format("%5.1f", self.speedY),
-            'MAXSpeedX: ' .. string.format("%5.1f", self.accelerationX),
-            'MAXSpeedY: ' .. string.format("%5.1f", self.accelerationY),
+            'AccelerationX: ' .. string.format("%5.1f", self.accelerationX),
+            'AccelerationY: ' .. string.format("%5.1f", self.accelerationY),
         }, '\n'), printX, printY)
     end
 
