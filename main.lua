@@ -181,6 +181,7 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.menuValues[menu.CREDITS]) then
+        menu.updateResetOffsetPrintCreditsStart(dt/fps)
         if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
             menu.selectionMenu = menu.MENU -- come back to menu
             love.audio.stop(creditsSound)

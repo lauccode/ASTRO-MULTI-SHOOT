@@ -170,8 +170,8 @@ Menu.new = function()
             SCREEN_HIGH / 2 + offsetPrint)
     end
 
-    local function updateResetOffsetPrintCreditsStart()
-        offsetPrintCreditsStart = offsetPrintCreditsStart - 1
+    function self.updateResetOffsetPrintCreditsStart(dt)
+        offsetPrintCreditsStart = offsetPrintCreditsStart - (0.5+dt)
         if (offsetPrintCreditsEnd < -(SCREEN_HIGH)) then
             offsetPrintCreditsStart = 0
         end
@@ -191,7 +191,6 @@ Menu.new = function()
 
     function self.creditsDraw()
         offsetPrintCredits = offsetPrintCreditsStart
-        updateResetOffsetPrintCreditsStart()
 
         printNextCredit("********************************* CREDITS ***********************************", true)
         printNextCredit("******************************  (q) or (esc) to quit ************************", true)
