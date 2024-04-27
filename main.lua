@@ -105,8 +105,6 @@ end
 function love.update(dt) -- 60 fps by defaut
 
     timerUpdate(dt, vaisseaux)
-    local fps = 60
-    dt = dt * fps
 
     if (menu.selectionMenu == menu.MENU) then
         DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
@@ -131,7 +129,7 @@ function love.update(dt) -- 60 fps by defaut
 
         asteroidsUpdate(dt, asteroids)
         missilesUpdate(dt, missiles)
-        particlesUpdate(dt/fps, particles)
+        particlesUpdate(dt, particles)
 
         -----------------------------------------
         -- COLLISSION MANAGER (FACTORIZED) --
@@ -159,7 +157,7 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.PRESENT_STAGE) then
-        particlesTransitionStage:update(dt/fps)
+        particlesTransitionStage:update(dt)
         if love.keyboard.isDown("s") then
             menu.isPresentStageDone = true
             menu.selectionMenu = menu.menuValues[menu.START]
@@ -181,7 +179,7 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.menuValues[menu.CREDITS]) then
-        menu.updateResetOffsetPrintCreditsStart(dt/fps)
+        menu.updateResetOffsetPrintCreditsStart(dt)
         if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
             menu.selectionMenu = menu.MENU -- come back to menu
             love.audio.stop(creditsSound)
