@@ -102,7 +102,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
 
     -- shield update
     if (vaisseaux[1].timeShieldStart < vaisseaux[1].TIME_SHIELD_START_MAX) then
-        vaisseaux[1].timeShieldStart = vaisseaux[1].timeShieldStart + (60*dt) -- count time from start of level
+        vaisseaux[1].updatePrintWarningStartLevel(dt)
     end
         
     -- VAISSEAU KEYBOARD UPDATE

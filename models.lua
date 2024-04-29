@@ -207,7 +207,7 @@ Vaisseau.new = function(level)
 
     local widthImage = 0
     local heightImage = 0
-    local colorValueIncrease = 0
+    -- local colorValueIncrease = 0
     local PROPULSOR_LOW_LEFT = 1
     local PROPULSOR_LOW_RIGHT = 2
     local PROPULSOR_HIGHT_LEFT = 3
@@ -249,6 +249,8 @@ Vaisseau.new = function(level)
 	self.missileAcceleration = 5*60
 	self.missileAccelerationMax = 60
 
+	self.colorValueIncrease = 0
+
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
             love.graphics.circle("line", self.X_pos, self.Y_pos,
@@ -256,9 +258,13 @@ Vaisseau.new = function(level)
         end
     end
 
+    function self.updatePrintWarningStartLevel(dt)
+        self.timeShieldStart = self.timeShieldStart + (60*dt) -- count time from start of level
+        self.colorValueIncrease = self.colorValueIncrease + (5*60*dt)
+    end
+    
     local function printWarningStartLevel()
-        colorValueIncrease = colorValueIncrease + 5
-        if (colorValueIncrease > 255) then colorValueIncrease = 0 end
+        if (self.colorValueIncrease > 255) then self.colorValueIncrease = 0 end
         local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18)
         love.graphics.setFont(font)
         love.graphics.setColor(255, 255, 0)         --yellow
@@ -266,7 +272,7 @@ Vaisseau.new = function(level)
             tostring(string.format("%d", (self.TIME_SHIELD_START_MAX / 60 - self.timeShieldStart / 60))),
             self.X_pos - widthImage, self.Y_pos - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
         love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.setColor(love.math.colorFromBytes(colorValueIncrease, 0, 0))
+        love.graphics.setColor(love.math.colorFromBytes(self.colorValueIncrease, 0, 0))
         shieldCircle(3)
         love.graphics.setColor(255, 255, 255, 255)
     end
