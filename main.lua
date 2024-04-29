@@ -117,7 +117,7 @@ function love.update(dt) -- 60 fps by defaut
         end
 
         -- level manager
-        vaisseaux[1].timeShieldStart = vaisseaux[1].timeShieldStart + 1 -- count time from start of level
+        vaisseaux[1].timeShieldStart = vaisseaux[1].timeShieldStart + (60*dt) -- count time from start of level
         if (level.levelDone == false) then
             if (level.levelNumber > 1) then
                 love.load() -- reset all before new level
