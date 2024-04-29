@@ -159,7 +159,7 @@ GameObject.new = function()
     end
 
     function self.graphic_infos()
-        local factor = 20
+        local factor = 20 / 60
         love.graphics.setColor(255, 0, 0)
         love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.accelerationX * factor),
             self.Y_pos + (self.accelerationY * factor))
