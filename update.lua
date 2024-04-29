@@ -17,7 +17,7 @@ local shootMachineGunTimerCounter = 0
 local shootMuchMachineGunTimerCounter = 0
 
 function timerPulse(dt, updateTimerCounterSpecific, timerLimit)
-    updateTimerCounterSpecific = updateTimerCounterSpecific + (1+dt)
+    updateTimerCounterSpecific = updateTimerCounterSpecific + (60*dt)
     if (updateTimerCounterSpecific > timerLimit) then
         return 0 , true
     else
