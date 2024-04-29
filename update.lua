@@ -100,6 +100,11 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         love.update()
     end
 
+    -- shield update
+    if (vaisseaux[1].timeShieldStart < vaisseaux[1].TIME_SHIELD_START_MAX) then
+        vaisseaux[1].timeShieldStart = vaisseaux[1].timeShieldStart + (60*dt) -- count time from start of level
+    end
+        
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
         if love.keyboard.isDown("right") then
