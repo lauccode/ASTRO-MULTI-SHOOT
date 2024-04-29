@@ -47,6 +47,10 @@ Menu.new = function()
         love.graphics.draw(particlesTransitionStage, SCREEN_WIDTH * 0.5, SCREEN_HIGH * 0.5)
     end
 
+    function self.updatePresentStage(dt)
+        self.timerPresentStage   = self.timerPresentStage + (dt*60)
+	end
+    
     function self.presentStage(levelNumberForMenu, particlesTransitionStage)
         local X_text_position    = 1
         local timeMove           = 120 -- 2 sec
@@ -56,9 +60,8 @@ Menu.new = function()
         local textStartS2        = textArrivedS1
         local textArrivedS2      = 0
         local textDistanceMoveS2 = 4 * ((SCREEN_WIDTH) / 4)
-        self.timerPresentStage   = self.timerPresentStage + 1
 
-        particlesTransitionStage = drawParticlesTS(particlesTransitionStage)
+        -- particlesTransitionStage = drawParticlesTS(particlesTransitionStage)
 
         love.graphics.setColor(255, 0, 0) -- red
         if (self.timerPresentStage < timeMove) then

@@ -157,7 +157,8 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.PRESENT_STAGE) then
-        particlesTransitionStage:update(dt)
+		menu.updatePresentStage(dt)
+		particlesTransitionStage:update(dt)
         if love.keyboard.isDown("s") then
             menu.isPresentStageDone = true
             menu.selectionMenu = menu.menuValues[menu.START]
