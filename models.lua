@@ -266,6 +266,8 @@ Vaisseau.new = function(level)
     local propulsorX_HIGHT_RIGHT = 0
     local propulsorY_HIGHT_RIGHT = 0
     local propulsorIncreasePower_HIGHT_RIGHT = 0
+    local angle_LOW = 0
+    local angle_HIGHT = 0
 
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
@@ -304,7 +306,7 @@ Vaisseau.new = function(level)
         return propulsorIncreasePowerTab[PropulsorWithV]
     end
 
-   local function  updateParticles(active, particles, propulsorX, propulsorY, propulsorIncreasePower)
+   local function  updateParticles(active, particles, propulsorX, propulsorY, propulsorIncreasePower, angle)
         if (active == true) then
             -- love.graphics.draw(PropulsorPng, propulsorX, propulsorY, angle,
             --     self.imageRatio * ((love.math.random() * 5 + 5) / 10),
@@ -316,7 +318,7 @@ Vaisseau.new = function(level)
             particles[particle_number]:start()
             particles[particle_number]:setEmissionRate(2 * propulsorIncreasePower / 1) -- 150
             particles[particle_number]:setSpeed(10, 50)                         -- min,max  500
-            particles[particle_number]:setDirection(self.angle + 1 / 2 * (math.pi))  -- radians
+            particles[particle_number]:setDirection(angle + 1 / 2 * (math.pi))  -- radians
             particles[particle_number]:setParticleLifetime(1, 2)                -- Particles live at least 1s and at most 2s.
             particles[particle_number]:setSizeVariation(1)
             particles[particle_number]:setLinearAcceleration(-30, -30, 30, 30)  -- Random movement in all directions.
@@ -343,42 +345,42 @@ Vaisseau.new = function(level)
     local function updatePropulsorDrawPositionXY(dt, PropulsorWithV, active, particles)
         active = active or false
 
+        angle_LOW =  self.angle + (0.5 * math.pi)
+        angle_HIGHT =  self.angle + (3 / 2 * math.pi)
         if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
             X_offsetPropulsorWithV = X_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_LOW_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT)
+            particles = updateParticles(active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_LOW_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT)
+            particles = updateParticles(active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT)
+            particles = updateParticles(active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT)
+            particles = updateParticles(active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
         end
         return particles
     end
 
     local function drawPropulsorPositionXY(particles)
         -- if (active == true) then
-    local angle_LOW =  self.angle + (0.5 * math.pi)
-    local angle_HIGHT =  self.angle + (3 / 2 * math.pi)
             love.graphics.draw(PropulsorPng, propulsorX_LOW_LEFT, propulsorY_LOW_LEFT, angle_LOW,
                 self.imageRatio * ((love.math.random() * 5 + 5) / 10),
                 (self.imageRatio * 2) * (propulsorIncreasePower_LOW_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
