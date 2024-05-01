@@ -178,7 +178,7 @@ Menu.new = function()
     end
 
     function self.updateResetOffsetPrintCreditsStart(dt)
-        offsetPrintCreditsStart = offsetPrintCreditsStart - (0.5+dt)
+        offsetPrintCreditsStart = offsetPrintCreditsStart - (0.5*dt*60)
         if (offsetPrintCreditsEnd < -(SCREEN_HIGH)) then
             offsetPrintCreditsStart = 0
         end
