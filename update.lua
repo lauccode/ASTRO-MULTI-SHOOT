@@ -89,7 +89,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
     return DEBUG_MODE, toggleDebug
 end
 
-function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
+function keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
     if love.keyboard.isDown("r") then -- restart game
         love.audio.stop(gameSound)
         menu.selectionMenu = menu.MENU
@@ -100,6 +100,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         love.update()
     end
 
+    -- reactor and smoke update
+	particles = vaisseaux[1].updatePropulsor(dt, particles)
+    
     -- shield update
     if (vaisseaux[1].timeShieldStart < vaisseaux[1].TIME_SHIELD_START_MAX) then
         vaisseaux[1].updatePrintWarningStartLevel(dt)
@@ -251,7 +254,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
 
         vaisseaux[1].move(dt)
     end
-    return DEBUG_MODE
+    return DEBUG_MODE, particles
 end
 
 function asteroidsUpdate(dt, asteroids)

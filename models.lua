@@ -251,6 +251,22 @@ Vaisseau.new = function(level)
 
 	self.colorValueIncrease = 0
 
+    local propulsorX_LOW_LEFT = 0
+    local propulsorY_LOW_LEFT = 0
+    local propulsorIncreasePower_LOW_LEFT = 0
+
+    local propulsorX_LOW_RIGHT = 0
+    local propulsorY_LOW_RIGHT = 0
+    local propulsorIncreasePower_LOW_RIGHT = 0
+
+    local propulsorX_HIGHT_LEFT = 0
+    local propulsorY_HIGHT_LEFT = 0
+    local propulsorIncreasePower_HIGHT_LEFT = 0
+
+    local propulsorX_HIGHT_RIGHT = 0
+    local propulsorY_HIGHT_RIGHT = 0
+    local propulsorIncreasePower_HIGHT_RIGHT = 0
+
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
             love.graphics.circle("line", self.X_pos, self.Y_pos,
@@ -277,7 +293,7 @@ Vaisseau.new = function(level)
         love.graphics.setColor(255, 255, 255, 255)
     end
 
-    local function propulsorIncreasePow(PropulsorWithV, active, propulsorIncreasePowerTab)
+    local function propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
         if (active) then
             if (propulsorIncreasePowerTab[PropulsorWithV] < PROPULSOR_POWER_MAX) then
                 propulsorIncreasePowerTab[PropulsorWithV] = propulsorIncreasePowerTab[PropulsorWithV] + 1
@@ -288,40 +304,11 @@ Vaisseau.new = function(level)
         return propulsorIncreasePowerTab[PropulsorWithV]
     end
 
-    local function propulsorDrawPositionXY(PropulsorWithV, angle, active, particles)
-        active = active or false
-        local X_offsetPropulsorWithV
-        local Y_offsetPropulsorWithV
-        local propulsorIncreasePower
-
-        if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower = propulsorIncreasePow(PropulsorWithV, active, propulsorIncreasePowerTab)
-        elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower = propulsorIncreasePow(PropulsorWithV, active, propulsorIncreasePowerTab)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower = propulsorIncreasePow(PropulsorWithV, active, propulsorIncreasePowerTab)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower = propulsorIncreasePow(PropulsorWithV, active, propulsorIncreasePowerTab)
-        end
-
-        -- Draw Propulsor
-        local propulsorX = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) -
-            (math.sin(self.angle) * Y_offsetPropulsorWithV)
-        local propulsorY = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) +
-            (math.cos(self.angle) * Y_offsetPropulsorWithV)
-
+   local function  updateParticles(active, particles, propulsorX, propulsorY, propulsorIncreasePower)
         if (active == true) then
-            love.graphics.draw(PropulsorPng, propulsorX, propulsorY, angle,
-                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-                (self.imageRatio * 2) * (propulsorIncreasePower / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+            -- love.graphics.draw(PropulsorPng, propulsorX, propulsorY, angle,
+            --     self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+            --     (self.imageRatio * 2) * (propulsorIncreasePower / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
 
             particle.posX[particle_number] = propulsorX
             particle.posY[particle_number] = propulsorY
@@ -329,7 +316,7 @@ Vaisseau.new = function(level)
             particles[particle_number]:start()
             particles[particle_number]:setEmissionRate(2 * propulsorIncreasePower / 1) -- 150
             particles[particle_number]:setSpeed(10, 50)                         -- min,max  500
-            particles[particle_number]:setDirection(angle + 1 / 2 * (math.pi))  -- radians
+            particles[particle_number]:setDirection(self.angle + 1 / 2 * (math.pi))  -- radians
             particles[particle_number]:setParticleLifetime(1, 2)                -- Particles live at least 1s and at most 2s.
             particles[particle_number]:setSizeVariation(1)
             particles[particle_number]:setLinearAcceleration(-30, -30, 30, 30)  -- Random movement in all directions.
@@ -344,11 +331,106 @@ Vaisseau.new = function(level)
         for particles_it = 1, #particles do
             local powerParticle = particles[particles_it]:getEmissionRate()
             particles[particles_it]:setEmissionRate(powerParticle / 1.05)
-            love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
+            -- love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
         end
 
         particle_number = particle_number + 1
         if (particle_number > 120 * 4) then particle_number = 1 end
+
+        return particles
+   end
+
+    local function updatePropulsorDrawPositionXY(dt, PropulsorWithV, active, particles)
+        active = active or false
+
+        if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
+            X_offsetPropulsorWithV = X_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
+            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
+            propulsorIncreasePower_LOW_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
+            propulsorX_LOW_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
+            propulsorY_LOW_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
+            particles = updateParticles(active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT)
+        elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
+            X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
+            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
+            propulsorIncreasePower_LOW_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
+            propulsorX_LOW_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
+            propulsorY_LOW_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
+            particles = updateParticles(active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT)
+        elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
+            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
+            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
+            propulsorIncreasePower_HIGHT_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
+            propulsorX_HIGHT_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
+            propulsorY_HIGHT_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
+            particles = updateParticles(active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT)
+        elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
+            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
+            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
+            propulsorIncreasePower_HIGHT_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
+            propulsorX_HIGHT_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
+            propulsorY_HIGHT_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
+            particles = updateParticles(active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT)
+        end
+        return particles
+    end
+
+    local function drawPropulsorPositionXY(particles)
+        -- if (active == true) then
+    local angle_LOW =  self.angle + (0.5 * math.pi)
+    local angle_HIGHT =  self.angle + (3 / 2 * math.pi)
+            love.graphics.draw(PropulsorPng, propulsorX_LOW_LEFT, propulsorY_LOW_LEFT, angle_LOW,
+                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+                (self.imageRatio * 2) * (propulsorIncreasePower_LOW_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+            love.graphics.draw(PropulsorPng, propulsorX_LOW_RIGHT, propulsorY_LOW_RIGHT, angle_LOW,
+                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+                (self.imageRatio * 2) * (propulsorIncreasePower_LOW_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+            love.graphics.draw(PropulsorPng, propulsorX_HIGHT_LEFT, propulsorY_HIGHT_LEFT, angle_HIGHT,
+                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+                (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+            love.graphics.draw(PropulsorPng, propulsorX_HIGHT_RIGHT, propulsorY_HIGHT_RIGHT, angle_HIGHT,
+                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+                (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+        -- end
+
+        for particles_it = 1, #particles do
+            local powerParticle = particles[particles_it]:getEmissionRate()
+            particles[particles_it]:setEmissionRate(powerParticle / 1.05)
+            love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
+        end
+    end
+
+	function self.updatePropulsor(dt, particles)
+        -- propulsor
+        if (self.accelerateFWorWW == "forward") then
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+        elseif (self.accelerateFWorWW == "backward") then
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
+        elseif (self.accelerateFWorWW == "neutral" and self.rotateRightorLeft == "neutral") then
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+        end
+
+        if (self.rotateRightorLeft == "left") then
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+        elseif (self.rotateRightorLeft == "right") then
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
+            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
+        end
+        return particles
     end
 
     function self.draw(particles)
@@ -360,35 +442,9 @@ Vaisseau.new = function(level)
             VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
         end
 
-        -- propulsor
-        if (self.accelerateFWorWW == "forward") then
-            propulsorDrawPositionXY(PROPULSOR_LOW_LEFT, self.angle + (0.5 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_RIGHT, self.angle + (0.5 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_LEFT, self.angle + (3 / 2 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_RIGHT, self.angle + (3 / 2 * math.pi), false, particles)
-        elseif (self.accelerateFWorWW == "backward") then
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_LEFT, self.angle + (3 / 2 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_RIGHT, self.angle + (3 / 2 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_LEFT, self.angle + (0.5 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_RIGHT, self.angle + (0.5 * math.pi), false, particles)
-        elseif (self.accelerateFWorWW == "neutral" and self.rotateRightorLeft == "neutral") then
-            propulsorDrawPositionXY(PROPULSOR_LOW_LEFT, self.angle + (0.5 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_RIGHT, self.angle + (0.5 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_LEFT, self.angle + (3 / 2 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_RIGHT, self.angle + (3 / 2 * math.pi), false, particles)
-        end
+        -- draw reactor and smoke
+        drawPropulsorPositionXY(particles)
 
-        if (self.rotateRightorLeft == "left") then
-            propulsorDrawPositionXY(PROPULSOR_LOW_RIGHT, self.angle + (0.5 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_LEFT, self.angle + (3 / 2 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_LEFT, self.angle + (0.5 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_RIGHT, self.angle + (3 / 2 * math.pi), false, particles)
-        elseif (self.rotateRightorLeft == "right") then
-            propulsorDrawPositionXY(PROPULSOR_LOW_LEFT, self.angle + (0.5 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_RIGHT, self.angle + (3 / 2 * math.pi), true, particles)
-            propulsorDrawPositionXY(PROPULSOR_LOW_RIGHT, self.angle + (0.5 * math.pi), false, particles)
-            propulsorDrawPositionXY(PROPULSOR_HIGHT_LEFT, self.angle + (3 / 2 * math.pi), false, particles)
-        end
         -- circle of protection at start level or with bonus
         if (self.timeShieldStart < self.TIME_SHIELD_START_MAX) then
             printWarningStartLevel()

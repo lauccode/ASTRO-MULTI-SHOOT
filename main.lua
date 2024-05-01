@@ -125,7 +125,7 @@ function love.update(dt) -- 60 fps by defaut
             asteroids = level.levelManager(vaisseaux, asteroids)
             level.levelDone = true
         end
-        DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
+        DEBUG_MODE, particles = keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
 
         asteroidsUpdate(dt, asteroids)
         missilesUpdate(dt, vaisseaux, missiles)
