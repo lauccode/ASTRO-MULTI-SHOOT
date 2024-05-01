@@ -26,6 +26,7 @@ Menu.new = function()
     local gravity = 10 / 60
     local verticalAcceleration = gravity
     local finalTitlePosition = 60
+    local updateTitleReboundFinished = false
     self.timerPresentStage = 1
 
     self.selectionMenu = self.MENU
@@ -92,13 +93,18 @@ Menu.new = function()
         love.graphics.setColor(255, 255, 255, 255) -- reset
     end
 
-    function titleRebound()
-        if (verticalTitlePosition > finalTitlePosition) then
-            verticalAcceleration = -verticalAcceleration * 0.9
+    function self.updateTitleRebound(dt)
+        if (verticalTitlePosition ~= finalTitlePosition and math.abs(verticalAcceleration) > (gravity / 100)) then
+            if (verticalTitlePosition > finalTitlePosition) then
+                verticalAcceleration = -verticalAcceleration * 0.9
+            else
+                verticalAcceleration = verticalAcceleration + gravity*60*dt
+            end
+            verticalTitlePosition = verticalTitlePosition + verticalAcceleration*60*dt
+            updateTitleReboundFinished = false
         else
-            verticalAcceleration = verticalAcceleration + gravity
+            updateTitleReboundFinished = true
         end
-        verticalTitlePosition = verticalTitlePosition + verticalAcceleration
     end
 
     function self.draw(toggleDebug)
@@ -113,9 +119,7 @@ Menu.new = function()
 
         -- TODO: add projectX effect
         TitlePng = love.graphics.newImage("sprites/title.png")
-        if (verticalTitlePosition ~= finalTitlePosition and math.abs(verticalAcceleration) > (gravity / 100)) then
-            titleRebound()
-        else
+        if(updateTitleReboundFinished) then
             MissilePng = love.graphics.newImage("sprites/missile.png")
             local xMsgPosition = horizontalTitlePosition + TitlePng:getWidth() + 20
             local yMsgPosition = verticalTitlePosition + (TitlePng:getHeight() / 2) - MissilePng:getHeight() / 2

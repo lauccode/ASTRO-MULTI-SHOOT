@@ -107,6 +107,7 @@ function love.update(dt) -- 60 fps by defaut
     timerUpdate(dt, vaisseaux)
 
     if (menu.selectionMenu == menu.MENU) then
+		menu.updateTitleRebound(dt)
         DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
     end
 
