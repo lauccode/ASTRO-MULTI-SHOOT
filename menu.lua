@@ -94,11 +94,12 @@ Menu.new = function()
     end
 
     function self.updateTitleRebound(dt)
-        if (verticalTitlePosition ~= finalTitlePosition and math.abs(verticalAcceleration) > (gravity / 100)) then
+        local finalVerticalAcceleration = 0.0019
+        if (verticalTitlePosition ~= finalTitlePosition and math.abs(verticalAcceleration) > finalVerticalAcceleration ) then
             if (verticalTitlePosition > finalTitlePosition) then
                 verticalAcceleration = -verticalAcceleration * 0.9
             else
-                verticalAcceleration = verticalAcceleration + gravity*60*dt
+                verticalAcceleration = verticalAcceleration + gravity
             end
             verticalTitlePosition = verticalTitlePosition + verticalAcceleration*60*dt
             updateTitleReboundFinished = false
@@ -127,6 +128,9 @@ Menu.new = function()
         end
         love.graphics.draw(TitlePng, horizontalTitlePosition, verticalTitlePosition, 0)
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED * 4
+
+        -- keep to debug updateTitleReboundFinished
+        love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
 
         if (self.positionMenu == 1) then
             love.graphics.setColor(255, 0, 0)          -- red
