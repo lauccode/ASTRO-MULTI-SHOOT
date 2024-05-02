@@ -130,7 +130,7 @@ Menu.new = function()
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED * 4
 
         -- keep to debug updateTitleReboundFinished
-        love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
+        -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
 
         if (self.positionMenu == 1) then
             love.graphics.setColor(255, 0, 0)          -- red
