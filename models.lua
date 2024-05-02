@@ -298,7 +298,7 @@ Vaisseau.new = function(level)
     local function propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
         if (active) then
             if (propulsorIncreasePowerTab[PropulsorWithV] < PROPULSOR_POWER_MAX) then
-                propulsorIncreasePowerTab[PropulsorWithV] = propulsorIncreasePowerTab[PropulsorWithV] + 1
+                propulsorIncreasePowerTab[PropulsorWithV] = propulsorIncreasePowerTab[PropulsorWithV] + 1 + (60*dt) -- need at least 1 for particle size
             end
         else
             propulsorIncreasePowerTab[PropulsorWithV] = 0
