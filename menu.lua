@@ -133,7 +133,7 @@ Menu.new = function()
 
         -- keep to debug updateTitleReboundFinished
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
-        love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
+        -- love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
 
         if (self.positionMenu == 1) then
             love.graphics.setColor(255, 0, 0)          -- red
