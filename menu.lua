@@ -100,7 +100,7 @@ Menu.new = function()
             if ((verticalTitlePosition + verticalAcceleration*60*dt)> finalTitlePosition) then
                 verticalAcceleration = -verticalAcceleration * 0.9
             else
-                verticalAcceleration = verticalAcceleration + gravity
+                verticalAcceleration = verticalAcceleration + gravity*60*dt
             end
             verticalTitlePosition = verticalTitlePosition + verticalAcceleration*60*dt
             updateTitleReboundFinished = false
