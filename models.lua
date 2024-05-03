@@ -298,7 +298,7 @@ Vaisseau.new = function(level)
     local function propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
         if (active) then
             if (propulsorIncreasePowerTab[PropulsorWithV] < PROPULSOR_POWER_MAX) then
-                propulsorIncreasePowerTab[PropulsorWithV] = propulsorIncreasePowerTab[PropulsorWithV] + 1 + (60*dt) -- need at least 1 for particle size
+                propulsorIncreasePowerTab[PropulsorWithV] = propulsorIncreasePowerTab[PropulsorWithV] + 1
             end
         else
             propulsorIncreasePowerTab[PropulsorWithV] = 0
@@ -314,9 +314,9 @@ Vaisseau.new = function(level)
 
             particle.posX[particle_number] = propulsorX
             particle.posY[particle_number] = propulsorY
-            particles[particle_number] = love.graphics.newParticleSystem(smokeImg, propulsorIncreasePower * 1)
+            particles[particle_number] = love.graphics.newParticleSystem(smokeImg, propulsorIncreasePower)
             particles[particle_number]:start()
-            particles[particle_number]:setEmissionRate(2 * propulsorIncreasePower / 1) -- 150
+            particles[particle_number]:setEmissionRate(2 * propulsorIncreasePower) -- 150
             particles[particle_number]:setSpeed(10, 50)                         -- min,max  500
             particles[particle_number]:setDirection(angle + 1 / 2 * (math.pi))  -- radians
             particles[particle_number]:setParticleLifetime(1, 2)                -- Particles live at least 1s and at most 2s.
