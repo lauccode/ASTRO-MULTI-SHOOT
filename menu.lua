@@ -27,6 +27,7 @@ Menu.new = function()
     local verticalAcceleration = gravity
     local finalTitlePosition = 60
     local updateTitleReboundFinished = false
+    local reboundTimer = 0
     self.timerPresentStage = 1
 
     self.selectionMenu = self.MENU
@@ -94,14 +95,14 @@ Menu.new = function()
     end
 
     function self.updateTitleRebound(dt)
-        local finalVerticalAcceleration = 0.0019
-        if (verticalTitlePosition ~= finalTitlePosition and math.abs(verticalAcceleration) > finalVerticalAcceleration ) then
+        if (reboundTimer < 17) then
+            reboundTimer = reboundTimer + dt
             if (verticalTitlePosition > finalTitlePosition) then
                 verticalAcceleration = -verticalAcceleration * 0.9
             else
                 verticalAcceleration = verticalAcceleration + gravity
             end
-            verticalTitlePosition = verticalTitlePosition + verticalAcceleration*60*dt
+            verticalTitlePosition = verticalTitlePosition + verticalAcceleration
             updateTitleReboundFinished = false
         else
             updateTitleReboundFinished = true
@@ -119,6 +120,7 @@ Menu.new = function()
         love.graphics.draw(MenuPng, 0, 0, 0)
 
         -- TODO: add projectX effect
+        -- if rebound finished, add missile image to know calculation is stopped
         TitlePng = love.graphics.newImage("sprites/title.png")
         if(updateTitleReboundFinished) then
             MissilePng = love.graphics.newImage("sprites/missile.png")
@@ -131,6 +133,7 @@ Menu.new = function()
 
         -- keep to debug updateTitleReboundFinished
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
+        love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
 
         if (self.positionMenu == 1) then
             love.graphics.setColor(255, 0, 0)          -- red
