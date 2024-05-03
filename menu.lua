@@ -97,7 +97,7 @@ Menu.new = function()
     function self.updateTitleRebound(dt)
         if (reboundTimer < 17) then
             reboundTimer = reboundTimer + dt
-            if (verticalTitlePosition > finalTitlePosition) then
+            if ((verticalTitlePosition + verticalAcceleration*60*dt)> finalTitlePosition) then
                 verticalAcceleration = -verticalAcceleration * 0.9
             else
                 verticalAcceleration = verticalAcceleration + gravity
