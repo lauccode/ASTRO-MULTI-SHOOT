@@ -332,13 +332,13 @@ Vaisseau.new = function(level)
             particles[particles_it]:setEmissionRate(powerParticle / 1.05)
         end
 
-        particle_number = particle_number + 1
         -- if (particle_number > 120 * 4) then
         if (particleTimer > 8) then
             particle_number = 1
             particleTimer = 0
         else
             particleTimer = particleTimer + dt
+            particle_number = particle_number + 1
         end
         return particles
    end
@@ -397,7 +397,7 @@ Vaisseau.new = function(level)
         -- end
 
 		-- debug smoke particles life time
-        love.graphics.print("particle Timer : " .. tostring(particleTimer), 50, 50)
+        -- love.graphics.print("particle Timer : " .. tostring(particleTimer), 50, 50)
         
         -- draw smoke
         for particles_it = 1, #particles do
