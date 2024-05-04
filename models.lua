@@ -228,6 +228,7 @@ Vaisseau.new = function(level)
     particle.posX = {}
     particle.posY = {}
     local particle_number = 1
+    local particleTimer = 0
 
     local VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
     local widthImage = VaisseauPng:getWidth()
@@ -306,12 +307,8 @@ Vaisseau.new = function(level)
         return propulsorIncreasePowerTab[PropulsorWithV]
     end
 
-   local function  updateParticles(active, particles, propulsorX, propulsorY, propulsorIncreasePower, angle)
+   local function  updateParticles(dt, active, particles, propulsorX, propulsorY, propulsorIncreasePower, angle)
         if (active == true) then
-            -- love.graphics.draw(PropulsorPng, propulsorX, propulsorY, angle,
-            --     self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-            --     (self.imageRatio * 2) * (propulsorIncreasePower / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-
             particle.posX[particle_number] = propulsorX
             particle.posY[particle_number] = propulsorY
             particles[particle_number] = love.graphics.newParticleSystem(smokeImg, propulsorIncreasePower)
@@ -333,12 +330,16 @@ Vaisseau.new = function(level)
         for particles_it = 1, #particles do
             local powerParticle = particles[particles_it]:getEmissionRate()
             particles[particles_it]:setEmissionRate(powerParticle / 1.05)
-            -- love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
         end
 
         particle_number = particle_number + 1
-        if (particle_number > 120 * 4) then particle_number = 1 end
-
+        -- if (particle_number > 120 * 4) then
+        if (particleTimer > 8) then
+            particle_number = 1
+            particleTimer = 0
+        else
+            particleTimer = particleTimer + dt
+        end
         return particles
    end
 
@@ -353,28 +354,28 @@ Vaisseau.new = function(level)
             propulsorIncreasePower_LOW_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
+            particles = updateParticles(dt, active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_LOW_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
+            particles = updateParticles(dt, active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
+            particles = updateParticles(dt, active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
+            particles = updateParticles(dt, active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
         end
         return particles
     end
@@ -395,6 +396,10 @@ Vaisseau.new = function(level)
                 (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
         -- end
 
+		-- debug smoke particles life time
+        love.graphics.print("particle Timer : " .. tostring(particleTimer), 50, 50)
+        
+        -- draw smoke
         for particles_it = 1, #particles do
             local powerParticle = particles[particles_it]:getEmissionRate()
             particles[particles_it]:setEmissionRate(powerParticle / 1.05)
