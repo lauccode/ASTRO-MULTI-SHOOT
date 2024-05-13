@@ -12,8 +12,10 @@ Each first destruction of asteroid release a random bonus. There is a lot of wea
 - `lua` version at least to 5.1.5
 
 ## launch
-1. Download this repository
-2. Open the Terminal in the root of the repository
+
+### linux
+1. In Terminal, 'git clone' this repository
+2. Go in the root of the repository
 3. Type `love .`
 
 ## debug mode
