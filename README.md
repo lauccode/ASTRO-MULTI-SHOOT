@@ -43,8 +43,8 @@ check version with
 > love .
 
 ### windows 10
-1. Click on `<> Code` of this page
-2. Select `Download ZIP`
+1. Click on `astro_multi_shoot.zip` file of this page
+2. Select icon `Download raw file`
 3. Save the zip file on your PC
 4. Unzip the zip file and go in the directory `astro_multi_shoot`
 5. Double click on `astro_multi_shoot.exe`
