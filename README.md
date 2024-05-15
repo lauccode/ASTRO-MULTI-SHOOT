@@ -7,16 +7,47 @@ Each first destruction of asteroid release a random bonus. There is a lot of wea
 
 ![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame.png?raw=true)
 
-## dependencies
+## dependencies only for linux debian based as Ubuntu
 - `love` version at least to 11.3
 - `lua` version at least to 5.1.5
+
+### example
+#### for love
+
+> sudo apt install love
+
+check version with
+
+> love --version
+
+#### for lua
+
+> sudo apt search lua5
+
+You should find a lua version as lua5.x, so install it
+
+> sudo apt install lua5.x
+
+check version with
+
+> lua -v
 
 ## launch
 
 ### linux
 1. In Terminal, 'git clone' this repository
+> git clone https://github.com/lauccode/ASTRO-MULTI-SHOOT.git
 2. Go in the root of the repository
-3. Type `love .`
+> cd ASTRO-MULTI-SHOOT/
+3. Type `love .` to start the game
+> love .
+
+### windows 10
+1. Click on `<> Code` of this page
+2. Select `Download ZIP`
+3. Save the zip file on your PC
+4. Unzip the zip file and go in the directory `astro_multi_shoot`
+5. Double click on `astro_multi_shoot.exe`
 
 ## debug mode
 A debug mode can be activated.
