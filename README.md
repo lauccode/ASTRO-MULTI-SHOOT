@@ -2,8 +2,8 @@
 
 ## Overview 
 This is a small asteroids game inspired by the nostalgic Blasteroid game on **AMSTRAD CPC 464** of my childwood.
-Now, there is only 6 stages with an increase of the asteroids to be destroyed.  
-Each first destruction of asteroid release a random bonus. There is a lot of weapons to discover.
+For now, there are only 6 stages, with an increase of the number of asteroids
+Each first destruction of asteroid releases a random bonus. There are a lot of weapons to discover.
 
 ![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame.png?raw=true)
 
