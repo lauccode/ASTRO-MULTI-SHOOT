@@ -137,7 +137,7 @@ Menu.new = function()
 
         if (self.positionMenu == 1) then
             love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> START   <", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("> START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
             love.graphics.print("  START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
@@ -145,24 +145,30 @@ Menu.new = function()
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
         if (self.positionMenu == 2) then
             love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> SHORTCUTS AND BONUS <", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("> SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
             love.graphics.print("  SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
         if (self.positionMenu == 3) then
-            love.graphics.setColor(255, 0, 0) -- red
-            love.graphics.print("> TOGGLE DEBUG <" .. tostring(toggleDebug), SCREEN_WIDTH / 2,
+            if(toggleDebug == true) then
+                love.graphics.setColor(0, 255, 0) -- red
+            else
+                love.graphics.setColor(255, 0, 0) -- red
+            end
+            love.graphics.print("> TOGGLE DEBUG   " .. tostring(toggleDebug), SCREEN_WIDTH / 2,
                 SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
-            love.graphics.print("  TOGGLE DEBUG", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            -- love.graphics.print("  TOGGLE DEBUG", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("  TOGGLE DEBUG   " .. tostring(toggleDebug), SCREEN_WIDTH / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
         if (self.positionMenu == 4) then
             love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> CREDITS <", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("> CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
             love.graphics.print("  CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
@@ -170,10 +176,10 @@ Menu.new = function()
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
         if (self.positionMenu == 5) then
             love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> QUIT    <", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("> QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
-            love.graphics.print("  QUIT", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.print("  QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED * 2
         local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
@@ -207,7 +213,7 @@ Menu.new = function()
         offsetPrintCredits = offsetPrintCreditsStart
 
         printNextCredit("********************************* CREDITS ***********************************", true)
-        printNextCredit("******************************  (q) or (esc) to quit ************************", true)
+        printNextCredit("******************************  (q) to quit *********************************", true)
         printNextCredit("")
 
         printNextCredit("V Music For level 1", true)
@@ -432,7 +438,7 @@ Menu.new = function()
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 3
 
-        love.graphics.print("***********************          (q) or (esc) to quit          *****************",
+        love.graphics.print("***************************          (q) to quit          **********************",
             HORIZONTAL_POSITION - 25, VERTICAL_POSITION + OffsetPrintBonus)
     end
 

@@ -173,7 +173,7 @@ function love.update(dt) -- 60 fps by defaut
     end
 
     if (menu.selectionMenu == menu.menuValues[menu.TUTO]) then
-        if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
+        if love.keyboard.isDown("q") then
             menu.selectionMenu = menu.MENU -- come back to menu
             -- love.audio.stop(creditsSound)
         end
@@ -181,7 +181,7 @@ function love.update(dt) -- 60 fps by defaut
 
     if (menu.selectionMenu == menu.menuValues[menu.CREDITS]) then
         menu.updateResetOffsetPrintCreditsStart(dt)
-        if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
+        if love.keyboard.isDown("q") then
             menu.selectionMenu = menu.MENU -- come back to menu
             love.audio.stop(creditsSound)
         end
@@ -197,7 +197,7 @@ function love.draw()
     love.graphics.scale(GRAPHICS_SCALE, GRAPHICS_SCALE)
 
     if (menu.selectionMenu == menu.MENU) then
-        local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 16)
+        local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
         love.graphics.setFont(font)
         menu.draw(toggleDebug)
     end

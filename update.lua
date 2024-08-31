@@ -86,6 +86,9 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
             love.event.quit()
         end
     end
+    if love.keyboard.isDown("escape") then
+        love.event.quit()
+    end
     return DEBUG_MODE, toggleDebug
 end
 
