@@ -93,14 +93,14 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
 end
 
 function keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
-    if love.keyboard.isDown("r") then -- restart game
+    if love.keyboard.isDown("q") then -- restart game
         love.audio.stop(gameSound)
         menu.selectionMenu = menu.MENU
         level.levelNumber = 0
         level.levelDone = false
 
         love.load()
-        love.update()
+        love.update(dt)
     end
 
     -- reactor and smoke update

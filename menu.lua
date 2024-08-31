@@ -344,7 +344,9 @@ Menu.new = function()
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("SPACE          to fire", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("(s)            stop the ship", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        love.graphics.print("(s)            to stop the ship", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        love.graphics.print("(q)            to go back menu", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
