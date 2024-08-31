@@ -137,18 +137,21 @@ function collisionManager(dt, level, objects, objects2)
                         -- remove asteroid
                         table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
                         love.audio.play(asteroidExplosion)
+                        -- add particle explosion
                     else
                         -- impact
                         objects2[objects_to_manage2[objects_removed_it2]].protection = objects2[
                         objects_to_manage2[objects_removed_it2]].protection - 1
                         objects2[objects_to_manage2[objects_removed_it2]].asteroidImpact = true
                         love.audio.play(asteroidExplosion)
+                        -- add particle explosion
                         if (
                                 objects2[objects_to_manage2[objects_removed_it2]].asteroidDivision < 1 and
                                 objects2[objects_to_manage2[objects_removed_it2]].protection < 1) then
                             -- remove asteroid
                             table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
                             love.audio.play(asteroidExplosion)
+                        -- add particle explosion
                         end
                     end
                 end
