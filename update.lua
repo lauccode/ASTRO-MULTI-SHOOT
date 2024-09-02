@@ -260,7 +260,8 @@ function keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level,
     return DEBUG_MODE, particles
 end
 
-function asteroidsUpdate(dt, asteroids)
+function asteroidsUpdate(dt, asteroids, particlesAsteroDivExplosion)
+	particlesAsteroDivExplosion:update(dt)
     for asteroids_it = 1, #asteroids do
         asteroids[asteroids_it].move(dt)
         -- asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, asteroids[asteroids_it].MANEUVERABILITY, dt)

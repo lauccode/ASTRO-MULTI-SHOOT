@@ -741,13 +741,15 @@ end
 -- ██   ██      ██    ██    ██      ██   ██ ██    ██ ██ ██   ██
 -- ██   ██ ███████    ██    ███████ ██   ██  ██████  ██ ██████
 Asteroid = {}
-Asteroid.new = function()
+Asteroid.new = function(asteroDivisionExplosion)
     local self = GameObject.new()
+    asteroDivisionExplosion = asteroDivisionExplosion or false
     self.nameInstance = "ASTEROID"
     local AsteroidPng = love.graphics.newImage("sprites/asteroid_retro.png")
     local AsteroidPngImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png")
     self.asteroidImpact = false
     local IMPACT_DURATION = 10 -- 1/6 second
+    local ASTERO_DIVISION_EXPLOSION_TRUE = true
     local asteroidImpactDuration = IMPACT_DURATION
     self.asteroidDivision = 2
     self.protection = 3
@@ -766,7 +768,19 @@ Asteroid.new = function()
         self.imageRadius = (widthImage / 2) * self.imageRatio
     end
 
-    function self.draw()
+    local function drawParticlesADE(particlesAsteroDivExplosion)
+        particlesAsteroDivExplosion:setParticleLifetime(3, 3) -- Particles live at least 3s and at most 3s.
+        particlesAsteroDivExplosion:setEmissionRate(150)
+        particlesAsteroDivExplosion:setSizeVariation(1)
+        particlesAsteroDivExplosion:setLinearAcceleration(-30, -30, 30, 30)     -- Random movement in all directions.
+        particlesAsteroDivExplosion:setSpeed(100, 500)                          -- min,max
+        particlesAsteroDivExplosion:setSizes(1, 0.1)
+        particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
+
+        love.graphics.draw(particlesAsteroDivExplosion, SCREEN_WIDTH * 0.5, SCREEN_HIGH * 0.5)
+    end
+
+    function self.draw(particlesAsteroDivExplosion)
         if (self.asteroidImpact == false) then
             love.graphics.draw(AsteroidPng, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi), self.imageRatio,
                 self.imageRatio, widthImage / 2, heightImage / 2)
@@ -778,6 +792,9 @@ Asteroid.new = function()
                 asteroidImpactDuration = IMPACT_DURATION
                 self.asteroidImpact = false
             end
+        end
+        if (asteroDivisionExplosion) then
+            particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
         end
     end
 

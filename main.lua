@@ -38,6 +38,7 @@ local asteroids = nil -- also to manage bonus
 local bonus = nil
 local particles = nil
 local particlesTransitionStage = nil
+local particlesAsteroDivExplosion = nil
 
 local menu = nil
 
@@ -93,6 +94,8 @@ function love.load()
 
     local img = love.graphics.newImage('sprites/star.png')
     particlesTransitionStage = love.graphics.newParticleSystem(img, 450)
+    local img = love.graphics.newImage('sprites/astero_dust.png')
+    particlesAsteroDivExplosion = love.graphics.newParticleSystem(img, 450)
 end
 
 -- ██    ██ ██████  ██████   █████  ████████ ███████
@@ -127,7 +130,7 @@ function love.update(dt) -- 60 fps by defaut
         end
         DEBUG_MODE, particles = keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
 
-        asteroidsUpdate(dt, asteroids)
+        asteroidsUpdate(dt, asteroids, particlesAsteroDivExplosion)
         missilesUpdate(dt, vaisseaux, missiles)
         particlesUpdate(dt, particles)
 
@@ -221,7 +224,7 @@ function love.draw()
 
         -- ASTEROIDS DRAW
         for asteroids_it = 1, #asteroids do
-            asteroids[asteroids_it].draw()
+            asteroids[asteroids_it].draw(particlesAsteroDivExplosion)
 
             if (DEBUG_MODE) then
                 debugMode(asteroids)
