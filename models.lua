@@ -786,7 +786,7 @@ Asteroid.new = function(asteroDivisionExplo)
         particlesAsteroDivExplosion:setEmissionRate(emissionRate)
         particlesAsteroDivExplosion:setSizeVariation(1)
         particlesAsteroDivExplosion:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
-        particlesAsteroDivExplosion:setSpeed(10, 50)                          -- min,max
+        particlesAsteroDivExplosion:setSpeed(30, 90)                          -- min,max
         particlesAsteroDivExplosion:setSizes(1, 0.1)
         particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
 
@@ -794,8 +794,8 @@ Asteroid.new = function(asteroDivisionExplo)
     end
 
     function self.draw(particlesAsteroDivExplosion)
-        love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
-        love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
+        -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
+        -- love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
 
         -- draw astero
         if (self.asteroidImpact == false) then
