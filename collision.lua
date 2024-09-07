@@ -112,7 +112,7 @@ function collisionManager(dt, level, objects, objects2)
                         end
 
                         -- Create 2 news asteroids more small
-                        table.insert(objects2, Asteroid.new())
+                        table.insert(objects2, Asteroid.new(true))
                         objects2[#objects2 + 1 - 1].X_pos = objects2[objects_to_manage2[objects_removed_it2]].X_pos
                         objects2[#objects2 + 1 - 1].Y_pos = objects2[objects_to_manage2[objects_removed_it2]].Y_pos
                         objects2[#objects2 + 1 - 1].imageRatio = (objects2[objects_to_manage2[objects_removed_it2]].imageRatio) /
@@ -137,14 +137,12 @@ function collisionManager(dt, level, objects, objects2)
                         -- remove asteroid
                         table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
                         love.audio.play(asteroidExplosion)
-                        -- add particle explosion
                     else
                         -- impact
                         objects2[objects_to_manage2[objects_removed_it2]].protection = objects2[
                         objects_to_manage2[objects_removed_it2]].protection - 1
                         objects2[objects_to_manage2[objects_removed_it2]].asteroidImpact = true
                         love.audio.play(asteroidExplosion)
-                        -- add particle explosion
                         if (
                                 objects2[objects_to_manage2[objects_removed_it2]].asteroidDivision < 1 and
                                 objects2[objects_to_manage2[objects_removed_it2]].protection < 1) then
