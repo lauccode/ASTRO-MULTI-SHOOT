@@ -820,7 +820,7 @@ Asteroid.new = function(asteroDivisionExplo)
             if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
                 emissionRate = 0
             else
-                emissionRate = math.abs(50*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
+                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
             end
             particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
         end
