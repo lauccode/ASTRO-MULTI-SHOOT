@@ -381,30 +381,26 @@ Vaisseau.new = function(level)
     end
 
     local function drawPropulsorPositionXY(particles)
-        -- if (active == true) then
-            love.graphics.draw(PropulsorPng, propulsorX_LOW_LEFT, propulsorY_LOW_LEFT, angle_LOW,
-                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-                (self.imageRatio * 2) * (propulsorIncreasePower_LOW_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-            love.graphics.draw(PropulsorPng, propulsorX_LOW_RIGHT, propulsorY_LOW_RIGHT, angle_LOW,
-                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-                (self.imageRatio * 2) * (propulsorIncreasePower_LOW_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-            love.graphics.draw(PropulsorPng, propulsorX_HIGHT_LEFT, propulsorY_HIGHT_LEFT, angle_HIGHT,
-                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-                (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-            love.graphics.draw(PropulsorPng, propulsorX_HIGHT_RIGHT, propulsorY_HIGHT_RIGHT, angle_HIGHT,
-                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-                (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-        -- end
-
-		-- debug smoke particles life time
-        -- love.graphics.print("particle Timer : " .. tostring(particleTimer), 50, 50)
-        
         -- draw smoke
         for particles_it = 1, #particles do
             local powerParticle = particles[particles_it]:getEmissionRate()
             particles[particles_it]:setEmissionRate(powerParticle / 1.05)
             love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
         end
+
+        -- draw propulsor
+        love.graphics.draw(PropulsorPng, propulsorX_LOW_LEFT, propulsorY_LOW_LEFT, angle_LOW,
+            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+            (self.imageRatio * 2) * (propulsorIncreasePower_LOW_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+        love.graphics.draw(PropulsorPng, propulsorX_LOW_RIGHT, propulsorY_LOW_RIGHT, angle_LOW,
+            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+            (self.imageRatio * 2) * (propulsorIncreasePower_LOW_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+        love.graphics.draw(PropulsorPng, propulsorX_HIGHT_LEFT, propulsorY_HIGHT_LEFT, angle_HIGHT,
+            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+            (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+        love.graphics.draw(PropulsorPng, propulsorX_HIGHT_RIGHT, propulsorY_HIGHT_RIGHT, angle_HIGHT,
+            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+            (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
     end
 
 	function self.updatePropulsor(dt, particles)
