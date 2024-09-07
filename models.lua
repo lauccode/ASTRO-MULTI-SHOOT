@@ -765,32 +765,43 @@ Asteroid.new = function(asteroDivisionExplo)
     self.imageRatioRef = 0.35
 
     local timeExplosion = 0
-    local TIME_EXPLOSION_END_TIME = 60
+    local TIME_EXPLOSION_END_TIME = 100
+    local TIME_EMISSION_RATE_END_TIME = 60
     local X_explosionPos = 0
     local Y_explosionPos = 0
     local takeExplosionPosition = false
+    local emissionRate = 0
 
     function self.recalculateImageRadius()
         self.imageRadius = (widthImage / 2) * self.imageRatio
     end
 
     function self.particlesExplosionLifeDurationUpdate(dt)
-        timeExplosion = timeExplosion + (60*dt)
+        if (self.asteroDivisionExplosion == true) then
+            timeExplosion = timeExplosion + (60*dt)
+        end
+        if(timeExplosion >= TIME_EXPLOSION_END_TIME) then
+            self.asteroDivisionExplosion = false
+        end
     end
 
     local function drawParticlesADE(particlesAsteroDivExplosion)
-        particlesAsteroDivExplosion:setParticleLifetime(3, 3) -- Particles live at least 3s and at most 3s.
-        particlesAsteroDivExplosion:setEmissionRate(150)
+        particlesAsteroDivExplosion:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
+        particlesAsteroDivExplosion:setEmissionRate(emissionRate)
         particlesAsteroDivExplosion:setSizeVariation(1)
-        particlesAsteroDivExplosion:setLinearAcceleration(-30, -30, 30, 30)     -- Random movement in all directions.
-        particlesAsteroDivExplosion:setSpeed(100, 500)                          -- min,max
-        particlesAsteroDivExplosion:setSizes(2, 0.1)
+        particlesAsteroDivExplosion:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
+        particlesAsteroDivExplosion:setSpeed(10, 50)                          -- min,max
+        particlesAsteroDivExplosion:setSizes(1, 0.1)
         particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
 
         love.graphics.draw(particlesAsteroDivExplosion, X_explosionPos, Y_explosionPos)
     end
 
     function self.draw(particlesAsteroDivExplosion)
+        love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
+        love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
+
+        -- draw astero
         if (self.asteroidImpact == false) then
             love.graphics.draw(AsteroidPng, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi), self.imageRatio,
                 self.imageRatio, widthImage / 2, heightImage / 2)
@@ -803,16 +814,19 @@ Asteroid.new = function(asteroDivisionExplo)
                 self.asteroidImpact = false
             end
         end
+        -- astero explosion
         if (self.asteroDivisionExplosion == true) then
             if(takeExplosionPosition == false) then
                 X_explosionPos = self.X_pos
                 Y_explosionPos = self.Y_pos
                 takeExplosionPosition = true
             end
-            particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
-            if(timeExplosion > TIME_EXPLOSION_END_TIME) then
-                self.asteroDivisionExplosion = false
+            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
+                emissionRate = 0
+            else
+                emissionRate = math.abs(50*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
             end
+            particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
         end
     end
 
