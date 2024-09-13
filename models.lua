@@ -810,7 +810,6 @@ Asteroid.new = function(asteroDivisionExplo)
                 self.asteroidImpact = false
             end
         end
-        
         -- astero explosion
         if (self.asteroDivisionExplosion == true) then
             if(takeExplosionPosition == false) then
