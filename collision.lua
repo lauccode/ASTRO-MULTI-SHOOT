@@ -100,6 +100,11 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, part
                         objects[objects_to_manage[object_number]].nameInstance == "MISSILE" and
                         objects2[objects_to_manage2[object_number2]].nameInstance == "ASTEROID") then
                     love.audio.stop(asteroidExplosion)
+                        -- add particle explosion
+                        table.insert(asteroidExplosions, AsteroidExplosions.new(objects[objects_to_manage[objects_removed_it]].X_pos, objects[objects_to_manage[objects_removed_it]].Y_pos))
+                        local img = love.graphics.newImage("sprites/astero_dust.png")
+                        table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
+                        -- end add particle explosion
                     -- remove missile
                     table.remove(objects, objects_to_manage[objects_removed_it]) -- remove objects from table
 
@@ -151,13 +156,14 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, part
                         objects_to_manage2[objects_removed_it2]].protection - 1
                         objects2[objects_to_manage2[objects_removed_it2]].asteroidImpact = true
                         love.audio.play(asteroidExplosion)
+
+
                         if (
                                 objects2[objects_to_manage2[objects_removed_it2]].asteroidDivision < 1 and
                                 objects2[objects_to_manage2[objects_removed_it2]].protection < 1) then
                             -- remove asteroid
                             table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
                             love.audio.play(asteroidExplosion)
-                        -- add particle explosion
 
                         end
                     end
