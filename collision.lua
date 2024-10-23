@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(dt, level, objects, objects2)
+function collisionManager(dt, level, objects, objects2, asteroidExplosions, particlesAsteroDivExplosions)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -123,7 +123,15 @@ function collisionManager(dt, level, objects, objects2)
                         objects2[#objects2 + 1 - 1].asteroidDivision = objects2[#objects2 + 1 - 1].asteroidDivision - 1
                         objects2[#objects2 + 1 - 1].protection = objects2[#objects2 + 1 - 1].asteroidDivision
 
-                        table.insert(objects2, Asteroid.new(true))
+                        table.insert(objects2, Asteroid.new())
+
+                        -- add particle explosion
+                        table.insert(asteroidExplosions, AsteroidExplosions.new(objects2[objects_to_manage2[objects_removed_it2]].X_pos, objects2[objects_to_manage2[objects_removed_it2]].Y_pos))
+	                    local img = love.graphics.newImage("sprites/astero_dust.png")
+                        table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
+                        -- end add particle explosion
+
+
                         objects2[#objects2 + 1 - 1].X_pos = objects2[objects_to_manage2[objects_removed_it2]].X_pos
                         objects2[#objects2 + 1 - 1].Y_pos = objects2[objects_to_manage2[objects_removed_it2]].Y_pos
                         objects2[#objects2 + 1 - 1].imageRatio = (objects2[objects_to_manage2[objects_removed_it2]].imageRatio) /
@@ -150,6 +158,7 @@ function collisionManager(dt, level, objects, objects2)
                             table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
                             love.audio.play(asteroidExplosion)
                         -- add particle explosion
+
                         end
                     end
                 end

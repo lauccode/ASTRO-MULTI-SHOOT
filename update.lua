@@ -260,16 +260,18 @@ function keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level,
     return DEBUG_MODE, particles
 end
 
-function asteroidsUpdate(dt, asteroids, particlesAsteroDivExplosion)
+function asteroidsUpdate(dt, asteroids)
     for asteroids_it = 1, #asteroids do
         asteroids[asteroids_it].move(dt)
         -- asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, asteroids[asteroids_it].MANEUVERABILITY, dt)
         asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, dt)
-        if(asteroids[asteroids_it].asteroDivisionExplosion == true) then
-            particlesAsteroDivExplosion:update(dt)
-            asteroids[asteroids_it].particlesExplosionLifeDurationUpdate(dt)
-        end
     end
+end
+
+function particlesAsteroDivExplosionUpdate(dt, particlesAsteroDivExplosions)
+            for particlesAsteroDivExplosion_it = 1, #particlesAsteroDivExplosions do
+                particlesAsteroDivExplosions[particlesAsteroDivExplosion_it]:update(dt)
+            end
 end
 
 function missilesUpdate(dt, vaisseaux, missiles)

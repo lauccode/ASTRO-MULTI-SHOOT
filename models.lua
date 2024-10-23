@@ -737,10 +737,10 @@ end
 -- ██   ██      ██    ██    ██      ██   ██ ██    ██ ██ ██   ██
 -- ██   ██ ███████    ██    ███████ ██   ██  ██████  ██ ██████
 Asteroid = {}
-Asteroid.new = function(asteroDivisionExplo)
+Asteroid.new = function()
     local self = GameObject.new()
-    asteroDivisionExplo = asteroDivisionExplo or false
-    self.asteroDivisionExplosion = asteroDivisionExplo
+    -- asteroDivisionExplo = asteroDivisionExplo or false
+    -- self.asteroDivisionExplosion = asteroDivisionExplo
     self.nameInstance = "ASTEROID"
     local AsteroidPng = love.graphics.newImage("sprites/asteroid_retro.png")
     local AsteroidPngImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png")
@@ -760,38 +760,38 @@ Asteroid.new = function(asteroDivisionExplo)
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
 
-    local timeExplosion = 0
-    local TIME_EXPLOSION_END_TIME = 100
-    local TIME_EMISSION_RATE_END_TIME = 60
-    local X_explosionPos = 0
-    local Y_explosionPos = 0
-    local takeExplosionPosition = false
-    local emissionRate = 0
+    -- local timeExplosion = 0
+    -- local TIME_EXPLOSION_END_TIME = 100
+    -- local TIME_EMISSION_RATE_END_TIME = 60
+    -- local X_explosionPos = 0
+    -- local Y_explosionPos = 0
+    -- local takeExplosionPosition = false
+    -- local emissionRate = 0
 
     function self.recalculateImageRadius()
         self.imageRadius = (widthImage / 2) * self.imageRatio
     end
 
-    function self.particlesExplosionLifeDurationUpdate(dt)
-        if (self.asteroDivisionExplosion == true) then
-            timeExplosion = timeExplosion + (60*dt)
-        end
-        if(timeExplosion >= TIME_EXPLOSION_END_TIME) then
-            self.asteroDivisionExplosion = false
-        end
-    end
+    -- function self.particlesExplosionLifeDurationUpdate(dt)
+    --     if (self.asteroDivisionExplosion == true) then
+    --         timeExplosion = timeExplosion + (60*dt)
+    --     end
+    --     if(timeExplosion >= TIME_EXPLOSION_END_TIME) then
+    --         self.asteroDivisionExplosion = false
+    --     end
+    -- end
 
-    local function drawParticlesADE(particlesAsteroDivExplosion)
-        particlesAsteroDivExplosion:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
-        particlesAsteroDivExplosion:setEmissionRate(emissionRate)
-        particlesAsteroDivExplosion:setSizeVariation(1)
-        particlesAsteroDivExplosion:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
-        particlesAsteroDivExplosion:setSpeed(30, 90)                          -- min,max
-        particlesAsteroDivExplosion:setSizes(1, 0.1)
-        particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
-
-        love.graphics.draw(particlesAsteroDivExplosion, X_explosionPos, Y_explosionPos)
-    end
+    -- local function drawParticlesADE(particlesAsteroDivExplosion)
+    --     particlesAsteroDivExplosion:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
+    --     particlesAsteroDivExplosion:setEmissionRate(emissionRate)
+    --     particlesAsteroDivExplosion:setSizeVariation(1)
+    --     particlesAsteroDivExplosion:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
+    --     particlesAsteroDivExplosion:setSpeed(30, 90)                          -- min,max
+    --     particlesAsteroDivExplosion:setSizes(1, 0.1)
+    --     particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
+    --
+    --     love.graphics.draw(particlesAsteroDivExplosion, X_explosionPos, Y_explosionPos)
+    -- end
 
     function self.draw(particlesAsteroDivExplosion)
         -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
@@ -810,20 +810,20 @@ Asteroid.new = function(asteroDivisionExplo)
                 self.asteroidImpact = false
             end
         end
-        -- astero explosion
-        if (self.asteroDivisionExplosion == true) then
-            if(takeExplosionPosition == false) then
-                X_explosionPos = self.X_pos
-                Y_explosionPos = self.Y_pos
-                takeExplosionPosition = true
-            end
-            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
-                emissionRate = 0
-            else
-                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
-            end
-            particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
-        end
+        -- -- astero explosion
+        -- if (self.asteroDivisionExplosion == true) then
+        --     if(takeExplosionPosition == false) then
+        --         X_explosionPos = self.X_pos
+        --         Y_explosionPos = self.Y_pos
+        --         takeExplosionPosition = true
+        --     end
+        --     if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
+        --         emissionRate = 0
+        --     else
+        --         emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
+        --     end
+        --     particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
+        -- end
     end
 
     self.CLOCKWISE = randomBool()
@@ -837,6 +837,67 @@ Asteroid.new = function(asteroDivisionExplo)
     self.speedY = MAX_SPEED * randomSign() * love.math.random()
     return self
 end
+
+AsteroidExplosions = {}
+AsteroidExplosions.new = function(X_explo, Y_explo)
+    local self = {}
+    local timeExplosion = 0
+    local TIME_EXPLOSION_END_TIME = 100
+    local TIME_EMISSION_RATE_END_TIME = 60
+    local X_explosionPos = X_explo
+    local Y_explosionPos = Y_explo
+    -- local takeExplosionPosition = false
+    local emissionRate = 0
+    self.asteroDivisionExplosion = true
+
+    function self.particlesExplosionLifeDurationUpdate(dt)
+
+        if (self.asteroDivisionExplosion == true) then
+            timeExplosion = timeExplosion + (60*dt)
+        end
+        if(timeExplosion >= TIME_EXPLOSION_END_TIME) then
+            self.asteroDivisionExplosion = false
+        end
+    end
+
+    local function drawParticlesADE(particlesAsteroDivExplosions, particle_number)
+        particlesAsteroDivExplosions[particle_number]:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
+        particlesAsteroDivExplosions[particle_number]:setEmissionRate(emissionRate)
+        particlesAsteroDivExplosions[particle_number]:setSizeVariation(1)
+        particlesAsteroDivExplosions[particle_number]:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
+        particlesAsteroDivExplosions[particle_number]:setSpeed(30, 90)                          -- min,max
+        particlesAsteroDivExplosions[particle_number]:setSizes(1, 0.1)
+        particlesAsteroDivExplosions[particle_number]:setDirection((2 * math.pi) * math.random()) -- radians
+
+        love.graphics.draw(particlesAsteroDivExplosions[particle_number], X_explosionPos, Y_explosionPos)
+    end
+
+    function self.draw(particlesAsteroDivExplosions, particle_number)
+        -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
+        -- love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
+
+        -- astero explosion
+        if (self.asteroDivisionExplosion == true) then
+            if(takeExplosionPosition == false) then
+                X_explosionPos = self.X_pos
+                Y_explosionPos = self.Y_pos
+                takeExplosionPosition = true
+            end
+            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
+                emissionRate = 0
+            else
+                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
+            end
+            particlesAsteroDivExplosions = drawParticlesADE(particlesAsteroDivExplosions, particle_number)
+        end
+    end
+
+    return self
+end
+
+
+
+
 
 
 -- ██████   ██████  ███    ██ ██    ██ ███████
