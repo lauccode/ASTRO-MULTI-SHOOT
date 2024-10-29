@@ -6,6 +6,9 @@ For now, there are only 6 stages, with an increase of the number of asteroids
 Each first destruction of asteroid releases a random bonus. There are a lot of weapons to discover.
 
 ![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame.png?raw=true)
+![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame2.png?raw=true)
+![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame3.png?raw=true)
+![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame4.png?raw=true)
 
 ## dependencies only for linux debian based as Ubuntu
 - `love` version at least to 11.3
