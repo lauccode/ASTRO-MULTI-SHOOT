@@ -5,10 +5,9 @@ This is a small asteroids game inspired by the nostalgic Blasteroid game on **AM
 For now, there are only 6 stages, with an increase of the number of asteroids
 Each first destruction of asteroid releases a random bonus. There are a lot of weapons to discover.
 
-![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame.png?raw=false)
-![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame2.png?raw=false)
-![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame3.png?raw=false)
-![Texte alternatif](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame4.png?raw=false)
+| ![Image 1](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame.png?raw=false) | ![Image 2](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame2.png?raw=false) |
+|:---:|:---:|
+| ![Image 3](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame3.png?raw=false) | ![Image 4](https://github.com/lauccode/ASTRO-MULTI-SHOOT/blob/main/inGame4.png?raw=false) |
 
 ## dependencies only for linux debian based as Ubuntu
 - `love` version at least to 11.3
