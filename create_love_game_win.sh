@@ -1,13 +1,14 @@
 # create windows zip game with exe inside to share your game
 ## do a copy of game directory and go in root directory and remove .git(too big)
 cd ..
-cp -r ASTRO_MULTI_SHOOT/ astro_multi_shoot
+cp -r ASTRO-MULTI-SHOOT/ astro_multi_shoot
 cd astro_multi_shoot/
 sudo rm -r .git/
 rm astro_multi_shoot.zip
-cd ..
 ## create .love
 zip -9 -q -r astro_multi_shoot.love .
+cp astro_multi_shoot.love ../
+cd ..
 ## download love (love-11.5-win64) and unzip
 ## copy the directory as game name
 cp -r love-11.5-win64 ASTRO_MULTI_SHOOT_WIN
@@ -20,7 +21,7 @@ rm astro_multi_shoot.love
 ## zip the directory with all inside, it is your game
 cd ..
 zip -r astro_multi_shoot.zip ASTRO_MULTI_SHOOT_WIN/
-cp astro_multi_shoot.zip ASTRO_MULTI_SHOOT_WIN
+cp astro_multi_shoot.zip ASTRO-MULTI-SHOOT
 ## remove useless .love and directory
 rm astro_multi_shoot.love 
 rm -r astro_multi_shoot
