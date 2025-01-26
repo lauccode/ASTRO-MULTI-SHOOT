@@ -169,7 +169,6 @@ GameObject.new = function()
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.circle("line", self.X_pos, self.Y_pos, self.imageRadius)
     end
-
     return self
 end
 
