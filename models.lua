@@ -24,7 +24,7 @@ GameObject.new = function()
     local startLevelActivated = false
     local previousAngle = (3 / 2 * math.pi) --1.5 * math.pi
 
-    self.SIDE_GUN_ANGLE_OFFSET = 0.7
+    self.SIDE_GUN_ANGLE_OFFSET = 0.5
     self.GUN_POSITION_X_OFFSET = 9
     self.GUN_POSITION_Y_OFFSET = 0
     self.SIDE_GUN_POSITION_X_OFFSET = 7
