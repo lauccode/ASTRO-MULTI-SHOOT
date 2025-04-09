@@ -7,6 +7,7 @@ local weaponCycleBigger = 0
 local weaponCycleQuicker = 0
 
 local key_Pulse = false
+local keyPressed = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -51,15 +52,19 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
 
     -- MENU KEYBOARD UPDATE
     if love.keyboard.isDown("up") then
-        if (key_Pulse) then
+       if not keyPressed then
             menu.positionMenu = menu.positionMenu - 1
+            keyPressed = true
         end
-    end
-    if love.keyboard.isDown("down") then
-        if (key_Pulse) then
+    elseif love.keyboard.isDown("down") then
+        if not keyPressed then
             menu.positionMenu = menu.positionMenu + 1
+            keyPressed = true
         end
+    else
+        keyPressed = false
     end
+
     if love.keyboard.isDown("space") then
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
             menu.selectionMenu = menu.menuValues[menu.START]
