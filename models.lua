@@ -222,6 +222,7 @@ Vaisseau.new = function(level)
     local Y_PROPULSOR_HIGHT_RIGHT = 11
 
     -- Particles
+	local particles = {}
     local smokeImg = love.graphics.newImage('sprites/smoke.png')
     local particle = {}
     particle.posX = {}
@@ -342,6 +343,12 @@ Vaisseau.new = function(level)
         return particles
    end
 
+    function self.particlesUpdate(dt)
+        for particles_it = 1, #particles do
+            particles[particles_it]:update(dt)
+        end
+    end
+
     local function updatePropulsorDrawPositionXY(dt, PropulsorWithV, active, particles)
         active = active or false
 
@@ -402,7 +409,7 @@ Vaisseau.new = function(level)
             (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
     end
 
-	function self.updatePropulsor(dt, particles)
+	function self.updatePropulsor(dt)
         -- propulsor
         if (self.accelerateFWorWW == "forward") then
             particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true, particles)
@@ -432,10 +439,9 @@ Vaisseau.new = function(level)
             particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
             particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
         end
-        return particles
     end
 
-    function self.draw(particles)
+    function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
             VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro.png")
         elseif (self.missilePackQuicker == self.MSL_PKG_QUICKER) then

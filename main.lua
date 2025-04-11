@@ -38,7 +38,6 @@ local vaisseaux = nil
 local missiles = nil
 local asteroids = nil -- also to manage bonus
 local bonus = nil
-local particles = nil
 local particlesTransitionStage = nil
 local particlesAsteroDivExplosion = nil
 
@@ -91,14 +90,12 @@ function love.load()
 	asteroids = {} --also to manage bonus
     asteroidExplosions = {}
 	bonuss = {}
-	particles = {}
     particlesAsteroDivExplosions = {}
 	menu.positionMenu = menu.START
 	level.levelDone = false
 
 	local img = love.graphics.newImage("sprites/star.png")
 	particlesTransitionStage = love.graphics.newParticleSystem(img, 450)
-	-- particlesAsteroDivExplosion = love.graphics.newParticleSystem(img, 450)
 end
 
 -- ██    ██ ██████  ██████   █████  ████████ ███████
@@ -129,11 +126,11 @@ function love.update(dt) -- 60 fps by defaut
 			asteroids = level.levelManager(vaisseaux, asteroids)
 			level.levelDone = true
 		end
-		DEBUG_MODE, particles = keyboardUpdate(vaisseaux, particles, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
+		DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
 
 		asteroidsUpdate(dt, asteroids)
 		missilesUpdate(dt, vaisseaux, missiles)
-		particlesUpdate(dt, particles)
+		vaisseaux[1].particlesUpdate(dt)
 
         -- update explosion
         local removeAsteroidExplosionNumber = nil
@@ -233,7 +230,7 @@ function love.draw()
 
 		-- VAISSEAU DRAW
 		if vaisseaux[1] ~= nil then
-			vaisseaux[1].draw(particles)
+			vaisseaux[1].draw()
 			if DEBUG_MODE then
 				debugMode(vaisseaux)
 			end
