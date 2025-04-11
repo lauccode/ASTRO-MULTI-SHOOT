@@ -343,7 +343,7 @@ Vaisseau.new = function(level)
         return particles
    end
 
-    function self.particlesUpdate(dt)
+    function self.smokeParticlesUpdate(dt)
         for particles_it = 1, #particles do
             particles[particles_it]:update(dt)
         end

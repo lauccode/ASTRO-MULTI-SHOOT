@@ -130,7 +130,7 @@ function love.update(dt) -- 60 fps by defaut
 
 		asteroidsUpdate(dt, asteroids)
 		missilesUpdate(dt, vaisseaux, missiles)
-		vaisseaux[1].particlesUpdate(dt)
+		vaisseaux[1].smokeParticlesUpdate(dt)
 
         -- update explosion
         local removeAsteroidExplosionNumber = nil
