@@ -137,18 +137,11 @@ function love.update(dt) -- 60 fps by defaut
             if asteroidExplosions[asteroDivExplosion_it].asteroDivisionExplosion == false then
                 removeAsteroidExplosionNumber = asteroDivExplosion_it
             end
+            asteroidExplosions[asteroDivExplosion_it].particlesExplosionLifeDurationUpdate(dt)
+            asteroidExplosions[asteroDivExplosion_it].particlesAsteroDivExplosionUpdate(dt)
         end
         if (removeAsteroidExplosionNumber ~= nil) then
                 table.remove(asteroidExplosions, removeAsteroidExplosionNumber) -- remove objects from table
-        end
-        for particlesAsteroDivExplosion_it = 1, #asteroidExplosions do
-            asteroidExplosions[particlesAsteroDivExplosion_it].particlesExplosionLifeDurationUpdate(dt)
-        end
-        for asteroDivExplosion_it = 1, #asteroidExplosions do
-            -- if asteroidExplosions[asteroDivExplosion_it].asteroDivisionExplosion == false then
-            --     removeAsteroidExplosionNumber = asteroDivExplosion_it
-            -- end
-            asteroidExplosions[asteroDivExplosion_it].particlesAsteroDivExplosionUpdate(dt)
         end
 
 		-----------------------------------------

@@ -648,8 +648,7 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
         if (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER or type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
             self.angle = angle_missile + randomSign() * (0.2 * love.math.random())
         else
-            self.angle = angle_missile                                            
-        end
+            self.angle = angle_missile        end
     end
 
     if (type_missile[LATERAL_TAB] == self.RIGHT) then
@@ -657,9 +656,9 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
         Y_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef)
         if (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER or type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
             self.angle = angle_missile - self.SIDE_GUN_ANGLE_OFFSET +
-            randomSign() * (0.1 * love.math.random())                                                          
+            randomSign() * (0.1 * love.math.random())
         else
-            self.angle = angle_missile - self.SIDE_GUN_ANGLE_OFFSET                                            
+            self.angle = angle_missile - self.SIDE_GUN_ANGLE_OFFSET
         end
     end
 
@@ -668,9 +667,9 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
         Y_offsetMissilePositionWithVaisseau = -self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef)
         if (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER or type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
             self.angle = angle_missile + self.SIDE_GUN_ANGLE_OFFSET +
-            randomSign() * (0.1 * love.math.random())                                                          
+            randomSign() * (0.1 * love.math.random())
         else
-            self.angle = angle_missile + self.SIDE_GUN_ANGLE_OFFSET                                            
+            self.angle = angle_missile + self.SIDE_GUN_ANGLE_OFFSET
         end
     end
 
@@ -765,38 +764,9 @@ Asteroid.new = function()
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
 
-    -- local timeExplosion = 0
-    -- local TIME_EXPLOSION_END_TIME = 100
-    -- local TIME_EMISSION_RATE_END_TIME = 60
-    -- local X_explosionPos = 0
-    -- local Y_explosionPos = 0
-    -- local takeExplosionPosition = false
-    -- local emissionRate = 0
-
     function self.recalculateImageRadius()
         self.imageRadius = (widthImage / 2) * self.imageRatio
     end
-
-    -- function self.particlesExplosionLifeDurationUpdate(dt)
-    --     if (self.asteroDivisionExplosion == true) then
-    --         timeExplosion = timeExplosion + (60*dt)
-    --     end
-    --     if(timeExplosion >= TIME_EXPLOSION_END_TIME) then
-    --         self.asteroDivisionExplosion = false
-    --     end
-    -- end
-
-    -- local function drawParticlesADE(particlesAsteroDivExplosion)
-    --     particlesAsteroDivExplosion:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
-    --     particlesAsteroDivExplosion:setEmissionRate(emissionRate)
-    --     particlesAsteroDivExplosion:setSizeVariation(1)
-    --     particlesAsteroDivExplosion:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
-    --     particlesAsteroDivExplosion:setSpeed(30, 90)                          -- min,max
-    --     particlesAsteroDivExplosion:setSizes(1, 0.1)
-    --     particlesAsteroDivExplosion:setDirection((2 * math.pi) * math.random()) -- radians
-    --
-    --     love.graphics.draw(particlesAsteroDivExplosion, X_explosionPos, Y_explosionPos)
-    -- end
 
     function self.draw(particlesAsteroDivExplosion)
         -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
@@ -815,20 +785,6 @@ Asteroid.new = function()
                 self.asteroidImpact = false
             end
         end
-        -- -- astero explosion
-        -- if (self.asteroDivisionExplosion == true) then
-        --     if(takeExplosionPosition == false) then
-        --         X_explosionPos = self.X_pos
-        --         Y_explosionPos = self.Y_pos
-        --         takeExplosionPosition = true
-        --     end
-        --     if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
-        --         emissionRate = 0
-        --     else
-        --         emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
-        --     end
-        --     particlesAsteroDivExplosion = drawParticlesADE(particlesAsteroDivExplosion)
-        -- end
     end
 
     self.CLOCKWISE = randomBool()
@@ -867,7 +823,6 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     local img = love.graphics.newImage("sprites/astero_dust.png")
     table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
 
- 
     function self.particlesAsteroDivExplosionUpdate(dt)
         for particlesAsteroDivExplosion_it = 1, #particlesAsteroDivExplosions do
             particlesAsteroDivExplosions[particlesAsteroDivExplosion_it]:update(dt)

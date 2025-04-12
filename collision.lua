@@ -102,8 +102,6 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions)
                     love.audio.stop(asteroidExplosion)
                         -- add particle explosion
                         table.insert(asteroidExplosions, AsteroidExplosions.new(objects[objects_to_manage[objects_removed_it]].X_pos, objects[objects_to_manage[objects_removed_it]].Y_pos))
-                        -- local img = love.graphics.newImage("sprites/astero_dust.png")
-                        -- table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
                         -- end add particle explosion
                     -- remove missile
                     table.remove(objects, objects_to_manage[objects_removed_it]) -- remove objects from table
@@ -132,8 +130,6 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions)
 
                         -- add particle explosion
                         table.insert(asteroidExplosions, AsteroidExplosions.new(objects2[objects_to_manage2[objects_removed_it2]].X_pos, objects2[objects_to_manage2[objects_removed_it2]].Y_pos))
-	                    -- local img = love.graphics.newImage("sprites/astero_dust.png")
-                        -- table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
                         -- end add particle explosion
 
 
