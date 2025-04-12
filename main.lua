@@ -90,7 +90,6 @@ function love.load()
 	asteroids = {} --also to manage bonus
     asteroidExplosions = {}
 	bonuss = {}
-    particlesAsteroDivExplosions = {}
 	menu.positionMenu = menu.START
 	level.levelDone = false
 
@@ -141,18 +140,22 @@ function love.update(dt) -- 60 fps by defaut
         end
         if (removeAsteroidExplosionNumber ~= nil) then
                 table.remove(asteroidExplosions, removeAsteroidExplosionNumber) -- remove objects from table
-                table.remove(particlesAsteroDivExplosions, removeAsteroidExplosionNumber) -- remove objects from table
         end
         for particlesAsteroDivExplosion_it = 1, #asteroidExplosions do
             asteroidExplosions[particlesAsteroDivExplosion_it].particlesExplosionLifeDurationUpdate(dt)
         end
-        particlesAsteroDivExplosionUpdate(dt, particlesAsteroDivExplosions)
+        for asteroDivExplosion_it = 1, #asteroidExplosions do
+            -- if asteroidExplosions[asteroDivExplosion_it].asteroDivisionExplosion == false then
+            --     removeAsteroidExplosionNumber = asteroDivExplosion_it
+            -- end
+            asteroidExplosions[asteroDivExplosion_it].particlesAsteroDivExplosionUpdate(dt)
+        end
 
 		-----------------------------------------
 		-- COLLISSION MANAGER (FACTORIZED) --
 		-----------------------------------------
 		collisionManager(dt, level, asteroids, asteroids)
-		collisionManager(dt, level, missiles, asteroids, asteroidExplosions, particlesAsteroDivExplosions)
+		collisionManager(dt, level, missiles, asteroids, asteroidExplosions)
 		local gameOver = collisionManager(dt, level, vaisseaux, asteroids)
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
@@ -247,7 +250,7 @@ function love.draw()
 
 		-- ASTEROID EXPLOSIONS
         for particlesAsteroDivExplosion_it = 1, #asteroidExplosions do
-            asteroidExplosions[particlesAsteroDivExplosion_it].draw(particlesAsteroDivExplosions, particlesAsteroDivExplosion_it)
+            asteroidExplosions[particlesAsteroDivExplosion_it].draw()
         end
 
 		-- MISSILE DRAW

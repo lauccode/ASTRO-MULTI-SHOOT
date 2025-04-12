@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(dt, level, objects, objects2, asteroidExplosions, particlesAsteroDivExplosions)
+function collisionManager(dt, level, objects, objects2, asteroidExplosions)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -102,8 +102,8 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, part
                     love.audio.stop(asteroidExplosion)
                         -- add particle explosion
                         table.insert(asteroidExplosions, AsteroidExplosions.new(objects[objects_to_manage[objects_removed_it]].X_pos, objects[objects_to_manage[objects_removed_it]].Y_pos))
-                        local img = love.graphics.newImage("sprites/astero_dust.png")
-                        table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
+                        -- local img = love.graphics.newImage("sprites/astero_dust.png")
+                        -- table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
                         -- end add particle explosion
                     -- remove missile
                     table.remove(objects, objects_to_manage[objects_removed_it]) -- remove objects from table
@@ -132,8 +132,8 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, part
 
                         -- add particle explosion
                         table.insert(asteroidExplosions, AsteroidExplosions.new(objects2[objects_to_manage2[objects_removed_it2]].X_pos, objects2[objects_to_manage2[objects_removed_it2]].Y_pos))
-	                    local img = love.graphics.newImage("sprites/astero_dust.png")
-                        table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
+	                    -- local img = love.graphics.newImage("sprites/astero_dust.png")
+                        -- table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
                         -- end add particle explosion
 
 

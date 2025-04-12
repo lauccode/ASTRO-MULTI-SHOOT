@@ -273,12 +273,6 @@ function asteroidsUpdate(dt, asteroids)
     end
 end
 
-function particlesAsteroDivExplosionUpdate(dt, particlesAsteroDivExplosions)
-            for particlesAsteroDivExplosion_it = 1, #particlesAsteroDivExplosions do
-                particlesAsteroDivExplosions[particlesAsteroDivExplosion_it]:update(dt)
-            end
-end
-
 function missilesUpdate(dt, vaisseaux, missiles)
     for missiles_it = 1, #missiles do
         missiles[missiles_it].accelerate(dt, vaisseaux[1].missileAcceleration, vaisseaux[1].missileAccelerationMax)

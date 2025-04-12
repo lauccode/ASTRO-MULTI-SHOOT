@@ -843,6 +843,14 @@ Asteroid.new = function()
     return self
 end
 
+
+--  █████  ███████ ████████ ███████ ██████   ██████  ██ ██████      ███████ ██   ██ ██████  ██       ██████  ███████ ██  ██████  ███    ██ ███████ 
+-- ██   ██ ██         ██    ██      ██   ██ ██    ██ ██ ██   ██     ██       ██ ██  ██   ██ ██      ██    ██ ██      ██ ██    ██ ████   ██ ██      
+-- ███████ ███████    ██    █████   ██████  ██    ██ ██ ██   ██     █████     ███   ██████  ██      ██    ██ ███████ ██ ██    ██ ██ ██  ██ ███████ 
+-- ██   ██      ██    ██    ██      ██   ██ ██    ██ ██ ██   ██     ██       ██ ██  ██      ██      ██    ██      ██ ██ ██    ██ ██  ██ ██      ██ 
+-- ██   ██ ███████    ██    ███████ ██   ██  ██████  ██ ██████      ███████ ██   ██ ██      ███████  ██████  ███████ ██  ██████  ██   ████ ███████ 
+
+
 AsteroidExplosions = {}
 AsteroidExplosions.new = function(X_explo, Y_explo)
     local self = {}
@@ -855,6 +863,17 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     local emissionRate = 0
     self.asteroDivisionExplosion = true
 
+    local particlesAsteroDivExplosions = {}
+    local img = love.graphics.newImage("sprites/astero_dust.png")
+    table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
+
+ 
+    function self.particlesAsteroDivExplosionUpdate(dt)
+        for particlesAsteroDivExplosion_it = 1, #particlesAsteroDivExplosions do
+            particlesAsteroDivExplosions[particlesAsteroDivExplosion_it]:update(dt)
+        end
+    end
+
     function self.particlesExplosionLifeDurationUpdate(dt)
 
         if (self.asteroDivisionExplosion == true) then
@@ -865,19 +884,19 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
         end
     end
 
-    local function drawParticlesADE(particlesAsteroDivExplosions, particle_number)
-        particlesAsteroDivExplosions[particle_number]:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
-        particlesAsteroDivExplosions[particle_number]:setEmissionRate(emissionRate)
-        particlesAsteroDivExplosions[particle_number]:setSizeVariation(1)
-        particlesAsteroDivExplosions[particle_number]:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
-        particlesAsteroDivExplosions[particle_number]:setSpeed(30, 90)                          -- min,max
-        particlesAsteroDivExplosions[particle_number]:setSizes(1, 0.1)
-        particlesAsteroDivExplosions[particle_number]:setDirection((2 * math.pi) * math.random()) -- radians
+    local function drawParticlesADE()
+        particlesAsteroDivExplosions[1]:setParticleLifetime(1, 1) -- Particles live at least 3s and at most 3s.
+        particlesAsteroDivExplosions[1]:setEmissionRate(emissionRate)
+        particlesAsteroDivExplosions[1]:setSizeVariation(1)
+        particlesAsteroDivExplosions[1]:setLinearAcceleration(-20, -20, 20, 20)     -- Random movement in all directions.
+        particlesAsteroDivExplosions[1]:setSpeed(30, 90)                          -- min,max
+        particlesAsteroDivExplosions[1]:setSizes(1, 0.1)
+        particlesAsteroDivExplosions[1]:setDirection((2 * math.pi) * math.random()) -- radians
 
-        love.graphics.draw(particlesAsteroDivExplosions[particle_number], X_explosionPos, Y_explosionPos)
+        love.graphics.draw(particlesAsteroDivExplosions[1], X_explosionPos, Y_explosionPos)
     end
 
-    function self.draw(particlesAsteroDivExplosions, particle_number)
+    function self.draw()
         -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
         -- love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
 
@@ -893,17 +912,12 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
             else
                 emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
             end
-            particlesAsteroDivExplosions = drawParticlesADE(particlesAsteroDivExplosions, particle_number)
+            drawParticlesADE()
         end
     end
 
     return self
 end
-
-
-
-
-
 
 -- ██████   ██████  ███    ██ ██    ██ ███████
 -- ██   ██ ██    ██ ████   ██ ██    ██ ██
