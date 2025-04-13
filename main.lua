@@ -31,7 +31,6 @@ if arg[#arg] == "vsc_debug" then
 end
 
 -- 1) Variables
-local MAX_ASTEROIDS = 0
 local DEBUG_MODE = false
 -- 2)
 local vaisseaux = nil
@@ -39,7 +38,6 @@ local missiles = nil
 local asteroids = nil -- also to manage bonus
 local bonus = nil
 local particlesTransitionStage = nil
-local particlesAsteroDivExplosion = nil
 
 local menu = nil
 
