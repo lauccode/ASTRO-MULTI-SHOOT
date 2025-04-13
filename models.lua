@@ -307,7 +307,7 @@ Vaisseau.new = function(level)
         return propulsorIncreasePowerTab[PropulsorWithV]
     end
 
-   local function  updateParticles(dt, active, particles, propulsorX, propulsorY, propulsorIncreasePower, angle)
+   local function  updateParticles(dt, active, propulsorX, propulsorY, propulsorIncreasePower, angle)
         if (active == true) then
             particle.posX[particle_number] = propulsorX
             particle.posY[particle_number] = propulsorY
@@ -349,7 +349,7 @@ Vaisseau.new = function(level)
         end
     end
 
-    local function updatePropulsorDrawPositionXY(dt, PropulsorWithV, active, particles)
+    local function updatePropulsorDrawPositionXY(dt, PropulsorWithV, active)
         active = active or false
 
         angle_LOW =  self.angle + (0.5 * math.pi)
@@ -360,33 +360,32 @@ Vaisseau.new = function(level)
             propulsorIncreasePower_LOW_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(dt, active, particles, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
+            updateParticles(dt, active, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_LOW_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_LOW_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_LOW_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(dt, active, particles, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
+            updateParticles(dt, active, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_LEFT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(dt, active, particles, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
+            updateParticles(dt, active, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
             X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
             propulsorIncreasePower_HIGHT_RIGHT = propulsorIncreasePow(dt, PropulsorWithV, active, propulsorIncreasePowerTab)
             propulsorX_HIGHT_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
             propulsorY_HIGHT_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            particles = updateParticles(dt, active, particles, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
+            updateParticles(dt, active, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
         end
-        return particles
     end
 
-    local function drawPropulsorPositionXY(particles)
+    local function drawPropulsorPositionXY()
         -- draw smoke
         for particles_it = 1, #particles do
             local powerParticle = particles[particles_it]:getEmissionRate()
@@ -412,32 +411,32 @@ Vaisseau.new = function(level)
 	function self.updatePropulsor(dt)
         -- propulsor
         if (self.accelerateFWorWW == "forward") then
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false)
         elseif (self.accelerateFWorWW == "backward") then
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false)
         elseif (self.accelerateFWorWW == "neutral" and self.rotateRightorLeft == "neutral") then
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false)
         end
 
         if (self.rotateRightorLeft == "left") then
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false, particles)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, false)
         elseif (self.rotateRightorLeft == "right") then
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false, particles)
-            particles = updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false, particles)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_LEFT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_RIGHT, true)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_LOW_RIGHT, false)
+            updatePropulsorDrawPositionXY(dt, PROPULSOR_HIGHT_LEFT, false)
         end
     end
 
@@ -451,7 +450,7 @@ Vaisseau.new = function(level)
         end
 
         -- draw reactor and smoke
-        drawPropulsorPositionXY(particles)
+        drawPropulsorPositionXY()
 
         -- circle of protection at start level or with bonus
         if (self.timeShieldStart < self.TIME_SHIELD_START_MAX) then
