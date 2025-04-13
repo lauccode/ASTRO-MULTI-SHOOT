@@ -21,7 +21,6 @@ GameObject.new = function()
     self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR = 3
     local STD_EXTENDED_IMAGE_RADIUS_FACTOR = 1
     local extendedImageRadiusFactor = 1
-    local startLevelActivated = false
     local previousAngle = (3 / 2 * math.pi) --1.5 * math.pi
 
     self.SIDE_GUN_ANGLE_OFFSET = 0.5
@@ -204,9 +203,6 @@ Vaisseau.new = function(level)
 	self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20 -- shot speed
 	self.SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 10
 
-    local widthImage = 0
-    local heightImage = 0
-    -- local colorValueIncrease = 0
     local PROPULSOR_LOW_LEFT = 1
     local PROPULSOR_LOW_RIGHT = 2
     local PROPULSOR_HIGHT_LEFT = 3
@@ -234,7 +230,6 @@ Vaisseau.new = function(level)
     local widthImage = VaisseauPng:getWidth()
     local heightImage = VaisseauPng:getHeight()
     local widthImageProp = PropulsorPng:getWidth()
-    local heightImageProp = PropulsorPng:getHeight()
     self.imageRadius = (widthImage / 2) * self.imageRatio
 
     self.TIME_SHIELD_START_MAX = 60 * 5
@@ -619,8 +614,6 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
 
     type_missile = type_missile or self.STD
 
-	-- self.accelerate = 300
-
     local LATERAL_TAB = 1
     local BIGGER_TAB = 2
     local QUICKER_TAB = 3
@@ -742,8 +735,6 @@ end
 Asteroid = {}
 Asteroid.new = function()
     local self = GameObject.new()
-    -- asteroDivisionExplo = asteroDivisionExplo or false
-    -- self.asteroDivisionExplosion = asteroDivisionExplo
     self.nameInstance = "ASTEROID"
     local AsteroidPng = love.graphics.newImage("sprites/asteroid_retro.png")
     local AsteroidPngImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png")
@@ -752,9 +743,6 @@ Asteroid.new = function()
     local asteroidImpactDuration = IMPACT_DURATION
     self.asteroidDivision = 2
     self.protection = 3
-
-    local widthImage = 0
-    local heightImage = 0
 
     local widthImage = AsteroidPng:getWidth()
     local heightImage = AsteroidPng:getHeight()
@@ -767,7 +755,7 @@ Asteroid.new = function()
         self.imageRadius = (widthImage / 2) * self.imageRatio
     end
 
-    function self.draw(particlesAsteroDivExplosion)
+    function self.draw()
         -- love.graphics.print("timeExplosion : " .. tostring(timeExplosion), 20, 250)
         -- love.graphics.print("setEmissionRate : " .. tostring(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME)), 20, 260)
 
@@ -814,7 +802,6 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     local TIME_EMISSION_RATE_END_TIME = 60
     local X_explosionPos = X_explo
     local Y_explosionPos = Y_explo
-    -- local takeExplosionPosition = false
     local emissionRate = 0
     self.asteroDivisionExplosion = true
 
@@ -883,7 +870,6 @@ Bonus = {}
 Bonus.new = function()
     local self = GameObject.new()
     self.nameInstance = "BONUS"
-    local IMPACT_DURATION = 10 -- 1/6 second
 
     local widthImage = 0
     local heightImage = 0

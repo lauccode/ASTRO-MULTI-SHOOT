@@ -111,10 +111,7 @@ Menu.new = function()
 
     function self.draw(toggleDebug)
         local offsetPrint = -50
-        local menuOffsetHori = 250
         local OFF_SET_PRINT_CREDITS_ADDED = 12
-        local positionMenuWidth = SCREEN_WIDTH / 2
-        local positionMenuHigh = SCREEN_HIGH / 2
 
         MenuPng = love.graphics.newImage("backgroud/background_vaisseau-512x512.png")
         love.graphics.draw(MenuPng, 0, 0, 0)
