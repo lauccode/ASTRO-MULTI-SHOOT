@@ -21,7 +21,7 @@ Level.new = function()
 
     local function loadLevel2(vaisseaux, asteroids)
         EspacePng = love.graphics.newImage("backgroud/Purple_Nebula_01-512x512.png")
-        local MAX_ASTEROIDS = 3
+        local MAX_ASTEROIDS = 2
         love.audio.stop(gameSound)
 
         gameSound = love.audio.newSource("music/Jaunter-Reset.mp3", "stream")
@@ -35,7 +35,7 @@ Level.new = function()
 
     local function loadLevel3(vaisseaux, asteroids)
         EspacePng = love.graphics.newImage("backgroud/Purple_Nebula_04-512x512.png")
-        local MAX_ASTEROIDS = 4
+        local MAX_ASTEROIDS = 3
         love.audio.stop(gameSound)
 
         gameSound = love.audio.newSource("music/KarolPiczak-LesChampsEtoiles.mp3", "stream")
@@ -49,7 +49,7 @@ Level.new = function()
 
     local function loadLevel4(vaisseaux, asteroids)
         EspacePng = love.graphics.newImage("backgroud/Blue_Nebula_08-512x512.png")
-        local MAX_ASTEROIDS = 5
+        local MAX_ASTEROIDS = 4
         love.audio.stop(gameSound)
 
         gameSound = love.audio.newSource("music/Kubbi-Ember-04Cascade.mp3", "stream")
@@ -63,7 +63,7 @@ Level.new = function()
 
     local function loadLevel5(vaisseaux, asteroids)
         EspacePng = love.graphics.newImage("backgroud/Green_Nebula_07-512x512.png")
-        local MAX_ASTEROIDS = 6
+        local MAX_ASTEROIDS = 5
         love.audio.stop(gameSound)
 
         gameSound = love.audio.newSource("music/PunchDeck-ICantStop.mp3", "stream")
