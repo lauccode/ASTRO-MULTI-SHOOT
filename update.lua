@@ -8,6 +8,8 @@ local weaponCycleQuicker = 0
 
 local key_Pulse = false
 local keyPressed = false
+local keyPressedDebug = false
+local keyPressedDebug2 = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -52,7 +54,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
 
     -- MENU KEYBOARD UPDATE
     if love.keyboard.isDown("up") then
-       if not keyPressed then
+        if not keyPressed then
             menu.positionMenu = menu.positionMenu - 1
             keyPressed = true
         end
@@ -73,11 +75,13 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
             menu.selectionMenu = menu.menuValues[menu.TUTO]
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TOGGLE_DEBUG]) then
-            if (key_Pulse) then
+            if not keyPressedDebug then
                 if (toggleDebug == true) then
                     toggleDebug = false
+                    keyPressedDebug = true
                 else
                     toggleDebug = true
+                    keyPressedDebug = true
                 end
             end
         end
@@ -90,6 +94,8 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.QUIT]) then
             love.event.quit()
         end
+    else
+        keyPressedDebug = false
     end
     if love.keyboard.isDown("escape") then
         love.event.quit()
@@ -115,7 +121,6 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
     if (vaisseaux[1].timeShieldStart < vaisseaux[1].TIME_SHIELD_START_MAX) then
         vaisseaux[1].updatePrintWarningStartLevel(dt)
     end
-        
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
         if love.keyboard.isDown("right") then
