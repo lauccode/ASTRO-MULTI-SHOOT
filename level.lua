@@ -77,7 +77,7 @@ Level.new = function()
 
     local function loadLevel6(vaisseaux, asteroids)
         EspacePng = love.graphics.newImage("backgroud/Green_Nebula_07-512x512.png")
-        local MAX_ASTEROIDS = 9
+        local MAX_ASTEROIDS = 6
         love.audio.stop(gameSound)
 
         gameSound = love.audio.newSource("music/LukeHall-Dystopia.mp3", "stream")
