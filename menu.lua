@@ -7,7 +7,7 @@ Menu.new = function()
     self.TOGGLE_DEBUG = 3
     self.CREDITS = 4
     self.QUIT = 5
-    self.menuValues = { "start", "tuto", "toggle_debug", "credits", "quit" }
+    self.menuValues = { "START", "SHORTCUTS AND BONUS", "TOGGLE DEBUG", "CREDITS", "QUIT" }
 
     self.MENU = "menu"
     self.GAMEOVER = "gameover"
@@ -107,6 +107,56 @@ Menu.new = function()
         end
     end
 
+    local function menuItemDraw(positionMenu,expectedMenu, offsetPrint)
+        local OFF_SET_PRINT_DRAW = 12
+        local menuItem = self.menuValues[expectedMenu]
+        local locked = (positionMenu == expectedMenu) and true or false
+
+        if (locked == true) then
+            love.graphics.setColor(255, 0, 0)          -- red
+            love.graphics.print("> " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.setColor(255, 255, 255, 255) -- reset
+        else
+            love.graphics.print("  " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+        end
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
+        return offsetPrint
+    end
+
+    local function menuItemDrawToggle(positionMenu,expectedMenu, offsetPrint, toggleDebug)
+        local OFF_SET_PRINT_DRAW = 12
+        local menuItem = self.menuValues[expectedMenu]
+        local locked = (positionMenu == expectedMenu) and true or false
+
+        if (locked == true) then
+            love.graphics.setColor(255, 0, 0)          -- red
+            love.graphics.print("> ".. tostring(menuItem) , SCREEN_WIDTH / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
+            if(toggleDebug == true) then
+                love.graphics.setColor(0, 255, 0) -- green
+            else
+                love.graphics.setColor(255, 0, 0) -- red
+            end
+            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.setColor(255, 255, 255, 255) -- reset
+        else
+            love.graphics.print("  ".. tostring(menuItem) , SCREEN_WIDTH / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
+            if(toggleDebug == true) then
+                love.graphics.setColor(0, 255, 0) -- green
+            else
+                love.graphics.setColor(255, 0, 0) -- red
+            end
+            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.setColor(255, 255, 255, 255) -- reset
+        end
+
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
+        return offsetPrint
+    end
+
     function self.draw(toggleDebug)
         local offsetPrint = -50
         local OFF_SET_PRINT_DRAW = 12
@@ -130,63 +180,14 @@ Menu.new = function()
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
         -- love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
 
-        if (self.positionMenu == self.START) then
-            love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        else
-            love.graphics.print("  START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-        end
+        offsetPrint = menuItemDraw(self.positionMenu, self.START, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO, offsetPrint)
+        offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
+        offsetPrint = menuItemDraw(self.positionMenu , self.CREDITS, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu , self.QUIT, offsetPrint)
+
         offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
-        if (self.positionMenu == self.TUTO) then
-            love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        else
-            love.graphics.print("  SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-        end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
-        if (self.positionMenu == self.TOGGLE_DEBUG) then
-            love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> TOGGLE DEBUG:  " , SCREEN_WIDTH / 2,
-                SCREEN_HIGH / 2 + offsetPrint)
-            if(toggleDebug == true) then
-                love.graphics.setColor(0, 255, 0) -- green
-            else
-                love.graphics.setColor(255, 0, 0) -- red
-            end
-            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
-                SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        else
-            love.graphics.print("  TOGGLE DEBUG:   ", SCREEN_WIDTH / 2,
-                SCREEN_HIGH / 2 + offsetPrint)
-            if(toggleDebug == true) then
-                love.graphics.setColor(0, 255, 0) -- green
-            else
-                love.graphics.setColor(255, 0, 0) -- red
-            end
-            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
-                SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
-        if (self.positionMenu == self.CREDITS) then
-            love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        else
-            love.graphics.print("  CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-        end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
-        if (self.positionMenu == self.QUIT) then
-            love.graphics.setColor(255, 0, 0)          -- red
-            love.graphics.print("> QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.setColor(255, 255, 255, 255) -- reset
-        else
-            love.graphics.print("  QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-        end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW * 2
+
         local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
         love.graphics.setFont(font)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,
