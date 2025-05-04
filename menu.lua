@@ -132,7 +132,7 @@ Menu.new = function()
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
         -- love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
 
-        if (self.positionMenu == 1) then
+        if (self.positionMenu == self.START) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
@@ -140,7 +140,7 @@ Menu.new = function()
             love.graphics.print("  START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
-        if (self.positionMenu == 2) then
+        if (self.positionMenu == self.TUTO) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
@@ -148,22 +148,32 @@ Menu.new = function()
             love.graphics.print("  SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
-        if (self.positionMenu == 3) then
+        if (self.positionMenu == self.TOGGLE_DEBUG) then
+            love.graphics.setColor(255, 0, 0)          -- red
+            love.graphics.print("> TOGGLE DEBUG:  " , SCREEN_WIDTH / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
             if(toggleDebug == true) then
-                love.graphics.setColor(0, 255, 0) -- red
+                love.graphics.setColor(0, 255, 0) -- green
             else
                 love.graphics.setColor(255, 0, 0) -- red
             end
-            love.graphics.print("> TOGGLE DEBUG   " .. tostring(toggleDebug), SCREEN_WIDTH / 2,
+            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
                 SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
-            -- love.graphics.print("  TOGGLE DEBUG", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
-            love.graphics.print("  TOGGLE DEBUG   " .. tostring(toggleDebug), SCREEN_WIDTH / 2,
+            love.graphics.print("  TOGGLE DEBUG:   ", SCREEN_WIDTH / 2,
                 SCREEN_HIGH / 2 + offsetPrint)
+            if(toggleDebug == true) then
+                love.graphics.setColor(0, 255, 0) -- green
+            else
+                love.graphics.setColor(255, 0, 0) -- red
+            end
+            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
+                SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.setColor(255, 255, 255, 255) -- reset
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
-        if (self.positionMenu == 4) then
+        if (self.positionMenu == self.CREDITS) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
@@ -171,7 +181,7 @@ Menu.new = function()
             love.graphics.print("  CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
         offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
-        if (self.positionMenu == 5) then
+        if (self.positionMenu == self.QUIT) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
