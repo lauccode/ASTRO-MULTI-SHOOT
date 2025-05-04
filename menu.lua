@@ -18,8 +18,6 @@ Menu.new = function()
 
     local offsetPrintCreditsStart = 0
     local offsetPrintCreditsEnd = 0
-    local OFF_SET_PRINT_CREDITS_ADDED = 10
-    local HORIZONTAL_POSITION = 50
     local offsetPrintCredits = offsetPrintCreditsStart
     local horizontalTitlePosition = 15
     local verticalTitlePosition = -100
@@ -111,7 +109,7 @@ Menu.new = function()
 
     function self.draw(toggleDebug)
         local offsetPrint = -50
-        local OFF_SET_PRINT_CREDITS_ADDED = 12
+        local OFF_SET_PRINT_DRAW = 12
 
         MenuPng = love.graphics.newImage("backgroud/background_vaisseau-512x512.png")
         love.graphics.draw(MenuPng, 0, 0, 0)
@@ -126,7 +124,7 @@ Menu.new = function()
             love.graphics.draw(MissilePng, xMsgPosition, yMsgPosition, 0, 7 / 10, 7 / 10)
         end
         love.graphics.draw(TitlePng, horizontalTitlePosition, verticalTitlePosition, 0)
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED * 4
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW * 4
 
         -- keep to debug updateTitleReboundFinished
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
@@ -139,7 +137,7 @@ Menu.new = function()
         else
             love.graphics.print("  START", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
         if (self.positionMenu == self.TUTO) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
@@ -147,7 +145,7 @@ Menu.new = function()
         else
             love.graphics.print("  SHORTCUTS AND BONUS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
         if (self.positionMenu == self.TOGGLE_DEBUG) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> TOGGLE DEBUG:  " , SCREEN_WIDTH / 2,
@@ -172,7 +170,7 @@ Menu.new = function()
                 SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
         if (self.positionMenu == self.CREDITS) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
@@ -180,7 +178,7 @@ Menu.new = function()
         else
             love.graphics.print("  CREDITS", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
         if (self.positionMenu == self.QUIT) then
             love.graphics.setColor(255, 0, 0)          -- red
             love.graphics.print("> QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
@@ -188,7 +186,7 @@ Menu.new = function()
         else
             love.graphics.print("  QUIT (esc)", SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
         end
-        offsetPrint = offsetPrint + OFF_SET_PRINT_CREDITS_ADDED * 2
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW * 2
         local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
         love.graphics.setFont(font)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,
@@ -205,6 +203,8 @@ Menu.new = function()
     end
 
     local function printNextCredit(stringToPrint, setRedColor)
+        local OFF_SET_PRINT_CREDITS = 10
+        local HORIZONTAL_POSITION = 50
         setRedColor = setRedColor or false
         if (setRedColor) then
             love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
@@ -213,7 +213,7 @@ Menu.new = function()
         else
             love.graphics.print(stringToPrint, HORIZONTAL_POSITION, SCREEN_HIGH + offsetPrintCredits)
         end
-        offsetPrintCredits = offsetPrintCredits + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrintCredits = offsetPrintCredits + OFF_SET_PRINT_CREDITS
     end
 
     function self.creditsDraw()
@@ -307,166 +307,166 @@ Menu.new = function()
     end
 
     function self.gameover()
-        local HORIZONTAL_POSITION = 50
+        local HORIZONTAL_GOVER_POSITION = 50
         local VERTICAL_POSITION = 50
-        local OFF_SET_PRINT_CREDITS_ADDED = 10
+        local OFF_SET_PRINT_GAMEOVER = 10
         local offsetPrintGameOver = 0
 
-        love.graphics.print("********************************* GAMEOVER **************************", HORIZONTAL_POSITION,
+        love.graphics.print("********************************* GAMEOVER **************************", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("*********************************************************************", HORIZONTAL_POSITION,
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
+        love.graphics.print("*********************************************************************", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("************************* Press 'R' to restart and continue **********", HORIZONTAL_POSITION,
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
+        love.graphics.print("************************* Press 'R' to restart and continue **********", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
     end
 
     function self.shortcutsAndBonus()
-        local HORIZONTAL_POSITION = 50
+        local HORIZONTAL_SHORTCUT_POSITION = 50
         local VERTICAL_POSITION = 20
-        local OFF_SET_PRINT_CREDITS_ADDED = 10
+        local OFF_SET_PRINT_SHORTCUTS = 10
         local OffsetPrintBonus = 0
         local xBonusPosition = 0
         local yBonusPosition = 0
 
         love.graphics.print("********************************* Shortcuts And Bonus **************************",
-            HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 3
+            HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 3
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("**** SHORTCUTS during the game *************", HORIZONTAL_POSITION,
+        love.graphics.print("**** SHORTCUTS during the game *************", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
-        love.graphics.print("UP ARROW       to go forward", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("DOWN ARROW     to go backward", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("LEFT ARROW     to turn left", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("RIGHT ARROW    to turn right", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("SPACE          to fire", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("(s)            to stop the ship", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("(q)            to go back menu", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        love.graphics.print("UP ARROW       to go forward", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("DOWN ARROW     to go backward", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("LEFT ARROW     to turn left", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("RIGHT ARROW    to turn right", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("SPACE          to fire", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("(s)            to stop the ship", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
+        love.graphics.print("(q)            to go back menu", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("**** SHORTCUTS if debug mode activated *****", HORIZONTAL_POSITION,
+        love.graphics.print("**** SHORTCUTS if debug mode activated *****", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
-        love.graphics.print("(d) activate/desactivate debug game information", HORIZONTAL_POSITION,
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
+        love.graphics.print("(d) activate/desactivate debug game information", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
         love.graphics.print("In red for BONUS, the key to press in debug mode to activate/desactivate the BONUS",
-            HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+            HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 4
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 4
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("**** BONUS *****", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        love.graphics.print("**** BONUS *****", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255)            -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_triple_shoot.png")
-        xBonusPosition = HORIZONTAL_POSITION
-        HORIZONTAL_POSITION = HORIZONTAL_POSITION + 25
+        xBonusPosition = HORIZONTAL_SHORTCUT_POSITION
+        HORIZONTAL_SHORTCUT_POSITION = HORIZONTAL_SHORTCUT_POSITION + 25
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Side fire activated FIRST, main fire put back in SECOND", HORIZONTAL_POSITION,
+        love.graphics.print("Side fire activated FIRST, main fire put back in SECOND", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(w) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(w) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_increase_shoot.png")
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Missile size can be increased TWICE", HORIZONTAL_POSITION,
+        love.graphics.print("Missile size can be increased TWICE", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(x) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(x) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png")
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Rate of fire can be increased TWICE", HORIZONTAL_POSITION,
+        love.graphics.print("Rate of fire can be increased TWICE", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(c) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(c) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_vise.png")
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Laser sight", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        love.graphics.print("Laser sight", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(v) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(v) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_sinus_shoot.png")
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Shot with sinusoidal trajectory", HORIZONTAL_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        love.graphics.print("Shot with sinusoidal trajectory", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(b) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(b) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 2
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
         BonusPng = love.graphics.newImage("sprites/bonus_bouclier.png")
         yBonusPosition = VERTICAL_POSITION + OffsetPrintBonus
         love.graphics.draw(BonusPng, xBonusPosition, yBonusPosition, 0, 1 / 3, 1 / 3)
-        love.graphics.print("Shield protection for limited time", HORIZONTAL_POSITION,
+        love.graphics.print("Shield protection for limited time", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(n) to activate/desactivate in debug mode", HORIZONTAL_POSITION,
+        love.graphics.print("(n) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_CREDITS_ADDED * 3
+        OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 3
 
         love.graphics.print("***************************          (q) to quit          **********************",
-            HORIZONTAL_POSITION - 25, VERTICAL_POSITION + OffsetPrintBonus)
+            HORIZONTAL_SHORTCUT_POSITION - 25, VERTICAL_POSITION + OffsetPrintBonus)
     end
 
     function self.congratulation()
-        local HORIZONTAL_POSITION = 50
+        local HORIZONTAL_CONGRAT_POSITION = 50
         local VERTICAL_POSITION = 50
-        local OFF_SET_PRINT_CREDITS_ADDED = 10
+        local OFF_SET_PRINT_CONGRAT = 10
         local offsetPrintGameOver = 0
 
         love.graphics.print("********************************* CONGRATULATION **************************",
-            HORIZONTAL_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
+            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
         love.graphics.print(
             "************************* You succeeded to finish this small game   ***********************",
-            HORIZONTAL_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("*************************Press 'R' to restart and continue **********", HORIZONTAL_POSITION,
+            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
+        love.graphics.print("*************************Press 'R' to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CREDITS_ADDED
+        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
     end
 
     return self
