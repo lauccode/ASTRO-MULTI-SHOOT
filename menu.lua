@@ -308,18 +308,22 @@ Menu.new = function()
     end
 
     function self.gameover()
-        local HORIZONTAL_GOVER_POSITION = 50
-        local VERTICAL_POSITION = 50
+        local HORIZONTAL_GOVER_POSITION = 0
+        local VERTICAL_POSITION = 140
         local OFF_SET_PRINT_GAMEOVER = 10
         local offsetPrintGameOver = 0
 
-        love.graphics.print("********************************* GAMEOVER **************************", HORIZONTAL_GOVER_POSITION,
+
+        local loseGamePng = love.graphics.newImage("backgroud/lose512x512.png")
+		love.graphics.draw(loseGamePng, 0, 0, 0)
+
+        love.graphics.print("******************* GAMEOVER **************************", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
         offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
-        love.graphics.print("*********************************************************************", HORIZONTAL_GOVER_POSITION,
+        love.graphics.print("*******************************************************", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
         offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
-        love.graphics.print("************************* Press 'R' to restart and continue **********", HORIZONTAL_GOVER_POSITION,
+        love.graphics.print("*********** Press 'R' to restart and continue **********", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
         offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
     end
