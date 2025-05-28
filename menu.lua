@@ -458,20 +458,23 @@ Menu.new = function()
 
     function self.congratulation()
         local HORIZONTAL_CONGRAT_POSITION = 50
-        local VERTICAL_POSITION = 50
+        local VERTICAL_POSITION = 90
         local OFF_SET_PRINT_CONGRAT = 10
-        local offsetPrintGameOver = 0
+        local offsetPrintWin = 0
 
-        love.graphics.print("********************************* CONGRATULATION **************************",
-            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
+        local winGamePng = love.graphics.newImage("backgroud/512x512_win.png")
+		love.graphics.draw(winGamePng, 0, 0, 0)
+
+        love.graphics.print("******************************************* CONGRATULATION **************************",
+            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintWin)
+        offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
         love.graphics.print(
-            "************************* You succeeded to finish this small game   ***********************",
-            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
-        love.graphics.print("*************************Press 'R' to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
-            VERTICAL_POSITION + offsetPrintGameOver)
-        offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_CONGRAT
+            "*********************************** You succeeded to finish this small game   ***********************",
+            HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintWin)
+        offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
+        love.graphics.print("***********************************Press 'R' to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
+            VERTICAL_POSITION + offsetPrintWin)
+        offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
     end
 
     return self
