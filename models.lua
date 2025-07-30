@@ -188,8 +188,9 @@ Vaisseau.new = function(level)
     local vaisseauImpactDuration = IMPACT_DURATION
     local PROPULSOR_POWER_MAX = 60 -- 1/6 second
     local propulsorIncreasePowerTab = { 0, 0, 0, 0 }
-    self.protection = 10           -- 10
-
+    local MAX_PROTECTION = 10
+    self.protection = MAX_PROTECTION      -- 10
+    
     self.missilePackLateral = self.MSL_PKG_STD
     self.missilePackBigger = self.MSL_PKG_STD
     self.missilePackQuicker = self.MSL_PKG_STD
@@ -436,6 +437,29 @@ Vaisseau.new = function(level)
             (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
     end
 
+    local function drawProtectionBar(protec, posH, posV)
+	local barGrey = love.graphics.newImage("sprites/barGrey.png")
+	local barRed = love.graphics.newImage("sprites/barRed.png")
+	local barOrange = love.graphics.newImage("sprites/barOrange.png")
+	local barGreen = love.graphics.newImage("sprites/barGreen.png")
+
+        local horizOffset = 21 * self.imageRatio
+        for protectionLoop = 1, protec do
+            if (protec < 4 ) then
+		love.graphics.draw(barRed, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
+	    elseif (protec >= 4 and protec < 6) then
+		love.graphics.draw(barOrange, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
+	    elseif (protec >= 6) then
+		love.graphics.draw(barGreen, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
+	    end
+	    posH = posH + horizOffset
+        end
+	for protectionLoop = protec, (MAX_PROTECTION-1) do
+	    love.graphics.draw(barGrey, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
+	    posH = posH + horizOffset
+        end
+    end
+
     function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
             VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro.png")
@@ -459,11 +483,12 @@ Vaisseau.new = function(level)
         local offsetPrintV = 0
         local OFF_SET_PRINT_CREDITS_ADDED = 12
         local valueOffset = 100
-        love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
+
+	love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
         love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(string.format("%d", self.protection)), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
         love.graphics.setColor(255, 255, 255, 255) -- reset
+	drawProtectionBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
         love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH / 3) + valueOffset,
