@@ -453,25 +453,25 @@ Vaisseau.new = function(level)
             (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
     end
 
-    local function drawBar(protec, posH, posV, MAX)
+    local function drawBar(barLevel, posH, posV, MAX)
 	local barGrey = love.graphics.newImage("sprites/barGrey.png")
 	local barRed = love.graphics.newImage("sprites/barRed.png")
 	local barOrange = love.graphics.newImage("sprites/barOrange.png")
 	local barGreen = love.graphics.newImage("sprites/barGreen.png")
 
         local horizOffset = 21 * self.imageRatio
-        for protectionLoop = 1, protec do
+        for protectionLoop = 1, barLevel do
 	    local lowLimit = (MAX<3) and MAX/2 or MAX/3
-            if (protec <= lowLimit ) then
+            if (barLevel <= lowLimit ) then
 		love.graphics.draw(barRed, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
-	    elseif (protec > MAX/3 and protec <= (MAX/3)*2 ) then
+	    elseif (barLevel > MAX/3 and barLevel <= (MAX/3)*2 ) then
 		love.graphics.draw(barOrange, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
-	    elseif (protec > (MAX/3)*2 ) then
+	    elseif (barLevel > (MAX/3)*2 ) then
 		love.graphics.draw(barGreen, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
 	    end
 	    posH = posH + horizOffset
         end
-	for protectionLoop = protec, (MAX-1) do
+	for protectionLoop = barLevel, (MAX-1) do
 	    love.graphics.draw(barGrey, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
 	    posH = posH + horizOffset
         end
