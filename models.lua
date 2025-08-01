@@ -44,6 +44,21 @@ GameObject.new = function()
     self.MSL_SINUS = 10
     self.MSL_PKG_LAST_END = 11
 
+    -- Create a lookup table
+    self.lookupWeaponsLevel = {
+	[self.MSL_PKG_STD] = 1,
+	[self.MSL_PKG_LATERAL] = 2,
+	[self.MSL_PKG_MUCH_LATERAL] = 3,
+	[self.MSL_PKG_BIGGER] = 2,
+	[self.MSL_PKG_MUCH_BIGGER] = 3,
+	[self.MSL_PKG_QUICKER] = 2,
+	[self.MSL_PKG_MUCH_QUICKER] = 3,
+	[self.MSL_LASER_SIGHT] = 2,
+	[self.SHIELD] = 2,
+	[self.MSL_SINUS] = 2
+	-- MSL_PKG_LAST_END is not mapped
+    }
+
     self.maneuverability = 4.8
 
     function self.rotate(clockwise, dt)
@@ -188,17 +203,18 @@ Vaisseau.new = function(level)
     local vaisseauImpactDuration = IMPACT_DURATION
     local PROPULSOR_POWER_MAX = 60 -- 1/6 second
     local propulsorIncreasePowerTab = { 0, 0, 0, 0 }
+    local MAX_WEAPON = 3
     local MAX_PROTECTION = 10
     self.protection = MAX_PROTECTION      -- 10
-    
+
     self.missilePackLateral = self.MSL_PKG_STD
     self.missilePackBigger = self.MSL_PKG_STD
     self.missilePackQuicker = self.MSL_PKG_STD
     self.missileLaserSight = self.MSL_PKG_STD
     self.missileSinus = self.MSL_PKG_STD
     self.shield = self.MSL_PKG_STD
-    local nameMissilePack = { "DISABLED", "LATERAL", "TRIPLE", "BIGGER", "MUCH BIGGER", "MACHINE GUN",
-        "SUPER MACHINE GUN", "LASER_SIGHT", "SHIELD", "MSL_SINUS" }
+    -- local nameMissilePack = { "DISABLED", "LATERAL", "TRIPLE", "BIGGER", "MUCH BIGGER", "MACHINE GUN",
+        -- "SUPER MACHINE GUN", "LASER_SIGHT", "SHIELD", "MSL_SINUS" }
 
 	self.SHOOT_TIMER_LIMIT = 30             --
 	self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20 -- shot speed
@@ -437,7 +453,7 @@ Vaisseau.new = function(level)
             (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
     end
 
-    local function drawProtectionBar(protec, posH, posV)
+    local function drawBar(protec, posH, posV, MAX)
 	local barGrey = love.graphics.newImage("sprites/barGrey.png")
 	local barRed = love.graphics.newImage("sprites/barRed.png")
 	local barOrange = love.graphics.newImage("sprites/barOrange.png")
@@ -445,16 +461,17 @@ Vaisseau.new = function(level)
 
         local horizOffset = 21 * self.imageRatio
         for protectionLoop = 1, protec do
-            if (protec < 4 ) then
+	    local lowLimit = (MAX<3) and MAX/2 or MAX/3
+            if (protec <= lowLimit ) then
 		love.graphics.draw(barRed, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
-	    elseif (protec >= 4 and protec < 6) then
+	    elseif (protec > MAX/3 and protec <= (MAX/3)*2 ) then
 		love.graphics.draw(barOrange, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
-	    elseif (protec >= 6) then
+	    elseif (protec > (MAX/3)*2 ) then
 		love.graphics.draw(barGreen, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
 	    end
 	    posH = posH + horizOffset
         end
-	for protectionLoop = protec, (MAX_PROTECTION-1) do
+	for protectionLoop = protec, (MAX-1) do
 	    love.graphics.draw(barGrey, posH, posV, 0, self.imageRatio, self.imageRatio, 1, 1)
 	    posH = posH + horizOffset
         end
@@ -487,7 +504,7 @@ Vaisseau.new = function(level)
 	love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
         love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
         love.graphics.setColor(255, 255, 255, 255) -- reset
-	drawProtectionBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV);
+	drawBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_PROTECTION);
 
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
@@ -495,28 +512,28 @@ Vaisseau.new = function(level)
             offsetPrintV)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Lateral Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.missilePackLateral]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+        drawBar(self.lookupWeaponsLevel[self.missilePackLateral], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Bigger Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.missilePackBigger]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+	drawBar(self.lookupWeaponsLevel[self.missilePackBigger], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON); --
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Quick Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.missilePackQuicker]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
+	drawBar(self.lookupWeaponsLevel[self.missilePackQuicker], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
+
+	offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Laser Sight", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.missileLaserSight]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+        drawBar(self.lookupWeaponsLevel[self.missileLaserSight], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Shield Protection", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.shield]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+        drawBar(self.lookupWeaponsLevel[self.shield], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Sinus", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(nameMissilePack[self.missileSinus]), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+        drawBar(self.lookupWeaponsLevel[self.missileSinus], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
         -- manage laser sight
@@ -896,9 +913,6 @@ Bonus = {}
 Bonus.new = function()
     local self = GameObject.new()
     self.nameInstance = "BONUS"
-
-    local widthImage = 0
-    local heightImage = 0
 
     local BonusPng
     local MAX_BONUS_NUMBER = (self.MSL_PKG_LAST_END - self.MSL_PKG_LATERAL)
