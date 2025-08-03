@@ -501,28 +501,29 @@ Vaisseau.new = function(level)
         local OFF_SET_PRINT_CREDITS_ADDED = 12
         local valueOffset = 100
 
-	love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.setColor(255, 255, 255, 255) -- reset
-	drawBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_PROTECTION);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
         love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH / 3) + valueOffset,
             offsetPrintV)
+
+        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
+        love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
+        love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
+        love.graphics.setColor(255, 255, 255, 255) -- reset
+	    drawBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_PROTECTION);
+
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Lateral Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
         drawBar(self.lookupWeaponsLevel[self.missilePackLateral], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
 
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Bigger Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-	drawBar(self.lookupWeaponsLevel[self.missilePackBigger], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON); --
+	    drawBar(self.lookupWeaponsLevel[self.missilePackBigger], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON); --
 
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Quick Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-	drawBar(self.lookupWeaponsLevel[self.missilePackQuicker], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
+	    drawBar(self.lookupWeaponsLevel[self.missilePackQuicker], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
 
-	offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
+	    offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.print("Laser Sight", (SCREEN_WIDTH / 3), offsetPrintV)
         drawBar(self.lookupWeaponsLevel[self.missileLaserSight], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
 
