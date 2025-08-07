@@ -86,7 +86,7 @@ function love.load()
 	vaisseaux[1].timeShieldStart = 0 --seconds
 	missiles = {}
 	asteroids = {} --also to manage bonus
-    asteroidExplosions = {}
+        asteroidExplosions = {}
 	bonuss = {}
 	menu.positionMenu = menu.START
 	level.levelDone = false
@@ -171,6 +171,7 @@ function love.update(dt) -- 60 fps by defaut
 		menu.updatePresentStage(dt)
 		particlesTransitionStage:update(dt)
 		if love.keyboard.isDown("s") then
+			particlesTransitionStage = nil  -- optim(TBT)
 			menu.isPresentStageDone = true
 			menu.selectionMenu = menu.menuValues[menu.START]
 		end
@@ -213,7 +214,7 @@ function love.draw()
 		menu.draw(toggleDebug)
 	end
 
-	if menu.selectionMenu == menu.PRESENT_STAGE then
+	if menu.selectionMenu == menu.PRESENT_STAGE and particlesTransitionStage ~= nil then  -- optim(TBT)
 		local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
 		love.graphics.setFont(font)
 		menu.presentStage(level.levelNumber, particlesTransitionStage)
