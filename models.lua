@@ -290,6 +290,10 @@ Vaisseau.new = function(level)
 	local barOrange = love.graphics.newImage("sprites/barOrange.png")
 	local barGreen = love.graphics.newImage("sprites/barGreen.png")
 
+    local VaisseauPngGreen = love.graphics.newImage("sprites/vaisseau_retro.png")
+    local VaisseauPngOrange = love.graphics.newImage("sprites/vaisseau_retro_orange.png")
+    local VaisseauPngRed = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
+
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
             love.graphics.circle("line", self.X_pos, self.Y_pos,
@@ -481,11 +485,11 @@ Vaisseau.new = function(level)
 
     function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
-            VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro.png")
+            VaisseauPng = VaisseauPngGreen
         elseif (self.missilePackQuicker == self.MSL_PKG_QUICKER) then
-            VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro_orange.png")
+            VaisseauPng = VaisseauPngOrange
         else
-            VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
+            VaisseauPng = VaisseauPngRed
         end
 
         -- draw reactor and smoke
@@ -663,6 +667,10 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
     local QUICKER_TAB = 3
     local SINUS = 4
 
+    local MissilePngGreen = love.graphics.newImage("sprites/missile.png")
+    local MissilePngOrange = love.graphics.newImage("sprites/missile_orange.png")
+    local MissilePngRed = love.graphics.newImage("sprites/missile_violet.png")
+
     self.imageRatio = self.imageRatio / 2 -- divided by 2 otherwise missile too big at the start
     self.imageRatioRef = 0.35 / 2         -- divided by 2 otherwise missile too big at the start
 
@@ -711,11 +719,11 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
 
     local MissilePng
     if (type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
-        MissilePng = love.graphics.newImage("sprites/missile.png")
+        MissilePng = MissilePngGreen
     elseif (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER) then
-        MissilePng = love.graphics.newImage("sprites/missile_orange.png")
+        MissilePng = MissilePngOrange
     else
-        MissilePng = love.graphics.newImage("sprites/missile_violet.png")
+        MissilePng = MissilePngRed
     end
 
     self.X_pos = X_pos_vaisseau + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -

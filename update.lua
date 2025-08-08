@@ -43,7 +43,7 @@ function timerUpdate(dt, vaisseaux)
     end
  end
 
-function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
+function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     local menuSize = tableLength(menu.menuValues)
 
     if (menu.positionMenu > menuSize) then
@@ -87,7 +87,6 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
             menu.selectionMenu = menu.menuValues[menu.CREDITS]
-            creditsSound = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream")
             creditsSound:setVolume(0.4)
             love.audio.play(creditsSound)
         end

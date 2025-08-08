@@ -50,7 +50,7 @@ Menu.new = function()
     function self.updatePresentStage(dt)
         self.timerPresentStage   = self.timerPresentStage + (dt*60)
 	end
-    
+
     function self.presentStage(levelNumberForMenu, particlesTransitionStage, fontNerd10)
         local X_text_position    = 1
         local timeMove           = 120 -- 2 sec

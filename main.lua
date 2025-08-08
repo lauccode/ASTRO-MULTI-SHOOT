@@ -54,6 +54,7 @@ creditsSound = nil
 asteroidExplosion = nil
 shootSound = nil
 vaisseauImpact = nil
+creditsSound = nil
 
 menu = Menu.new()
 level = Level.new()
@@ -87,6 +88,7 @@ function love.load()
 	shootSound:setVolume(0.4)
 	vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
 	vaisseauImpact:setVolume(1)
+    creditsSound = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream")
 
 	DEBUG_MODE = false
 	vaisseaux = {}
@@ -94,7 +96,7 @@ function love.load()
 	vaisseaux[1].timeShieldStart = 0 --seconds
 	missiles = {}
 	asteroids = {} --also to manage bonus
-        asteroidExplosions = {}
+    asteroidExplosions = {}
 	bonuss = {}
 	menu.positionMenu = menu.START
 	level.levelDone = false
@@ -122,7 +124,7 @@ function love.update(dt) -- 60 fps by defaut
 
 	if menu.selectionMenu == menu.MENU then
 		menu.updateTitleRebound(dt)
-		DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug)
+		DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.START] then
