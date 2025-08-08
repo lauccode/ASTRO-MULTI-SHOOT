@@ -282,6 +282,13 @@ Vaisseau.new = function(level)
     local angle_LOW = 0
     local angle_HIGHT = 0
 
+    -- NEED TO BE LOADED ONE TIME ! (otherwise FPS ISSUE)
+    local fontBar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
+	local barGrey = love.graphics.newImage("sprites/barGrey.png")
+	local barRed = love.graphics.newImage("sprites/barRed.png")
+	local barOrange = love.graphics.newImage("sprites/barOrange.png")
+	local barGreen = love.graphics.newImage("sprites/barGreen.png")
+
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
             love.graphics.circle("line", self.X_pos, self.Y_pos,
@@ -293,7 +300,7 @@ Vaisseau.new = function(level)
         self.timeShieldStart = self.timeShieldStart + (60*dt) -- count time from start of level
         self.colorValueIncrease = self.colorValueIncrease + (5*60*dt)
     end
-    
+
     local function printWarningStartLevel()
         if (self.colorValueIncrease > 255) then self.colorValueIncrease = 0 end
         local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18)
@@ -454,11 +461,6 @@ Vaisseau.new = function(level)
     end
 
     local function drawBar(barLevel, posH, posV, MAX)
-	local barGrey = love.graphics.newImage("sprites/barGrey.png")
-	local barRed = love.graphics.newImage("sprites/barRed.png")
-	local barOrange = love.graphics.newImage("sprites/barOrange.png")
-	local barGreen = love.graphics.newImage("sprites/barGreen.png")
-
         local horizOffset = 21 * self.imageRatio
         for protectionLoop = 1, barLevel do
 	    local lowLimit = (MAX<3) and MAX/2 or MAX/3
@@ -494,9 +496,7 @@ Vaisseau.new = function(level)
             printWarningStartLevel()
         end
 
-
-        local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
-        love.graphics.setFont(font)
+        love.graphics.setFont(fontBar)
         local offsetPrintV = 0
         local OFF_SET_PRINT_CREDITS_ADDED = 12
         local valueOffset = 100
