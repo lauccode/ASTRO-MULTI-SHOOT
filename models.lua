@@ -282,6 +282,7 @@ Vaisseau.new = function(level)
     local angle_LOW = 0
     local angle_HIGHT = 0
 
+    local fontNerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18)
     -- NEED TO BE LOADED ONE TIME ! (otherwise FPS ISSUE)
     local fontBar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
 	local barGrey = love.graphics.newImage("sprites/barGrey.png")
@@ -303,8 +304,7 @@ Vaisseau.new = function(level)
 
     local function printWarningStartLevel()
         if (self.colorValueIncrease > 255) then self.colorValueIncrease = 0 end
-        local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18)
-        love.graphics.setFont(font)
+        love.graphics.setFont(fontNerd18)
         love.graphics.setColor(255, 255, 0)         --yellow
         love.graphics.print("WARNING - SHIELD OFF IN : " ..
             tostring(string.format("%d", (self.TIME_SHIELD_START_MAX / 60 - self.timeShieldStart / 60))),

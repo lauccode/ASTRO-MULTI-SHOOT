@@ -51,7 +51,7 @@ Menu.new = function()
         self.timerPresentStage   = self.timerPresentStage + (dt*60)
 	end
     
-    function self.presentStage(levelNumberForMenu, particlesTransitionStage)
+    function self.presentStage(levelNumberForMenu, particlesTransitionStage, fontNerd10)
         local X_text_position    = 1
         local timeMove           = 120 -- 2 sec
         local textStartS1        = ((3 * SCREEN_WIDTH) / 4)
@@ -86,8 +86,7 @@ Menu.new = function()
                 tostring(levelNumberForMenu - 1) .. " CLEAR - PREPARE TO STAGE " .. tostring(levelNumberForMenu),
                 X_text_position, SCREEN_HIGH / 3)
         end
-        local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10)
-        love.graphics.setFont(font)
+        love.graphics.setFont(fontNerd10)
         love.graphics.print("Press 's' to start when you are ready to fight", SCREEN_WIDTH / 4, SCREEN_HIGH / 3 + 30)
         love.graphics.setColor(255, 255, 255, 255) -- reset
     end
@@ -157,7 +156,7 @@ Menu.new = function()
         return offsetPrint
     end
 
-    function self.draw(toggleDebug)
+    function self.draw(toggleDebug, fontVT12)
         local offsetPrint = -50
         local OFF_SET_PRINT_DRAW = 12
 
@@ -188,8 +187,7 @@ Menu.new = function()
 
         offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
 
-        local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
-        love.graphics.setFont(font)
+        love.graphics.setFont(fontVT12)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,
             SCREEN_HIGH / 2 + offsetPrint)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,

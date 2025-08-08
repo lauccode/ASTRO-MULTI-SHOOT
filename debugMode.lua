@@ -1,6 +1,5 @@
-function debugMode(objects)
-    local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
-    love.graphics.setFont(font)
+function debugMode(objects, fontNerd11)
+    love.graphics.setFont(fontNerd11)
 
     if (objects[1] ~= nil) then
         if (objects[1].nameInstance == "VAISSEAU") then

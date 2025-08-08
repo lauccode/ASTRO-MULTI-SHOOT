@@ -58,6 +58,14 @@ vaisseauImpact = nil
 menu = Menu.new()
 level = Level.new()
 
+-- Fonts
+local fontNerd10 = nil
+local fontNerd11 = nil
+local fontNerd14 = nil
+local fontNerd20 = nil
+local fontVT12 = nil
+local fontVT20 = nil
+
 -- ██       ██████   █████  ██████
 -- ██      ██    ██ ██   ██ ██   ██
 -- ██      ██    ██ ███████ ██   ██
@@ -93,6 +101,14 @@ function love.load()
 
 	local img = love.graphics.newImage("sprites/star.png")
 	particlesTransitionStage = love.graphics.newParticleSystem(img, 450)
+
+    fontNerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10)
+    fontNerd11 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
+    fontNerd14 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
+    fontNerd20 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
+    fontVT12 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
+    fontVT20 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
+
 end
 
 -- ██    ██ ██████  ██████   █████  ████████ ███████
@@ -209,15 +225,13 @@ function love.draw()
 	love.graphics.scale(GRAPHICS_SCALE, GRAPHICS_SCALE)
 
 	if menu.selectionMenu == menu.MENU then
-		local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
-		love.graphics.setFont(font)
-		menu.draw(toggleDebug)
+		love.graphics.setFont(fontVT20)
+		menu.draw(toggleDebug, fontVT12)
 	end
 
 	if menu.selectionMenu == menu.PRESENT_STAGE and particlesTransitionStage ~= nil then  -- optim(TBT)
-		local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
-		love.graphics.setFont(font)
-		menu.presentStage(level.levelNumber, particlesTransitionStage)
+		love.graphics.setFont(fontNerd20)
+		menu.presentStage(level.levelNumber, particlesTransitionStage, fontNerd10)
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.START] then
@@ -227,7 +241,7 @@ function love.draw()
 		if vaisseaux[1] ~= nil then
 			vaisseaux[1].draw()
 			if DEBUG_MODE then
-				debugMode(vaisseaux)
+				debugMode(vaisseaux, fontNerd11)
 			end
 		end
 
@@ -236,7 +250,7 @@ function love.draw()
 			asteroids[asteroids_it].draw()
 
 			if DEBUG_MODE then
-				debugMode(asteroids)
+				debugMode(asteroids, fontNerd11)
 			end
 		end
 
@@ -252,32 +266,28 @@ function love.draw()
 			end
 
 			if DEBUG_MODE then
-				debugMode(missiles)
+				debugMode(missiles, fontNerd11)
 			end
 		end
 	end
 
 	if menu.selectionMenu == menu.GAMEOVER then
-		local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
-		love.graphics.setFont(font)
+		love.graphics.setFont(fontNerd14)
 		menu.gameover()
 	end
 
 	if menu.selectionMenu == menu.CONGRATULATION then
-		local font = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
-		love.graphics.setFont(font)
+		love.graphics.setFont(fontNerd14)
 		menu.congratulation()
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
-		local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
-		love.graphics.setFont(font)
+		love.graphics.setFont(fontVT12)
 		menu.shortcutsAndBonus()
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
-		local font = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
-		love.graphics.setFont(font)
+		love.graphics.setFont(fontVT12)
 		menu.creditsDraw()
 	end
 end
