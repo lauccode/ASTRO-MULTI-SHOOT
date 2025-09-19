@@ -505,11 +505,6 @@ Vaisseau.new = function(level)
         local OFF_SET_PRINT_CREDITS_ADDED = 12
         local valueOffset = 100
 
-        love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
         love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
         love.graphics.setColor(255, 255, 255, 255) -- reset
@@ -539,6 +534,10 @@ Vaisseau.new = function(level)
         love.graphics.print("Sinus", (SCREEN_WIDTH / 3), offsetPrintV)
         drawBar(self.lookupWeaponsLevel[self.missileSinus], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
 
+        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
+        love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
+        love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH / 3) + valueOffset,
+            offsetPrintV)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
         -- manage laser sight
