@@ -102,7 +102,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     return DEBUG_MODE, toggleDebug, creditsSound
 end
 
-function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, dt)
+function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, shootSound, dt)
     if love.keyboard.isDown("q") then -- restart game
         if gameSound ~= nil then
             love.audio.stop(gameSound)

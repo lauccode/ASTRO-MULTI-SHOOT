@@ -49,9 +49,9 @@ local GRAPHICS_SCALE = 1.5
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
 -- IntroSound = nil
-shootSound = nil
 vaisseauImpact = nil
 
+local shootSound = nil
 local asteroidExplosionSound= nil
 local creditsSound = nil
 local gameSound = nil
@@ -144,7 +144,7 @@ function love.update(dt) -- 60 fps by defaut
 			asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
 			level.levelDone = true
 		end
-		DEBUG_MODE, gameSound = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, dt)
+		DEBUG_MODE, gameSound = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, shootSound, dt)
 
 		asteroidsUpdate(dt, asteroids)
 		missilesUpdate(dt, vaisseaux, missiles)
