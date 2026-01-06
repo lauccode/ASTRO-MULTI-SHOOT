@@ -102,9 +102,11 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     return DEBUG_MODE, toggleDebug
 end
 
-function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
+function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, dt)
     if love.keyboard.isDown("q") then -- restart game
-        love.audio.stop(gameSound)
+        if gameSound ~= nil then
+            love.audio.stop(gameSound)
+        end
         menu.selectionMenu = menu.MENU
         level.levelNumber = 0
         level.levelDone = false
@@ -263,7 +265,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
 
         vaisseaux[1].move(dt)
     end
-    return DEBUG_MODE
+    return DEBUG_MODE, gameSound
 end
 
 function asteroidsUpdate(dt, asteroids)

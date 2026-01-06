@@ -48,13 +48,14 @@ local GRAPHICS_SCALE = 1.5
 -- global to be used everywhere
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
-introSound = nil
-gameSound = nil
+IntroSound = nil
 creditsSound = nil
 asteroidExplosion = nil
 shootSound = nil
 vaisseauImpact = nil
 creditsSound = nil
+
+local gameSound = nil
 
 menu = Menu.new()
 level = Level.new()
@@ -89,6 +90,9 @@ function love.load()
 	vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
 	vaisseauImpact:setVolume(1)
     creditsSound = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream")
+
+    -- gameSound = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream")
+    -- gameSound:setVolume(0.4)
 
 	DEBUG_MODE = false
 	vaisseaux = {}
@@ -138,10 +142,10 @@ function love.update(dt) -- 60 fps by defaut
 			if level.levelNumber > 1 then
 				love.load() -- reset all before new level
 			end
-			asteroids = level.levelManager(vaisseaux, asteroids)
+			asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
 			level.levelDone = true
 		end
-		DEBUG_MODE = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, dt)
+		DEBUG_MODE, gameSound = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, dt)
 
 		asteroidsUpdate(dt, asteroids)
 		missilesUpdate(dt, vaisseaux, missiles)
