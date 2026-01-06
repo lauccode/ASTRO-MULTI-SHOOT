@@ -60,12 +60,12 @@ menu = Menu.new()
 level = Level.new()
 
 -- Fonts
-local fontNerd10 = nil
-local fontNerd11 = nil
-local fontNerd14 = nil
-local fontNerd20 = nil
-local fontVT12 = nil
-local fontVT20 = nil
+local fontNerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10)
+local fontNerd11 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
+local fontNerd14 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
+local fontNerd20 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
+local fontVT12 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
+local fontVT20 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
 
 -- ██       ██████   █████  ██████
 -- ██      ██    ██ ██   ██ ██   ██
@@ -106,13 +106,6 @@ function love.load()
 
 	local img = love.graphics.newImage("sprites/star.png")
 	particlesTransitionStage = love.graphics.newParticleSystem(img, 450)
-
-    fontNerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10)
-    fontNerd11 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
-    fontNerd14 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
-    fontNerd20 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
-    fontVT12 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
-    fontVT20 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
 
 end
 
