@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(dt, level, objects, objects2, asteroidExplosions)
+function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonuss)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -109,9 +109,9 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions)
                     if (objects2[objects_to_manage2[objects_removed_it2]].asteroidDivision > 0 and objects2[objects_to_manage2[objects_removed_it2]].protection < 1) then
                         -- create Bonus on first division
                         if (objects2[objects_to_manage2[objects_removed_it2]].asteroidDivision == 2) then
-                            table.insert(objects2, Bonus.new()) -- Bonus managed in asteroids table !
-                            objects2[#objects2 + 1 - 1].X_pos = objects2[objects_to_manage2[objects_removed_it2]].X_pos
-                            objects2[#objects2 + 1 - 1].Y_pos = objects2[objects_to_manage2[objects_removed_it2]].Y_pos
+                            table.insert(bonuss, Bonus.new()) -- Bonus managed in asteroids table !
+                            bonuss[#bonuss + 1 - 1].X_pos = objects2[objects_to_manage2[objects_removed_it2]].X_pos
+                            bonuss[#bonuss + 1 - 1].Y_pos = objects2[objects_to_manage2[objects_removed_it2]].Y_pos
                         end
 
                         -- Create 2 news asteroids more small

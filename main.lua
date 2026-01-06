@@ -6,14 +6,14 @@ require("level")
 require("menu")
 
 -- Pour debugger avec zeroBrane
-if arg[#arg] == "-debug" then
-	require("mobdebug").start()
-end
+-- if arg[#arg] == "-debug" then
+-- 	require("mobdebug").start()
+-- end
 
 -- MANDATORY TO DEBUG WITH VSC + install "local lua debbuger" plugin
--- if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
---   require("lldebugger").start()
--- end
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+  require("lldebugger").start()
+end
 -- OR
 
 -- sudo add-apt-repository ppa:bartbes/love-stable
@@ -26,9 +26,9 @@ end
 -- French Language Pack for Visual Studio Code v1.70.8170921 Microsoft
 
 -- Pour debugger avec vsCode
-if arg[#arg] == "vsc_debug" then
-	require("lldebugger").start()
-end
+-- if arg[#arg] == "vsc_debug" then
+-- 	require("lldebugger").start()
+-- end
 
 -- 1) Variables
 local DEBUG_MODE = false
@@ -164,7 +164,8 @@ function love.update(dt) -- 60 fps by defaut
 		-- COLLISSION MANAGER (FACTORIZED) --
 		-----------------------------------------
 		collisionManager(dt, level, asteroids, asteroids)
-		collisionManager(dt, level, missiles, asteroids, asteroidExplosions)
+		collisionManager(dt, level, missiles, asteroids, asteroidExplosions, bonuss)
+		collisionManager(dt, level, vaisseaux, bonuss)
 		local gameOver = collisionManager(dt, level, vaisseaux, asteroids)
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
@@ -254,6 +255,11 @@ function love.draw()
 			if DEBUG_MODE then
 				debugMode(asteroids, fontNerd11)
 			end
+		end
+
+		-- BONUSS DRAW
+		for bonuss_it = 1, #bonuss do
+			bonuss[bonuss_it].draw()
 		end
 
 		-- ASTEROID EXPLOSIONS
