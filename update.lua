@@ -99,7 +99,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     if love.keyboard.isDown("escape") then
         love.event.quit()
     end
-    return DEBUG_MODE, toggleDebug
+    return DEBUG_MODE, toggleDebug, creditsSound
 end
 
 function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, dt)

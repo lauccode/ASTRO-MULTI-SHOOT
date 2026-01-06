@@ -49,12 +49,11 @@ local GRAPHICS_SCALE = 1.5
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
 IntroSound = nil
-creditsSound = nil
 asteroidExplosion = nil
 shootSound = nil
 vaisseauImpact = nil
-creditsSound = nil
 
+local creditsSound = nil
 local gameSound = nil
 
 menu = Menu.new()
@@ -128,7 +127,7 @@ function love.update(dt) -- 60 fps by defaut
 
 	if menu.selectionMenu == menu.MENU then
 		menu.updateTitleRebound(dt)
-		DEBUG_MODE, toggleDebug = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
+		DEBUG_MODE, toggleDebug, creditsSound = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.START] then
