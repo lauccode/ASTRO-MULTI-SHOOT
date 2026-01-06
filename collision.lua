@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonuss)
+function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonuss, asteroidExplosionSound)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -99,7 +99,7 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonu
                 if (
                         objects[objects_to_manage[object_number]].nameInstance == "MISSILE" and
                         objects2[objects_to_manage2[object_number2]].nameInstance == "ASTEROID") then
-                    love.audio.stop(asteroidExplosion)
+                    love.audio.stop(asteroidExplosionSound)
                         -- add particle explosion
                         table.insert(asteroidExplosions, AsteroidExplosions.new(objects[objects_to_manage[objects_removed_it]].X_pos, objects[objects_to_manage[objects_removed_it]].Y_pos))
                         -- end add particle explosion
@@ -145,13 +145,13 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonu
 
                         -- remove asteroid
                         table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
-                        love.audio.play(asteroidExplosion)
+                        love.audio.play(asteroidExplosionSound)
                     else
                         -- impact
                         objects2[objects_to_manage2[objects_removed_it2]].protection = objects2[
                         objects_to_manage2[objects_removed_it2]].protection - 1
                         objects2[objects_to_manage2[objects_removed_it2]].asteroidImpact = true
-                        love.audio.play(asteroidExplosion)
+                        love.audio.play(asteroidExplosionSound)
 
 
                         if (
@@ -159,7 +159,7 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonu
                                 objects2[objects_to_manage2[objects_removed_it2]].protection < 1) then
                             -- remove asteroid
                             table.remove(objects2, objects_to_manage2[objects_removed_it2]) -- remove objects from table
-                            love.audio.play(asteroidExplosion)
+                            love.audio.play(asteroidExplosionSound)
 
                         end
                     end

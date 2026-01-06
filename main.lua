@@ -48,11 +48,11 @@ local GRAPHICS_SCALE = 1.5
 -- global to be used everywhere
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
-IntroSound = nil
-asteroidExplosion = nil
+-- IntroSound = nil
 shootSound = nil
 vaisseauImpact = nil
 
+local asteroidExplosionSound= nil
 local creditsSound = nil
 local gameSound = nil
 
@@ -82,8 +82,8 @@ function love.load()
 	-- love.window.setFullscreen(true, "desktop")
 	-- love.window.setFullscreen( true )
 
-	asteroidExplosion = love.audio.newSource("sound/explosion_asteroid-101886.mp3", "stream")
-	asteroidExplosion:setVolume(1)
+	asteroidExplosionSound= love.audio.newSource("sound/explosion_asteroid-101886.mp3", "stream")
+	asteroidExplosionSound:setVolume(1)
 	shootSound = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "stream")
 	shootSound:setVolume(0.4)
 	vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
@@ -167,7 +167,7 @@ function love.update(dt) -- 60 fps by defaut
 		-- COLLISSION MANAGER (FACTORIZED) --
 		-----------------------------------------
 		collisionManager(dt, level, asteroids, asteroids)
-		collisionManager(dt, level, missiles, asteroids, asteroidExplosions, bonuss)
+		collisionManager(dt, level, missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
 		collisionManager(dt, level, vaisseaux, bonuss)
 		local gameOver = collisionManager(dt, level, vaisseaux, asteroids)
 		if gameOver then
