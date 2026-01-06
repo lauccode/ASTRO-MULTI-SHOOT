@@ -9,7 +9,7 @@ function createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
     return asteroids
 end
 
-function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonuss, asteroidExplosionSound)
+function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseauImpactSound)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}
@@ -184,10 +184,10 @@ function collisionManager(dt, level, objects, objects2, asteroidExplosions, bonu
                             objects[objects_to_manage[object_number]].protection = objects[
                                 objects_to_manage[object_number]]
                                 .protection - 1
-                            love.audio.play(vaisseauImpact)
+                            love.audio.play(vaisseauImpactSound)
                         end
                         objects[objects_to_manage[object_number]].vaisseauImpact = true
-                        love.audio.play(vaisseauImpact)
+                        love.audio.play(vaisseauImpactSound)
                     else
                         table.remove(objects, objects_to_manage[objects_removed_it]) -- remove vaisseaux from table
                         gameOver = true

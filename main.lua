@@ -49,8 +49,8 @@ local GRAPHICS_SCALE = 1.5
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
 -- IntroSound = nil
-vaisseauImpact = nil
 
+local vaisseauImpactSound = nil
 local shootSound = nil
 local asteroidExplosionSound= nil
 local creditsSound = nil
@@ -86,8 +86,8 @@ function love.load()
 	asteroidExplosionSound:setVolume(1)
 	shootSound = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "stream")
 	shootSound:setVolume(0.4)
-	vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
-	vaisseauImpact:setVolume(1)
+	vaisseauImpactSound = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
+	vaisseauImpactSound:setVolume(1)
     creditsSound = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream")
 
     -- gameSound = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream")
@@ -169,7 +169,7 @@ function love.update(dt) -- 60 fps by defaut
 		collisionManager(dt, level, asteroids, asteroids)
 		collisionManager(dt, level, missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
 		collisionManager(dt, level, vaisseaux, bonuss)
-		local gameOver = collisionManager(dt, level, vaisseaux, asteroids)
+		local gameOver = collisionManager(dt, level, vaisseaux, asteroids, nil, nil, nil, vaisseauImpactSound)
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
 			love.audio.stop(gameSound)
