@@ -44,7 +44,7 @@ Level.new = function()
         end
         gameSound:setVolume(0.4)
         love.audio.play(gameSound)
-        createAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
+        CreateAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
         return asteroids, gameSound
     end
 
