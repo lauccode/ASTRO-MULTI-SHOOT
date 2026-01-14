@@ -193,27 +193,20 @@ function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
             for j = #objects_to_manage2, 1, -1 do
                 local vaisseau = vaisseaux[objects_to_manage[object_number]]
                 local bonus = bonuss[objects_to_manage2[object_number2]]
-                if bonus.bonus == bonus.MSL_PKG_MUCH_QUICKER or bonus.bonus == bonus.MSL_PKG_QUICKER then
-                    if vaisseau.missilePackQuicker == vaisseau.MSL_PKG_QUICKER then
-                        vaisseau.missilePackQuicker = vaisseau.MSL_PKG_MUCH_QUICKER
-                    elseif vaisseau.missilePackQuicker == vaisseau.MSL_PKG_STD then
-                        vaisseau.missilePackQuicker = vaisseau.MSL_PKG_QUICKER
+
+                local function upgradePack(bonusTypeMuch, bonusType, vaisseauField, vaisseauTypeStd, vaisseauType, vaisseauTypeMuch)
+                    if bonus.bonus == bonusTypeMuch or bonus.bonus == bonusType then
+                        if vaisseau[vaisseauField] == vaisseau[vaisseauType] then
+                            vaisseau[vaisseauField] = vaisseau[vaisseauTypeMuch]
+                        elseif vaisseau[vaisseauField] == vaisseau[vaisseauTypeStd] then
+                            vaisseau[vaisseauField] = vaisseau[vaisseauType]
+                        end
                     end
                 end
-                if bonus.bonus == bonus.MSL_PKG_MUCH_BIGGER or bonus.bonus == bonus.MSL_PKG_BIGGER then
-                    if vaisseau.missilePackBigger == vaisseau.MSL_PKG_BIGGER then
-                        vaisseau.missilePackBigger = vaisseau.MSL_PKG_MUCH_BIGGER
-                    elseif vaisseau.missilePackBigger == vaisseau.MSL_PKG_STD then
-                        vaisseau.missilePackBigger = vaisseau.MSL_PKG_BIGGER
-                    end
-                end
-                if bonus.bonus == bonus.MSL_PKG_MUCH_LATERAL or bonus.bonus == bonus.MSL_PKG_LATERAL then
-                    if vaisseau.missilePackLateral == vaisseau.MSL_PKG_LATERAL then
-                        vaisseau.missilePackLateral = vaisseau.MSL_PKG_MUCH_LATERAL
-                    elseif vaisseau.missilePackLateral == vaisseau.MSL_PKG_STD then
-                        vaisseau.missilePackLateral = vaisseau.MSL_PKG_LATERAL
-                    end
-                end
+                upgradePack(bonus.MSL_PKG_MUCH_QUICKER, bonus.MSL_PKG_QUICKER, "missilePackQuicker", "MSL_PKG_STD", "MSL_PKG_QUICKER", "MSL_PKG_MUCH_QUICKER")
+                upgradePack(bonus.MSL_PKG_MUCH_BIGGER, bonus.MSL_PKG_BIGGER, "missilePackBigger", "MSL_PKG_STD", "MSL_PKG_BIGGER", "MSL_PKG_MUCH_BIGGER")
+                upgradePack(bonus.MSL_PKG_MUCH_LATERAL, bonus.MSL_PKG_LATERAL, "missilePackLateral", "MSL_PKG_STD", "MSL_PKG_LATERAL", "MSL_PKG_MUCH_LATERAL")
+
                 if bonus.bonus == bonus.MSL_LASER_SIGHT then
                     vaisseau.missileLaserSight = vaisseau.MSL_LASER_SIGHT 
                 end
