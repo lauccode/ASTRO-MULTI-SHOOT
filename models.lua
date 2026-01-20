@@ -1,4 +1,36 @@
+
 require("utils")
+
+-- Table centrale pour les assets (images, polices, etc.)
+Assets = {
+    images = {
+        propulsor = love.graphics.newImage("sprites/propulsor.png"),
+        vaisseauImpact = love.graphics.newImage("sprites/vaisseau_retro_impact.png"),
+        smoke = love.graphics.newImage('sprites/smoke.png'),
+        vaisseauRouge = love.graphics.newImage("sprites/vaisseau_retro_rouge.png"),
+        barGrey = love.graphics.newImage("sprites/barGrey.png"),
+        barRed = love.graphics.newImage("sprites/barRed.png"),
+        barOrange = love.graphics.newImage("sprites/barOrange.png"),
+        barGreen = love.graphics.newImage("sprites/barGreen.png"),
+        vaisseauGreen = love.graphics.newImage("sprites/vaisseau_retro.png"),
+        vaisseauOrange = love.graphics.newImage("sprites/vaisseau_retro_orange.png"),
+        missileGreen = love.graphics.newImage("sprites/missile.png"),
+        missileOrange = love.graphics.newImage("sprites/missile_orange.png"),
+        missileRed = love.graphics.newImage("sprites/missile_violet.png"),
+        asteroid = love.graphics.newImage("sprites/asteroid_retro.png"),
+        asteroidImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png"),
+        asteroDust = love.graphics.newImage("sprites/astero_dust.png"),
+        bonusTripleShoot = love.graphics.newImage("sprites/bonus_triple_shoot.png"),
+        bonusIncreaseShoot = love.graphics.newImage("sprites/bonus_increase_shoot.png"),
+        bonusMachineGunShoot = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png"),
+        bonusVise = love.graphics.newImage("sprites/bonus_vise.png"),
+        bonusBouclier = love.graphics.newImage("sprites/bonus_bouclier.png"),
+    },
+    fonts = {
+        nerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18),
+        bar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
+    }
+}
 
 GameObject = {}
 GameObject.new = function()
@@ -196,8 +228,8 @@ Vaisseau = {}
 Vaisseau.new = function(level)
     local self = GameObject.new()
     self.nameInstance = "VAISSEAU"
-    local PropulsorPng = love.graphics.newImage("sprites/propulsor.png")
-    local VaisseauPngImpact = love.graphics.newImage("sprites/vaisseau_retro_impact.png")
+    local PropulsorPng = Assets.images.propulsor
+    local VaisseauPngImpact = Assets.images.vaisseauImpact
     self.vaisseauImpact = false
     local IMPACT_DURATION = 10     -- 1/6 second
     local vaisseauImpactDuration = IMPACT_DURATION
@@ -236,14 +268,14 @@ Vaisseau.new = function(level)
 
     -- Particles
 	local particles = {}
-    local smokeImg = love.graphics.newImage('sprites/smoke.png')
+    local smokeImg = Assets.images.smoke
     local particle = {}
     particle.posX = {}
     particle.posY = {}
     local particle_number = 1
     local particleTimer = 0
 
-    local VaisseauPng = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
+    local VaisseauPng = Assets.images.vaisseauRouge
     local widthImage = VaisseauPng:getWidth()
     local heightImage = VaisseauPng:getHeight()
     local widthImageProp = PropulsorPng:getWidth()
@@ -282,17 +314,15 @@ Vaisseau.new = function(level)
     local angle_LOW = 0
     local angle_HIGHT = 0
 
-    local fontNerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18)
-    -- NEED TO BE LOADED ONE TIME ! (otherwise FPS ISSUE)
-    local fontBar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
-	local barGrey = love.graphics.newImage("sprites/barGrey.png")
-	local barRed = love.graphics.newImage("sprites/barRed.png")
-	local barOrange = love.graphics.newImage("sprites/barOrange.png")
-	local barGreen = love.graphics.newImage("sprites/barGreen.png")
-
-    local VaisseauPngGreen = love.graphics.newImage("sprites/vaisseau_retro.png")
-    local VaisseauPngOrange = love.graphics.newImage("sprites/vaisseau_retro_orange.png")
-    local VaisseauPngRed = love.graphics.newImage("sprites/vaisseau_retro_rouge.png")
+    local fontNerd18 = Assets.fonts.nerd18
+    local fontBar = Assets.fonts.bar
+    local barGrey = Assets.images.barGrey
+    local barRed = Assets.images.barRed
+    local barOrange = Assets.images.barOrange
+    local barGreen = Assets.images.barGreen
+    local VaisseauPngGreen = Assets.images.vaisseauGreen
+    local VaisseauPngOrange = Assets.images.vaisseauOrange
+    local VaisseauPngRed = Assets.images.vaisseauRouge
 
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
@@ -666,9 +696,9 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
     local QUICKER_TAB = 3
     local SINUS = 4
 
-    local MissilePngGreen = love.graphics.newImage("sprites/missile.png")
-    local MissilePngOrange = love.graphics.newImage("sprites/missile_orange.png")
-    local MissilePngRed = love.graphics.newImage("sprites/missile_violet.png")
+    local MissilePngGreen = Assets.images.missileGreen
+    local MissilePngOrange = Assets.images.missileOrange
+    local MissilePngRed = Assets.images.missileRed
 
     self.imageRatio = self.imageRatio / 2 -- divided by 2 otherwise missile too big at the start
     self.imageRatioRef = 0.35 / 2         -- divided by 2 otherwise missile too big at the start
@@ -787,8 +817,8 @@ Asteroid = {}
 Asteroid.new = function()
     local self = GameObject.new()
     self.nameInstance = "ASTEROID"
-    local AsteroidPng = love.graphics.newImage("sprites/asteroid_retro.png")
-    local AsteroidPngImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png")
+    local AsteroidPng = Assets.images.asteroid
+    local AsteroidPngImpact = Assets.images.asteroidImpact
     self.asteroidImpact = false
     local IMPACT_DURATION = 10 -- 1/6 second
     local asteroidImpactDuration = IMPACT_DURATION
@@ -857,7 +887,7 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     self.asteroDivisionExplosion = true
 
     local particlesAsteroDivExplosions = {}
-    local img = love.graphics.newImage("sprites/astero_dust.png")
+    local img = Assets.images.asteroDust
     table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
 
     function self.particlesAsteroDivExplosionUpdate(dt)
@@ -943,19 +973,19 @@ Bonus.new = function()
 
     self.bonus = math.floor(2 + love.math.random() * MAX_BONUS_NUMBER)
     if (self.bonus == self.MSL_PKG_LATERAL or self.bonus == self.MSL_PKG_MUCH_LATERAL) then
-        BonusPng = love.graphics.newImage("sprites/bonus_triple_shoot.png")
+        BonusPng = Assets.images.bonusTripleShoot
     end
     if (self.bonus == self.MSL_PKG_BIGGER or self.bonus == self.MSL_PKG_MUCH_BIGGER) then
-        BonusPng = love.graphics.newImage("sprites/bonus_increase_shoot.png")
+        BonusPng = Assets.images.bonusIncreaseShoot
     end
     if (self.bonus == self.MSL_PKG_QUICKER or self.bonus == self.MSL_PKG_MUCH_QUICKER) then
-        BonusPng = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png")
+        BonusPng = Assets.images.bonusMachineGunShoot
     end
     if (self.bonus == self.MSL_LASER_SIGHT) then
-        BonusPng = love.graphics.newImage("sprites/bonus_vise.png")
+        BonusPng = Assets.images.bonusVise
     end
     if (self.bonus == self.SHIELD) then
-        BonusPng = love.graphics.newImage("sprites/bonus_bouclier.png")
+        BonusPng = Assets.images.bonusBouclier
     end
     if (self.bonus == self.MSL_SINUS) then
         BonusPng = love.graphics.newImage("sprites/bonus_sinus_shoot.png")
