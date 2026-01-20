@@ -1,50 +1,6 @@
 
 require("utils")
 
--- Table centrale pour les assets (images, polices, etc.)
-Assets = {
-    images = {
-        propulsor = love.graphics.newImage("sprites/propulsor.png"),
-        vaisseauImpact = love.graphics.newImage("sprites/vaisseau_retro_impact.png"),
-        smoke = love.graphics.newImage('sprites/smoke.png'),
-        vaisseauRouge = love.graphics.newImage("sprites/vaisseau_retro_rouge.png"),
-        barGrey = love.graphics.newImage("sprites/barGrey.png"),
-        barRed = love.graphics.newImage("sprites/barRed.png"),
-        barOrange = love.graphics.newImage("sprites/barOrange.png"),
-        barGreen = love.graphics.newImage("sprites/barGreen.png"),
-        vaisseauGreen = love.graphics.newImage("sprites/vaisseau_retro.png"),
-        vaisseauOrange = love.graphics.newImage("sprites/vaisseau_retro_orange.png"),
-        missileGreen = love.graphics.newImage("sprites/missile.png"),
-        missileOrange = love.graphics.newImage("sprites/missile_orange.png"),
-        missileRed = love.graphics.newImage("sprites/missile_violet.png"),
-        asteroid = love.graphics.newImage("sprites/asteroid_retro.png"),
-        asteroidImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png"),
-        asteroDust = love.graphics.newImage("sprites/astero_dust.png"),
-        bonusTripleShoot = love.graphics.newImage("sprites/bonus_triple_shoot.png"),
-        bonusIncreaseShoot = love.graphics.newImage("sprites/bonus_increase_shoot.png"),
-        bonusMachineGunShoot = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png"),
-        bonusVise = love.graphics.newImage("sprites/bonus_vise.png"),
-        bonusBouclier = love.graphics.newImage("sprites/bonus_bouclier.png"),
-    },
-    fonts = {
-        nerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18),
-        bar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
-    },
-    sounds = {
-        explosionAsteroid = love.audio.newSource("sound/explosion_asteroid-101886.mp3", "static"),
-        shoot = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "static"),
-        vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
-        credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
-        level1 = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream"),
-        level2 = love.audio.newSource("music/Jaunter-Reset.mp3", "stream"),
-        level3 = love.audio.newSource("music/KarolPiczak-LesChampsEtoiles.mp3", "stream"),
-        level4 = love.audio.newSource("music/Kubbi-Ember-04Cascade.mp3", "stream"),
-        level5 = love.audio.newSource("music/PunchDeck-ICantStop.mp3", "stream"),
-        level6 = love.audio.newSource("music/LukeHall-Dystopia.mp3", "stream"),
-        -- Ajoute ici d'autres sons ou musiques si besoin
-    }
-}
-
 GameObject = {}
 GameObject.new = function()
     local self = {}
