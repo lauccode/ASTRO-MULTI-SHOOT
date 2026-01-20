@@ -82,13 +82,13 @@ function love.load()
 	-- love.window.setFullscreen(true, "desktop")
 	-- love.window.setFullscreen( true )
 
-	asteroidExplosionSound= love.audio.newSource("sound/explosion_asteroid-101886.mp3", "stream")
+	asteroidExplosionSound = Assets.sounds.explosionAsteroid
 	asteroidExplosionSound:setVolume(1)
-	shootSound = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "stream")
+	shootSound = Assets.sounds.shoot
 	shootSound:setVolume(0.4)
-	vaisseauImpactSound = love.audio.newSource("sound/hurt_c_08-102842.mp3", "stream")
+	vaisseauImpactSound = Assets.sounds.vaisseauImpact
 	vaisseauImpactSound:setVolume(1)
-    creditsSound = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream")
+	creditsSound = Assets.sounds.credits
 
     -- gameSound = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream")
     -- gameSound:setVolume(0.4)

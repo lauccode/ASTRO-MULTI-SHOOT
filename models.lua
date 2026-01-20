@@ -29,6 +29,19 @@ Assets = {
     fonts = {
         nerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18),
         bar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
+    },
+    sounds = {
+        explosionAsteroid = love.audio.newSource("sound/explosion_asteroid-101886.mp3", "static"),
+        shoot = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "static"),
+        vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
+        credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
+        level1 = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream"),
+        level2 = love.audio.newSource("music/Jaunter-Reset.mp3", "stream"),
+        level3 = love.audio.newSource("music/KarolPiczak-LesChampsEtoiles.mp3", "stream"),
+        level4 = love.audio.newSource("music/Kubbi-Ember-04Cascade.mp3", "stream"),
+        level5 = love.audio.newSource("music/PunchDeck-ICantStop.mp3", "stream"),
+        level6 = love.audio.newSource("music/LukeHall-Dystopia.mp3", "stream"),
+        -- Ajoute ici d'autres sons ou musiques si besoin
     }
 }
 
