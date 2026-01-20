@@ -1,5 +1,5 @@
-function debugMode(objects, fontNerd11)
-    love.graphics.setFont(fontNerd11)
+function debugMode(objects)
+    love.graphics.setFont(Assets.fonts.nerd11)
 
     if (objects[1] ~= nil) then
         if (objects[1].nameInstance == "VAISSEAU") then

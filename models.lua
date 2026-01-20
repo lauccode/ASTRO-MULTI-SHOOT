@@ -307,7 +307,7 @@ Vaisseau.new = function(level)
 
     local function printWarningStartLevel()
         if (self.colorValueIncrease > 255) then self.colorValueIncrease = 0 end
-        love.graphics.setFont(fontNerd18)
+        love.graphics.setFont(Assets.fonts.nerd18)
         love.graphics.setColor(255, 255, 0)         --yellow
         love.graphics.print("WARNING - SHIELD OFF IN : " ..
             tostring(string.format("%d", (self.TIME_SHIELD_START_MAX / 60 - self.timeShieldStart / 60))),
@@ -499,7 +499,7 @@ Vaisseau.new = function(level)
             printWarningStartLevel()
         end
 
-        love.graphics.setFont(fontBar)
+        love.graphics.setFont(Assets.fonts.bar)
         local offsetPrintV = 0
         local OFF_SET_PRINT_CREDITS_ADDED = 12
         local valueOffset = 100

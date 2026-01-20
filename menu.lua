@@ -86,7 +86,7 @@ Menu.new = function()
                 tostring(levelNumberForMenu - 1) .. " CLEAR - PREPARE TO STAGE " .. tostring(levelNumberForMenu),
                 X_text_position, SCREEN_HIGH / 3)
         end
-        love.graphics.setFont(fontNerd10)
+        love.graphics.setFont(Assets.fonts.nerd10)
         love.graphics.print("Press 's' to start when you are ready to fight", SCREEN_WIDTH / 4, SCREEN_HIGH / 3 + 30)
         love.graphics.setColor(255, 255, 255, 255) -- reset
     end
@@ -187,7 +187,7 @@ Menu.new = function()
 
         offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
 
-        love.graphics.setFont(fontVT12)
+        love.graphics.setFont(Assets.fonts.vt12)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,
             SCREEN_HIGH / 2 + offsetPrint)
         love.graphics.print("( UP and DOWN arrow to move and space to select )", SCREEN_WIDTH / 2,

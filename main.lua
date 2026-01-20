@@ -59,13 +59,7 @@ local gameSound = nil
 menu = Menu.new()
 level = Level.new()
 
--- Fonts
-local fontNerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10)
-local fontNerd11 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11)
-local fontNerd14 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14)
-local fontNerd20 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20)
-local fontVT12 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12)
-local fontVT20 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20)
+
 
 -- Central table for assets (images, fonts, etc.)
 Assets = {
@@ -92,10 +86,16 @@ Assets = {
         bonusVise = love.graphics.newImage("sprites/bonus_vise.png"),
         bonusBouclier = love.graphics.newImage("sprites/bonus_bouclier.png"),
     },
-    fonts = {
-        nerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18),
-        bar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
-    },
+	fonts = {
+		nerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10),
+		nerd11 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
+		nerd14 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 14),
+		nerd18 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 18),
+		nerd20 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 20),
+		bar = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 11),
+		vt12 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 12),
+		vt20 = love.graphics.newFont("fonts/VT323/VT323-Regular.ttf", 20),
+	},
     sounds = {
         explosionAsteroid = love.audio.newSource("sound/explosion_asteroid-101886.mp3", "static"),
         shoot = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "static"),
@@ -268,13 +268,13 @@ function love.draw()
 	love.graphics.scale(GRAPHICS_SCALE, GRAPHICS_SCALE)
 
 	if menu.selectionMenu == menu.MENU then
-		love.graphics.setFont(fontVT20)
-		menu.draw(toggleDebug, fontVT12)
+		love.graphics.setFont(Assets.fonts.vt20)
+		menu.draw(toggleDebug, Assets.fonts.vt12)
 	end
 
 	if menu.selectionMenu == menu.PRESENT_STAGE and particlesTransitionStage ~= nil then  -- optim(TBT)
-		love.graphics.setFont(fontNerd20)
-		menu.presentStage(level.levelNumber, particlesTransitionStage, fontNerd10)
+		love.graphics.setFont(Assets.fonts.nerd20)
+		menu.presentStage(level.levelNumber, particlesTransitionStage, Assets.fonts.nerd10)
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.START] then
@@ -284,7 +284,7 @@ function love.draw()
 		if vaisseaux[1] ~= nil then
 			vaisseaux[1].draw()
 			if DEBUG_MODE then
-				debugMode(vaisseaux, fontNerd11)
+				debugMode(vaisseaux, Assets.fonts.nerd11)
 			end
 		end
 
@@ -293,7 +293,7 @@ function love.draw()
 			asteroids[asteroids_it].draw()
 
 			if DEBUG_MODE then
-				debugMode(asteroids, fontNerd11)
+				debugMode(asteroids, Assets.fonts.nerd11)
 			end
 		end
 
@@ -303,9 +303,9 @@ function love.draw()
 		end
 
 		-- ASTEROID EXPLOSIONS
-        for particlesAsteroDivExplosion_it = 1, #asteroidExplosions do
-            asteroidExplosions[particlesAsteroDivExplosion_it].draw()
-        end
+		for particlesAsteroDivExplosion_it = 1, #asteroidExplosions do
+			asteroidExplosions[particlesAsteroDivExplosion_it].draw()
+		end
 
 		-- MISSILE DRAW
 		for missiles_it = 1, #missiles do
@@ -314,28 +314,28 @@ function love.draw()
 			end
 
 			if DEBUG_MODE then
-				debugMode(missiles, fontNerd11)
+				debugMode(missiles, Assets.fonts.nerd11)
 			end
 		end
 	end
 
 	if menu.selectionMenu == menu.GAMEOVER then
-		love.graphics.setFont(fontNerd14)
+		love.graphics.setFont(Assets.fonts.nerd14)
 		menu.gameover()
 	end
 
 	if menu.selectionMenu == menu.CONGRATULATION then
-		love.graphics.setFont(fontNerd14)
+		love.graphics.setFont(Assets.fonts.nerd14)
 		menu.congratulation()
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
-		love.graphics.setFont(fontVT12)
+		love.graphics.setFont(Assets.fonts.vt12)
 		menu.shortcutsAndBonus()
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
-		love.graphics.setFont(fontVT12)
+		love.graphics.setFont(Assets.fonts.vt12)
 		menu.creditsDraw()
 	end
 end
