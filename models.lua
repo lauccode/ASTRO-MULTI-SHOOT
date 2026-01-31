@@ -321,7 +321,7 @@ Vaisseau.new = function(level)
         return propulsorIncreasePowerTab[PropulsorWithV]
     end
 
-   local function  updateParticles(dt, active, propulsorX, propulsorY, propulsorIncreasePower, angle)
+   local function  updateParticles(dt, active, propulsorX, propulsorY, propulsorIncreasePower)
         if (active == true) then
             particle.posX[particle_number] = propulsorX
             particle.posY[particle_number] = propulsorY
@@ -329,7 +329,7 @@ Vaisseau.new = function(level)
             particles[particle_number]:start()
             particles[particle_number]:setEmissionRate(2 * propulsorIncreasePower) -- 150
             particles[particle_number]:setSpeed(10, 50)                         -- min,max  500
-            particles[particle_number]:setDirection(angle + 1 / 2 * (math.pi))  -- radians
+            particles[particle_number]:setDirection(1 / 2 * (math.pi))  -- radians
             particles[particle_number]:setParticleLifetime(1, 2)                -- Particles live at least 1s and at most 2s.
             particles[particle_number]:setSizeVariation(1)
             particles[particle_number]:setLinearAcceleration(-30, -30, 30, 30)  -- Random movement in all directions.
@@ -369,17 +369,17 @@ Vaisseau.new = function(level)
         
         local function getPropulsorParams(PropulsorWithV)
             if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
-                return 1, X_PROPULSOR_LOW_LEFT, Y_PROPULSOR_LOW_LEFT, angle_LOW
+                return 1, X_PROPULSOR_LOW_LEFT, Y_PROPULSOR_LOW_LEFT
             elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
-                return 2, X_PROPULSOR_LOW_RIGHT, Y_PROPULSOR_LOW_RIGHT, angle_LOW
+                return 2, X_PROPULSOR_LOW_RIGHT, Y_PROPULSOR_LOW_RIGHT
             elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-                return 3, X_PROPULSOR_HIGHT_LEFT, Y_PROPULSOR_HIGHT_LEFT, angle_HIGHT
+                return 3, X_PROPULSOR_HIGHT_LEFT, Y_PROPULSOR_HIGHT_LEFT
             elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-                return 4, X_PROPULSOR_HIGHT_RIGHT, Y_PROPULSOR_HIGHT_RIGHT, angle_HIGHT
+                return 4, X_PROPULSOR_HIGHT_RIGHT, Y_PROPULSOR_HIGHT_RIGHT
             end
         end
         
-        local idx, x_prop, y_prop, ang = getPropulsorParams(PropulsorWithV)
+        local idx, x_prop, y_prop = getPropulsorParams(PropulsorWithV)
         
         if idx then
             local x_offset = x_prop * (self.imageRatio / self.imageRatioRef)
@@ -387,7 +387,7 @@ Vaisseau.new = function(level)
             propulsors[idx].x = self.X_pos + (math.cos(self.angle) * x_offset) - (math.sin(self.angle) * y_offset)
             propulsors[idx].y = self.Y_pos + (math.sin(self.angle) * x_offset) + (math.cos(self.angle) * y_offset)
             propulsors[idx].power = propulsorIncreasePow(PropulsorWithV, active)
-            updateParticles(dt, active, propulsors[idx].x, propulsors[idx].y, propulsors[idx].power, ang)
+            updateParticles(dt, active, propulsors[idx].x, propulsors[idx].y, propulsors[idx].power)
         end
     end
 
