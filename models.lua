@@ -396,15 +396,7 @@ Vaisseau.new = function(level)
 
         angle_LOW =  self.angle + (0.5 * math.pi)
         angle_HIGHT =  self.angle + (3 / 2 * math.pi)
-        if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active)
-        elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active)
-        end
+        updatePropulsorParticles(dt, PropulsorWithV, active)
     end
 
 	function self.updatePropulsor(dt)
