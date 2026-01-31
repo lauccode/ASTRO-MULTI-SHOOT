@@ -265,21 +265,13 @@ Vaisseau.new = function(level)
 
 	self.colorValueIncrease = 0
 
-    local propulsorX_LOW_LEFT = 0
-    local propulsorY_LOW_LEFT = 0
-    local propulsorIncreasePower_LOW_LEFT = 0
-
-    local propulsorX_LOW_RIGHT = 0
-    local propulsorY_LOW_RIGHT = 0
-    local propulsorIncreasePower_LOW_RIGHT = 0
-
-    local propulsorX_HIGHT_LEFT = 0
-    local propulsorY_HIGHT_LEFT = 0
-    local propulsorIncreasePower_HIGHT_LEFT = 0
-
-    local propulsorX_HIGHT_RIGHT = 0
-    local propulsorY_HIGHT_RIGHT = 0
-    local propulsorIncreasePower_HIGHT_RIGHT = 0
+    local propulsors = {
+        {x = 0, y = 0, power = 0}, -- LOW_LEFT
+        {x = 0, y = 0, power = 0}, -- LOW_RIGHT
+        {x = 0, y = 0, power = 0}, -- HIGHT_LEFT
+        {x = 0, y = 0, power = 0}  -- HIGHT_RIGHT
+    }
+    
     local angle_LOW = 0
     local angle_HIGHT = 0
 
@@ -371,35 +363,31 @@ Vaisseau.new = function(level)
         end
     end
 
-    local function updatePropulsorParticles(dt, PropulsorWithV, active, angle)
-        if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_LEFT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower_LOW_LEFT = propulsorIncreasePow(PropulsorWithV, active)
-            propulsorX_LOW_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
-            propulsorY_LOW_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            updateParticles(dt, active, propulsorX_LOW_LEFT,propulsorY_LOW_LEFT, propulsorIncreasePower_LOW_LEFT, angle_LOW)
-        elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_LOW_RIGHT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower_LOW_RIGHT = propulsorIncreasePow(PropulsorWithV, active)
-            propulsorX_LOW_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
-            propulsorY_LOW_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            updateParticles(dt, active, propulsorX_LOW_RIGHT,propulsorY_LOW_RIGHT, propulsorIncreasePower_LOW_RIGHT, angle_LOW)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_LEFT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower_HIGHT_LEFT = propulsorIncreasePow(PropulsorWithV, active)
-            propulsorX_HIGHT_LEFT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
-            propulsorY_HIGHT_LEFT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            updateParticles(dt, active, propulsorX_HIGHT_LEFT,propulsorY_HIGHT_LEFT, propulsorIncreasePower_HIGHT_LEFT, angle_HIGHT)
-        elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-            X_offsetPropulsorWithV = X_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
-            Y_offsetPropulsorWithV = Y_PROPULSOR_HIGHT_RIGHT * (self.imageRatio / self.imageRatioRef)
-            propulsorIncreasePower_HIGHT_RIGHT = propulsorIncreasePow(PropulsorWithV, active)
-            propulsorX_HIGHT_RIGHT = self.X_pos + (math.cos(self.angle) * X_offsetPropulsorWithV) - (math.sin(self.angle) * Y_offsetPropulsorWithV)
-            propulsorY_HIGHT_RIGHT = self.Y_pos + (math.sin(self.angle) * X_offsetPropulsorWithV) + (math.cos(self.angle) * Y_offsetPropulsorWithV)
-            updateParticles(dt, active, propulsorX_HIGHT_RIGHT,propulsorY_HIGHT_RIGHT, propulsorIncreasePower_HIGHT_RIGHT, angle_HIGHT)
+
+
+    local function updatePropulsorParticles(dt, PropulsorWithV, active)
+        
+        local function getPropulsorParams(PropulsorWithV)
+            if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
+                return 1, X_PROPULSOR_LOW_LEFT, Y_PROPULSOR_LOW_LEFT, angle_LOW
+            elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
+                return 2, X_PROPULSOR_LOW_RIGHT, Y_PROPULSOR_LOW_RIGHT, angle_LOW
+            elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
+                return 3, X_PROPULSOR_HIGHT_LEFT, Y_PROPULSOR_HIGHT_LEFT, angle_HIGHT
+            elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
+                return 4, X_PROPULSOR_HIGHT_RIGHT, Y_PROPULSOR_HIGHT_RIGHT, angle_HIGHT
+            end
+        end
+        
+        local idx, x_prop, y_prop, ang = getPropulsorParams(PropulsorWithV)
+        
+        if idx then
+            local x_offset = x_prop * (self.imageRatio / self.imageRatioRef)
+            local y_offset = y_prop * (self.imageRatio / self.imageRatioRef)
+            propulsors[idx].x = self.X_pos + (math.cos(self.angle) * x_offset) - (math.sin(self.angle) * y_offset)
+            propulsors[idx].y = self.Y_pos + (math.sin(self.angle) * x_offset) + (math.cos(self.angle) * y_offset)
+            propulsors[idx].power = propulsorIncreasePow(PropulsorWithV, active)
+            updateParticles(dt, active, propulsors[idx].x, propulsors[idx].y, propulsors[idx].power, ang)
         end
     end
 
@@ -409,13 +397,13 @@ Vaisseau.new = function(level)
         angle_LOW =  self.angle + (0.5 * math.pi)
         angle_HIGHT =  self.angle + (3 / 2 * math.pi)
         if (PropulsorWithV == PROPULSOR_LOW_LEFT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active, angle_LOW)
+            updatePropulsorParticles(dt, PropulsorWithV, active)
         elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active, angle_LOW)
+            updatePropulsorParticles(dt, PropulsorWithV, active)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active, angle_HIGHT)
+            updatePropulsorParticles(dt, PropulsorWithV, active)
         elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-            updatePropulsorParticles(dt, PropulsorWithV, active, angle_HIGHT)
+            updatePropulsorParticles(dt, PropulsorWithV, active)
         end
     end
 
@@ -459,19 +447,20 @@ Vaisseau.new = function(level)
             love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
         end
 
-        -- draw propulsor
-        love.graphics.draw(PropulsorPng, propulsorX_LOW_LEFT, propulsorY_LOW_LEFT, angle_LOW,
-            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-            (self.imageRatio * 2) * (propulsorIncreasePower_LOW_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-        love.graphics.draw(PropulsorPng, propulsorX_LOW_RIGHT, propulsorY_LOW_RIGHT, angle_LOW,
-            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-            (self.imageRatio * 2) * (propulsorIncreasePower_LOW_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-        love.graphics.draw(PropulsorPng, propulsorX_HIGHT_LEFT, propulsorY_HIGHT_LEFT, angle_HIGHT,
-            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-            (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_LEFT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
-        love.graphics.draw(PropulsorPng, propulsorX_HIGHT_RIGHT, propulsorY_HIGHT_RIGHT, angle_HIGHT,
-            self.imageRatio * ((love.math.random() * 5 + 5) / 10),
-            (self.imageRatio * 2) * (propulsorIncreasePower_HIGHT_RIGHT / PROPULSOR_POWER_MAX), widthImageProp / 2, 0)
+        -- draw propulsor using propulsors table
+        local angles = {angle_LOW, angle_LOW, angle_HIGHT, angle_HIGHT}
+        for i = 1, 4 do
+            love.graphics.draw(
+                PropulsorPng,
+                propulsors[i].x,
+                propulsors[i].y,
+                angles[i],
+                self.imageRatio * ((love.math.random() * 5 + 5) / 10),
+                (self.imageRatio * 2) * (propulsors[i].power / PROPULSOR_POWER_MAX),
+                widthImageProp / 2,
+                0
+            )
+        end
     end
 
     local function drawBar(barLevel, posH, posV, MAX)
