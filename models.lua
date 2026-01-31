@@ -1,21 +1,22 @@
 
 require("utils")
+local Vector2 = require("Vector2")
 
 GameObject = {}
 GameObject.new = function()
     local self = {}
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
-    self.X_pos = SCREEN_WIDTH / 2
-    self.Y_pos = SCREEN_HIGH / 2
-    self.speedX = 0
-    self.speedY = 0
+
+    -- Position, velocity and acceleration as vectors
+    self.position = Vector2.new(SCREEN_WIDTH / 2, SCREEN_HIGH / 2)
+    self.velocity = Vector2.new(0, 0)
+    self.acceleration = Vector2.new(0, 0)
+    
     self.angle = (3 / 2 * math.pi) --1.5 * math.pi
     self.accelerateFWorWW = "neutral"
     self.rotateRightorLeft = "neutral"
 
-    self.accelerationX = 0
-    self.accelerationY = 0
 
     self.imageRadius = 0
 
@@ -80,20 +81,19 @@ GameObject.new = function()
     end
 
     function self.move(dt)
-        self.X_pos = self.X_pos + self.speedX*dt
-        self.Y_pos = self.Y_pos + self.speedY*dt
+        -- update position using velocity vector
+        self.position = self.position:add(self.velocity:scale(dt))
 
-        -- no collision, this is movement
-        if ((self.X_pos > SCREEN_WIDTH and self.speedX > 0) or (self.speedX < 0 and self.X_pos < 0)) then
-            self.speedX = -self.speedX
-        elseif ((self.Y_pos > SCREEN_HIGH and self.speedY > 0) or (self.speedY < 0 and self.Y_pos < 0)) then
-            self.speedY = -self.speedY
+        -- no collision, this is movement (bounce on screen edges)
+        if ((self.position.x > SCREEN_WIDTH and self.velocity.x > 0) or (self.velocity.x < 0 and self.position.x < 0)) then
+            self.velocity.x = -self.velocity.x
+        elseif ((self.position.y > SCREEN_HIGH and self.velocity.y > 0) or (self.velocity.y < 0 and self.position.y < 0)) then
+            self.velocity.y = -self.velocity.y
         end
     end
 
     function self.stop(dt)
-        self.speedX = 0
-        self.speedY = 0
+        self.velocity = Vector2.new(0, 0)
     end
 
     function self.accelerateBack(dt, acceleration, accelerationMax)
@@ -109,15 +109,15 @@ GameObject.new = function()
             extendedImageRadiusFactor = STD_EXTENDED_IMAGE_RADIUS_FACTOR
         end
 
-        local dx = Object.X_pos - self.X_pos
-        local dy = Object.Y_pos - self.Y_pos
+        local dx = Object.position.x - self.position.x
+        local dy = Object.position.y - self.position.y
         local dist = math.sqrt(dx * dx + dy * dy)
         return dist < (self.imageRadius * extendedImageRadiusFactor + Object.imageRadius)
     end
 
     function self.distanceWith(Object)
-        local dx = Object.X_pos - self.X_pos
-        local dy = Object.Y_pos - self.Y_pos
+        local dx = Object.position.x - self.position.x
+        local dy = Object.position.y - self.position.y
         local dist = math.sqrt(dx * dx + dy * dy)
         return dist
     end
@@ -127,34 +127,33 @@ GameObject.new = function()
 
         if (goBack) then
             self.accelerateFWorWW = "backward"
-            self.speedX = self.speedX - (math.cos(self.angle) * accelerationMax)
-            self.speedY = self.speedY - (math.sin(self.angle) * accelerationMax)
+            self.velocity.x = self.velocity.x - (math.cos(self.angle) * accelerationMax)
+            self.velocity.y = self.velocity.y - (math.sin(self.angle) * accelerationMax)
         else
             self.accelerateFWorWW = "forward"
-            self.speedX = self.speedX + (math.cos(self.angle) * accelerationMax)
-            self.speedY = self.speedY + (math.sin(self.angle) * accelerationMax)
+            self.velocity.x = self.velocity.x + (math.cos(self.angle) * accelerationMax)
+            self.velocity.y = self.velocity.y + (math.sin(self.angle) * accelerationMax)
         end
 
-        if ((self.speedX ~= 0) and (self.speedY ~= 0)) then
+        if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then
             -- fully needed to avoid "diagonal effect"
-            local cosinus = self.speedX / math.sqrt(math.pow(self.speedX, 2) + math.pow(self.speedY, 2))
-            local sinus = self.speedY / math.sqrt(math.pow(self.speedX, 2) + math.pow(self.speedY, 2))
+            local mag = math.sqrt(self.velocity.x * self.velocity.x + self.velocity.y * self.velocity.y)
+            local cosinus = self.velocity.x / mag
+            local sinus = self.velocity.y / mag
 
-            self.accelerationX = cosinus * acceleration
-            self.accelerationY = sinus * acceleration
-            self.absMaxSpeedX = math.abs(self.accelerationX)
-            self.absMaxSpeedY = math.abs(self.accelerationY)
+            self.acceleration.x = cosinus * acceleration
+            self.acceleration.y = sinus * acceleration
+            self.absMaxSpeedX = math.abs(self.acceleration.x)
+            self.absMaxSpeedY = math.abs(self.acceleration.y)
         end
 
-        if ((self.speedX ~= 0) and (self.speedY ~= 0)) then
+        if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then
             -- fully needed to avoid "diagonal effect"
-            if (math.abs(self.speedX) >= self.absMaxSpeedX) then
-                -- self.speedX = clamp(-self.absMaxSpeedX, self.speedX, self.absMaxSpeedX)
-                self.speedX = self.accelerationX
+            if (math.abs(self.velocity.x) >= self.absMaxSpeedX) then
+                self.velocity.x = self.acceleration.x
             end
-            if (math.abs(self.speedY) >= self.absMaxSpeedY) then
-                -- self.speedY = clamp(-self.absMaxSpeedY, self.speedY, self.absMaxSpeedY)
-                self.speedY = self.accelerationY
+            if (math.abs(self.velocity.y) >= self.absMaxSpeedY) then
+                self.velocity.y = self.acceleration.y
             end
         end
     end
@@ -164,26 +163,51 @@ GameObject.new = function()
             Object .. " -->",
             'Angle Radian : ' .. string.format("%5.1f", self.angle),
             'Angle Degre : ' .. string.format("%5.1f", ((360 / (2 * math.pi)) * self.angle)),
-            'X: ' .. string.format("%5.1f", self.X_pos),
-            'Y: ' .. string.format("%5.1f", self.Y_pos),
-            'SpeedX: ' .. string.format("%5.1f", self.speedX),
-            'SpeedY: ' .. string.format("%5.1f", self.speedY),
-            'AccelerationX: ' .. string.format("%5.1f", self.accelerationX),
-            'AccelerationY: ' .. string.format("%5.1f", self.accelerationY),
+            'X: ' .. string.format("%5.1f", self.position.x),
+            'Y: ' .. string.format("%5.1f", self.position.y),
+            'SpeedX: ' .. string.format("%5.1f", self.velocity.x),
+            'SpeedY: ' .. string.format("%5.1f", self.velocity.y),
+            'AccelerationX: ' .. string.format("%5.1f", self.acceleration.x),
+            'AccelerationY: ' .. string.format("%5.1f", self.acceleration.y),
         }, '\n'), printX, printY)
     end
 
     function self.graphic_infos()
         local factor = 20 / 60
         love.graphics.setColor(255, 0, 0)
-        love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.accelerationX * factor),
-            self.Y_pos + (self.accelerationY * factor))
+        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.acceleration.x * factor),
+            self.position.y + (self.acceleration.y * factor))
         love.graphics.setColor(0, 255, 0)
-        love.graphics.line(self.X_pos, self.Y_pos, self.X_pos + (self.speedX * factor),
-            self.Y_pos + (self.speedY * factor))
+        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.velocity.x * factor),
+            self.position.y + (self.velocity.y * factor))
         love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.circle("line", self.X_pos, self.Y_pos, self.imageRadius)
+        love.graphics.circle("line", self.position.x, self.position.y, self.imageRadius)
     end
+    -- -- Proxy metatable to keep backward-compatibility with existing code
+    -- local mt = {
+    --     __index = function(t, k)
+    --         if k == "X_pos" then return t.position.x
+    --         elseif k == "Y_pos" then return t.position.y
+    --         elseif k == "speedX" then return t.velocity.x
+    --         elseif k == "speedY" then return t.velocity.y
+    --         elseif k == "accelerationX" then return t.acceleration.x
+    --         elseif k == "accelerationY" then return t.acceleration.y
+    --         else return rawget(t, k)
+    --         end
+    --     end,
+    --     __newindex = function(t, k, v)
+    --         if k == "X_pos" then t.position.x = v
+    --         elseif k == "Y_pos" then t.position.y = v
+    --         elseif k == "speedX" then t.velocity.x = v
+    --         elseif k == "speedY" then t.velocity.y = v
+    --         elseif k == "accelerationX" then t.acceleration.x = v
+    --         elseif k == "accelerationY" then t.acceleration.y = v
+    --         else rawset(t, k, v)
+    --         end
+    --     end
+    -- }
+    -- setmetatable(self, mt)
+
     return self
 end
 
@@ -258,7 +282,8 @@ Vaisseau.new = function(level)
 
     self.toggleShootLeftRight = false
 
-	self.acceleration = 180
+    -- scalar thrust (rename to avoid conflict with vector `acceleration` in GameObject)
+    self.thrust = 180
 	self.accelerationMax = 6
 	self.missileAcceleration = 5*60
 	self.missileAccelerationMax = 60
@@ -287,7 +312,7 @@ Vaisseau.new = function(level)
 
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
-            love.graphics.circle("line", self.X_pos, self.Y_pos,
+            love.graphics.circle("line", self.position.x, self.position.y,
                 self.imageRadius * self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + (extensionToDo - 1))
         end
     end
@@ -303,7 +328,7 @@ Vaisseau.new = function(level)
         love.graphics.setColor(255, 255, 0)         --yellow
         love.graphics.print("WARNING - SHIELD OFF IN : " ..
             tostring(string.format("%d", (self.TIME_SHIELD_START_MAX / 60 - self.timeShieldStart / 60))),
-            self.X_pos - widthImage, self.Y_pos - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
+            self.position.x - widthImage, self.position.y - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setColor(love.math.colorFromBytes(self.colorValueIncrease, 0, 0))
         shieldCircle(3)
@@ -384,8 +409,8 @@ Vaisseau.new = function(level)
         if idx then
             local x_offset = x_prop * (self.imageRatio / self.imageRatioRef)
             local y_offset = y_prop * (self.imageRatio / self.imageRatioRef)
-            propulsors[idx].x = self.X_pos + (math.cos(self.angle) * x_offset) - (math.sin(self.angle) * y_offset)
-            propulsors[idx].y = self.Y_pos + (math.sin(self.angle) * x_offset) + (math.cos(self.angle) * y_offset)
+            propulsors[idx].x = self.position.x + (math.cos(self.angle) * x_offset) - (math.sin(self.angle) * y_offset)
+            propulsors[idx].y = self.position.y + (math.sin(self.angle) * x_offset) + (math.cos(self.angle) * y_offset)
             propulsors[idx].power = propulsorIncreasePow(PropulsorWithV, active)
             updateParticles(dt, active, propulsors[idx].x, propulsors[idx].y, propulsors[idx].power)
         end
@@ -543,13 +568,13 @@ Vaisseau.new = function(level)
                 -- draw laser ON
                 love.graphics.setColor(255, 0, 0)
                 love.graphics.line(
-                    self.X_pos + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -
+                    self.position.x + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -
                     (math.sin(self.angle) * Y_offsetMissilePositionWithVaisseau),
-                    self.Y_pos + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
+                    self.position.y + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
                     (math.cos(self.angle) * Y_offsetMissilePositionWithVaisseau),
-                    self.X_pos + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseauAway) -
+                    self.position.x + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseauAway) -
                     (math.sin(self.angle) * Y_offsetMissilePositionWithVaisseauAway),
-                    self.Y_pos + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseauAway) +
+                    self.position.y + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseauAway) +
                     (math.cos(self.angle) * Y_offsetMissilePositionWithVaisseauAway))
                 love.graphics.setColor(255, 255, 255, 255)
             end
@@ -575,41 +600,41 @@ Vaisseau.new = function(level)
                 love.graphics.setColor(255, 0, 0)
 
                 love.graphics.line(
-                    self.X_pos +
+                    self.position.x +
                     (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) -
                     (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight),
-                    self.Y_pos +
+                    self.position.y +
                     (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) +
                     (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight),
-                    self.X_pos +
+                    self.position.x +
                     (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRightAway) -
                     (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRightAway),
-                    self.Y_pos +
+                    self.position.y +
                     (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRightAway) +
                     (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRightAway))
                 love.graphics.line(
-                    self.X_pos +
+                    self.position.x +
                     (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) -
                     (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft),
-                    self.Y_pos +
+                    self.position.y +
                     (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) +
                     (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft),
-                    self.X_pos +
+                    self.position.x +
                     (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeftAway) -
                     (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeftAway),
-                    self.Y_pos +
+                    self.position.y +
                     (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeftAway) +
                     (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeftAway))
                 love.graphics.setColor(255, 255, 255, 255)
             end
         end
 
-        love.graphics.draw(VaisseauPng, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi), self.imageRatio,
+        love.graphics.draw(VaisseauPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
             self.imageRatio, widthImage / 2, heightImage / 2)
 
         -- vaisseau impact
         if (self.vaisseauImpact == true) then
-            love.graphics.draw(VaisseauPngImpact, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi),
+            love.graphics.draw(VaisseauPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi),
                 self.imageRatio, self.imageRatio, widthImage / 2, heightImage / 2)
 
             vaisseauImpactDuration = vaisseauImpactDuration - 1
@@ -626,7 +651,7 @@ Vaisseau.new = function(level)
 
     function self.shoot(typeOfMissile)
         self.toggleShootLeftRight = toggleBool(self.toggleShootLeftRight)
-        return Missile.new(self.angle, self.X_pos, self.Y_pos, self.speedX, self.speedY, typeOfMissile,
+        return Missile.new(self.angle, self.position.x, self.position.y, self.velocity.x, self.velocity.y, typeOfMissile,
             self.toggleShootLeftRight)
     end
 
@@ -716,19 +741,19 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
         MissilePng = MissilePngRed
     end
 
-    self.X_pos = X_pos_vaisseau + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -
+    self.position.x = X_pos_vaisseau + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -
     (math.sin(self.angle) * Y_offsetMissilePositionWithVaisseau)
-    self.Y_pos = Y_pos_vaisseau + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
+    self.position.y = Y_pos_vaisseau + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
     (math.cos(self.angle) * Y_offsetMissilePositionWithVaisseau)
-    self.speedX = speedX_missile
-    self.speedY = speedY_missile
+    self.velocity.x = speedX_missile
+    self.velocity.y = speedY_missile
 
     local widthImage = MissilePng:getWidth()
     local heightImage = MissilePng:getHeight()
     self.imageRadius = (widthImage / 2) * self.imageRatio
 
     function self.draw()
-        love.graphics.draw(MissilePng, self.X_pos, self.Y_pos, 0, (self.imageRatio), (self.imageRatio), widthImage / 2,
+        love.graphics.draw(MissilePng, self.position.x, self.position.y, 0, (self.imageRatio), (self.imageRatio), widthImage / 2,
             heightImage / 2)
     end
 
@@ -746,20 +771,20 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
             self.timeInMilliSecond = (love.timer.getTime() * 10 - self.initTimeInMilliSecond)
 
             current_distance = amplitude * math.sin(self.timeInMilliSecond * frequency + phase);
-            self.X_pos = self.X_pos + (math.cos(beta) * current_distance)
-            self.Y_pos = self.Y_pos + (math.sin(beta) * current_distance)
-            self.X_pos = (self.X_pos + self.speedX*dt)
-            self.Y_pos = (self.Y_pos + self.speedY*dt)
+            self.position.x = self.position.x + (math.cos(beta) * current_distance)
+            self.position.y = self.position.y + (math.sin(beta) * current_distance)
+            self.position.x = (self.position.x + self.velocity.x * dt)
+            self.position.y = (self.position.y + self.velocity.y * dt)
         else
-            self.X_pos = (self.X_pos + self.speedX*dt)
-            self.Y_pos = (self.Y_pos + self.speedY*dt)
+            self.position.x = (self.position.x + self.velocity.x * dt)
+            self.position.y = (self.position.y + self.velocity.y * dt)
         end
     end
 
     self.initTimeInMilliSecond = love.timer.getTime() * 10
 
     function self.missile_lost()
-        if (self.X_pos > SCREEN_WIDTH or self.X_pos < 0 or self.Y_pos > SCREEN_HIGH or self.Y_pos < 0) then
+        if (self.position.x > SCREEN_WIDTH or self.position.x < 0 or self.position.y > SCREEN_HIGH or self.position.y < 0) then
             return true
         else
             return false
@@ -803,10 +828,10 @@ Asteroid.new = function()
 
         -- draw astero
         if (self.asteroidImpact == false) then
-            love.graphics.draw(AsteroidPng, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi), self.imageRatio,
+            love.graphics.draw(AsteroidPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
                 self.imageRatio, widthImage / 2, heightImage / 2)
         else
-            love.graphics.draw(AsteroidPngImpact, self.X_pos, self.Y_pos, self.angle + (0.5 * math.pi), self.imageRatio,
+            love.graphics.draw(AsteroidPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
                 self.imageRatio, widthImage / 2, heightImage / 2)
             asteroidImpactDuration = asteroidImpactDuration - 1
             if (asteroidImpactDuration < 1) then
@@ -819,12 +844,12 @@ Asteroid.new = function()
     self.CLOCKWISE = randomBool()
     self.maneuverability = 1 * love.math.random()
 
-    self.X_pos = SCREEN_WIDTH * love.math.random()
-    self.Y_pos = SCREEN_HIGH * love.math.random()
+    self.position.x = SCREEN_WIDTH * love.math.random()
+    self.position.y = SCREEN_HIGH * love.math.random()
     self.angle = 2 * math.pi * love.math.random()
     local MAX_SPEED = 300 * love.math.random()
-    self.speedX = MAX_SPEED * randomSign() * love.math.random()
-    self.speedY = MAX_SPEED * randomSign() * love.math.random()
+    self.velocity.x = MAX_SPEED * randomSign() * love.math.random()
+    self.velocity.y = MAX_SPEED * randomSign() * love.math.random()
     return self
 end
 
@@ -886,8 +911,8 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
         -- astero explosion
         if (self.asteroDivisionExplosion == true) then
             if(takeExplosionPosition == false) then
-                X_explosionPos = self.X_pos
-                Y_explosionPos = self.Y_pos
+                X_explosionPos = self.position.x
+                Y_explosionPos = self.position.y
                 takeExplosionPosition = true
             end
             if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
@@ -922,12 +947,12 @@ Bonus.new = function()
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
 
-    self.X_pos = SCREEN_WIDTH * love.math.random()
-    self.Y_pos = SCREEN_HIGH * love.math.random()
+    self.position.x = SCREEN_WIDTH * love.math.random()
+    self.position.y = SCREEN_HIGH * love.math.random()
     self.angle = 2 * math.pi
     local MAX_SPEED = 3 * love.math.random()
-    self.speedX = MAX_SPEED * randomSign() * love.math.random()
-    self.speedY = MAX_SPEED * randomSign() * love.math.random()
+    self.velocity.x = MAX_SPEED * randomSign() * love.math.random()
+    self.velocity.y = MAX_SPEED * randomSign() * love.math.random()
 
     local counterIncrease = 1
     local imageRatioChange = nil
@@ -987,12 +1012,12 @@ Bonus.new = function()
 
         if (self.checkLifeTimeAlmostFinished() == true) then
             if (isEven(math.floor(love.timer.getTime() - startTimeCreation))) then
-                love.graphics.draw(BonusPng, self.X_pos, self.Y_pos, self.angle + (2 * math.pi),
+                love.graphics.draw(BonusPng, self.position.x, self.position.y, self.angle + (2 * math.pi),
                     self.imageRatio / imageRatioChange,
                     self.imageRatio, widthImage / 2, heightImage / 2)
             end
         else
-            love.graphics.draw(BonusPng, self.X_pos, self.Y_pos, self.angle + (2 * math.pi),
+            love.graphics.draw(BonusPng, self.position.x, self.position.y, self.angle + (2 * math.pi),
                 self.imageRatio / imageRatioChange,
                 self.imageRatio, widthImage / 2, heightImage / 2)
         end

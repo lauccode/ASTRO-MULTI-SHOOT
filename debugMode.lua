@@ -8,9 +8,9 @@ function debugMode(objects)
         end
     end
 
-    if (objects[1].nameInstance == "ASTEROID") then
-        love.graphics.print("" .. tostring(1), objects[1].X_pos,
-            objects[1].Y_pos)
+        if (objects[1].nameInstance == "ASTEROID") then
+        love.graphics.print("" .. tostring(1), objects[1].position.x,
+            objects[1].position.y)
         local offsetPrint = 10
         love.graphics.print("#asteroids :" .. tostring(#objects), 300, 270 - offsetPrint)
         for objects_it = 1, #objects do

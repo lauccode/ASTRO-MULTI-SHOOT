@@ -2,27 +2,28 @@
 local function objectBounce(dt, objects, objects2, objects_to_manage, objects_to_manage2)
     for objects_moved_it = #objects_to_manage, 1, -1 do
         for objects_moved_it2 = #objects_to_manage2, 1, -1 do
-            local speedX_Object1 = objects2[objects_to_manage2[objects_moved_it2]].speedX
-            local speedY_Object1 = objects2[objects_to_manage2[objects_moved_it2]].speedY
-            local speedX_Object2 = objects[objects_to_manage[objects_moved_it]].speedX
-            local speedY_Object2 = objects[objects_to_manage[objects_moved_it]].speedY
+            local idx1 = objects_to_manage[objects_moved_it]
+            local idx2 = objects_to_manage2[objects_moved_it2]
+            local speedX_Object2 = objects[idx1].velocity.x
+            local speedY_Object2 = objects[idx1].velocity.y
+            local speedX_Object1 = objects2[idx2].velocity.x
+            local speedY_Object1 = objects2[idx2].velocity.y
 
-            local X_posObject1 = (objects[objects_to_manage[objects_moved_it]].X_pos + speedX_Object1*dt)
-            local Y_posObject1 = (objects[objects_to_manage[objects_moved_it]].Y_pos + speedY_Object1*dt)
-            local X_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].X_pos + speedX_Object2*dt)
-            local Y_posObject2 = (objects2[objects_to_manage2[objects_moved_it2]].Y_pos + speedY_Object2*dt)
+            local X_posObject1 = (objects[idx1].position.x + speedX_Object1 * dt)
+            local Y_posObject1 = (objects[idx1].position.y + speedY_Object1 * dt)
+            local X_posObject2 = (objects2[idx2].position.x + speedX_Object2 * dt)
+            local Y_posObject2 = (objects2[idx2].position.y + speedY_Object2 * dt)
             local dx = X_posObject2 - X_posObject1
             local dy = Y_posObject2 - Y_posObject1
             local newDist = math.sqrt(dx * dx + dy * dy)
 
-            local actualDist = objects[objects_to_manage[objects_moved_it]].distanceWith(objects2[
-            objects_to_manage2[objects_moved_it2]])
+            local actualDist = objects[idx1].distanceWith(objects2[idx2])
 
             if (newDist > actualDist) then
-                objects[objects_to_manage[objects_moved_it]].speedX = speedX_Object1
-                objects[objects_to_manage[objects_moved_it]].speedY = speedY_Object1
-                objects2[objects_to_manage2[objects_moved_it2]].speedX = speedX_Object2
-                objects2[objects_to_manage2[objects_moved_it2]].speedY = speedY_Object2
+                objects[idx1].velocity.x = speedX_Object1
+                objects[idx1].velocity.y = speedY_Object1
+                objects2[idx2].velocity.x = speedX_Object2
+                objects2[idx2].velocity.y = speedY_Object2
             end
         end
     end
@@ -79,25 +80,25 @@ function CollisionManagerAsteroidsAndMissiles(dt, level, missiles, asteroids, as
         for i = #objects_to_manage, 1, -1 do
             for j = #objects_to_manage2, 1, -1 do
                 love.audio.stop(asteroidExplosionSound)
-                table.insert(asteroidExplosions, AsteroidExplosions.new(missiles[objects_to_manage[i]].X_pos, missiles[objects_to_manage[i]].Y_pos))
+                table.insert(asteroidExplosions, AsteroidExplosions.new(missiles[objects_to_manage[i]].position.x, missiles[objects_to_manage[i]].position.y))
                 table.remove(missiles, objects_to_manage[i])
                 local asteroid = asteroids[objects_to_manage2[j]]
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
                     if asteroid.asteroidDivision == 2 then
                         table.insert(bonuss, Bonus.new())
-                        bonuss[#bonuss].X_pos = asteroid.X_pos
-                        bonuss[#bonuss].Y_pos = asteroid.Y_pos
+                        bonuss[#bonuss].position.x = asteroid.position.x
+                        bonuss[#bonuss].position.y = asteroid.position.y
                     end
                     for k = 1, 2 do
                         table.insert(asteroids, Asteroid.new())
                         local newAsteroid = asteroids[#asteroids]
-                        newAsteroid.X_pos = asteroid.X_pos
-                        newAsteroid.Y_pos = asteroid.Y_pos
+                        newAsteroid.position.x = asteroid.position.x
+                        newAsteroid.position.y = asteroid.position.y
                         newAsteroid.imageRatio = asteroid.imageRatio / 2
                         newAsteroid.recalculateImageRadius()
                         newAsteroid.asteroidDivision = asteroid.asteroidDivision - 1
                         newAsteroid.protection = newAsteroid.asteroidDivision
-                        table.insert(asteroidExplosions, AsteroidExplosions.new(newAsteroid.X_pos, newAsteroid.Y_pos))
+                        table.insert(asteroidExplosions, AsteroidExplosions.new(newAsteroid.position.x, newAsteroid.position.y))
                     end
                     table.remove(asteroids, objects_to_manage2[j])
                     love.audio.play(asteroidExplosionSound)
