@@ -1,4 +1,9 @@
 -- Helper for bounce
+local Vector2 = require("Vector2")
+
+-- When predicting next-frame positions, compute the distance between the
+-- predicted positions using vector operations. This is clearer and less
+-- error-prone than manual dx/dy + sqrt.
 local function objectBounce(dt, objects, objects2, objects_to_manage, objects_to_manage2)
     for objects_moved_it = #objects_to_manage, 1, -1 do
         for objects_moved_it2 = #objects_to_manage2, 1, -1 do
@@ -13,9 +18,15 @@ local function objectBounce(dt, objects, objects2, objects_to_manage, objects_to
             local Y_posObject1 = (objects[idx1].position.y + speedY_Object1 * dt)
             local X_posObject2 = (objects2[idx2].position.x + speedX_Object2 * dt)
             local Y_posObject2 = (objects2[idx2].position.y + speedY_Object2 * dt)
-            local dx = X_posObject2 - X_posObject1
-            local dy = Y_posObject2 - Y_posObject1
-            local newDist = math.sqrt(dx * dx + dy * dy)
+            -- Build Vector2 positions for each object's predicted location,
+            -- compute their difference and take the length (distance).
+            local pos1 = Vector2.new(X_posObject1, Y_posObject1)
+            local pos2 = Vector2.new(X_posObject2, Y_posObject2)
+            local newDist = pos2:sub(pos1):length()
+            -- OLD implementation (manual components):
+            -- local dx = X_posObject2 - X_posObject1
+            -- local dy = Y_posObject2 - Y_posObject1
+            -- local newDist = math.sqrt(dx * dx + dy * dy)
 
             local actualDist = objects[idx1].distanceWith(objects2[idx2])
 

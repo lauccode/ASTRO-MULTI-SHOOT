@@ -109,17 +109,28 @@ GameObject.new = function()
             extendedImageRadiusFactor = STD_EXTENDED_IMAGE_RADIUS_FACTOR
         end
 
-        local dx = Object.position.x - self.position.x
-        local dy = Object.position.y - self.position.y
-        local dist = math.sqrt(dx * dx + dy * dy)
+        -- Compute the distance between this object and `Object` using vector ops:
+        -- `Object.position:sub(self.position)` builds the vector from `self.position`
+        -- to `Object.position`. Calling `:length()` returns its magnitude (distance).
+        local dist = Object.position:sub(self.position):length()
+        -- Compare the distance to the sum of radii (with potential extension).
         return dist < (self.imageRadius * extendedImageRadiusFactor + Object.imageRadius)
+        -- OLD implementation (manual components):
+        -- local dx = Object.position.x - self.position.x
+        -- local dy = Object.position.y - self.position.y
+        -- local dist = math.sqrt(dx * dx + dy * dy)
+        -- return dist < (self.imageRadius * extendedImageRadiusFactor + Object.imageRadius)
     end
 
     function self.distanceWith(Object)
-        local dx = Object.position.x - self.position.x
-        local dy = Object.position.y - self.position.y
-        local dist = math.sqrt(dx * dx + dy * dy)
-        return dist
+        -- Returns the scalar distance between this object and `Object`.
+        -- Internally: distance = | Object.position - self.position |
+        return Object.position:sub(self.position):length()
+        -- OLD implementation (manual components):
+        -- local dx = Object.position.x - self.position.x
+        -- local dy = Object.position.y - self.position.y
+        -- local dist = math.sqrt(dx * dx + dy * dy)
+        -- return dist
     end
 
     function self.accelerate(dt, acceleration, accelerationMax, goBack)
@@ -137,14 +148,26 @@ GameObject.new = function()
 
         if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then
             -- fully needed to avoid "diagonal effect"
-            local mag = math.sqrt(self.velocity.x * self.velocity.x + self.velocity.y * self.velocity.y)
-            local cosinus = self.velocity.x / mag
-            local sinus = self.velocity.y / mag
-
-            self.acceleration.x = cosinus * acceleration
-            self.acceleration.y = sinus * acceleration
-            self.absMaxSpeedX = math.abs(self.acceleration.x)
-            self.absMaxSpeedY = math.abs(self.acceleration.y)
+            -- Use `Vector2:length()` to compute magnitude and `:normalize()` to get
+            -- the unit direction of `self.velocity`. Multiply the unit vector by
+            -- scalar `acceleration` to get the acceleration components.
+            local mag = self.velocity:length()
+            if mag ~= 0 then
+                local norm = self.velocity:normalize()
+                -- set acceleration components along velocity direction
+                self.acceleration.x = norm.x * acceleration
+                self.acceleration.y = norm.y * acceleration
+                self.absMaxSpeedX = math.abs(self.acceleration.x)
+                self.absMaxSpeedY = math.abs(self.acceleration.y)
+            end
+            -- OLD implementation (manual magnitude + direction):
+            -- local mag = math.sqrt(self.velocity.x * self.velocity.x + self.velocity.y * self.velocity.y)
+            -- local cosinus = self.velocity.x / mag
+            -- local sinus = self.velocity.y / mag
+            -- self.acceleration.x = cosinus * acceleration
+            -- self.acceleration.y = sinus * acceleration
+            -- self.absMaxSpeedX = math.abs(self.acceleration.x)
+            -- self.absMaxSpeedY = math.abs(self.acceleration.y)
         end
 
         if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then

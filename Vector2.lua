@@ -1,3 +1,19 @@
+-- Simple 2D vector utility.
+-- Methods provided:
+--  - `Vector2.new(x, y)`        : create a new vector
+--  - `v:add(u)`                 : return v + u (new Vector2)
+--  - `v:sub(u)`                 : return v - u (new Vector2)
+--  - `v:scale(s)`               : return v * s (new Vector2)
+--  - `v:dot(u)`                 : dot product
+--  - `v:length()`               : length (magnitude) of the vector
+--  - `v:normalize()`            : unit vector in same direction (zero -> (0,0))
+--
+-- Usage examples:
+--   local a = Vector2.new(1,2)
+--   local b = Vector2.new(3,4)
+--   local d = b:sub(a):length()  -- distance between a and b
+--   local dir = b:sub(a):normalize() -- unit direction from a to b
+
 local Vector2 = {}
 Vector2.__index = Vector2
 
