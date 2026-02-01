@@ -11,7 +11,7 @@ GameObject.new = function()
     -- Position, velocity and acceleration as vectors
     self.position = Vector2.new(SCREEN_WIDTH / 2, SCREEN_HIGH / 2)
     self.velocity = Vector2.new(0, 0)
-    self.acceleration = Vector2.new(0, 0)
+    self.velocityMax = Vector2.new(0, 0)
     
     self.angle = (3 / 2 * math.pi) --1.5 * math.pi
     self.accelerateFWorWW = "neutral"
@@ -96,9 +96,9 @@ GameObject.new = function()
         self.velocity = Vector2.new(0, 0)
     end
 
-    function self.accelerateBack(dt, acceleration, accelerationMax)
+    function self.accelerateBack(dt, speedMax, accelerationMax)
         local goBack = true
-        self.accelerate(dt, acceleration, accelerationMax, goBack)
+        self.accelerate(dt, speedMax, accelerationMax, goBack)
     end
 
     function self.collisionWith(Object, startLevel)
@@ -133,7 +133,7 @@ GameObject.new = function()
         -- return dist
     end
 
-    function self.accelerate(dt, acceleration, accelerationMax, goBack)
+    function self.accelerate(dt, velocityMax, accelerationMax, goBack)
         goBack = goBack or false
 
         if (goBack) then
@@ -146,19 +146,22 @@ GameObject.new = function()
             self.velocity.y = self.velocity.y + (math.sin(self.angle) * accelerationMax)
         end
 
+        local absMaxSpeedX = 0
+        local absMaxSpeedY = 0
+
         if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then
             -- fully needed to avoid "diagonal effect"
             -- Use `Vector2:length()` to compute magnitude and `:normalize()` to get
             -- the unit direction of `self.velocity`. Multiply the unit vector by
-            -- scalar `acceleration` to get the acceleration components.
+            -- scalar `velocityMax` to get the velocityMax components.
             local mag = self.velocity:length()
             if mag ~= 0 then
                 local norm = self.velocity:normalize()
-                -- set acceleration components along velocity direction
-                self.acceleration.x = norm.x * acceleration
-                self.acceleration.y = norm.y * acceleration
-                self.absMaxSpeedX = math.abs(self.acceleration.x)
-                self.absMaxSpeedY = math.abs(self.acceleration.y)
+                -- set velocityMax components along velocity direction
+                self.velocityMax.x = norm.x * velocityMax
+                self.velocityMax.y = norm.y * velocityMax
+                absMaxSpeedX = math.abs(self.velocityMax.x)
+                absMaxSpeedY = math.abs(self.velocityMax.y)
             end
             -- OLD implementation (manual magnitude + direction):
             -- local mag = math.sqrt(self.velocity.x * self.velocity.x + self.velocity.y * self.velocity.y)
@@ -172,11 +175,11 @@ GameObject.new = function()
 
         if ((self.velocity.x ~= 0) and (self.velocity.y ~= 0)) then
             -- fully needed to avoid "diagonal effect"
-            if (math.abs(self.velocity.x) >= self.absMaxSpeedX) then
-                self.velocity.x = self.acceleration.x
+            if (math.abs(self.velocity.x) >= absMaxSpeedX) then
+                self.velocity.x = self.velocityMax.x
             end
-            if (math.abs(self.velocity.y) >= self.absMaxSpeedY) then
-                self.velocity.y = self.acceleration.y
+            if (math.abs(self.velocity.y) >= absMaxSpeedY) then
+                self.velocity.y = self.velocityMax.y
             end
         end
     end
@@ -190,19 +193,19 @@ GameObject.new = function()
             'Y: ' .. string.format("%5.1f", self.position.y),
             'SpeedX: ' .. string.format("%5.1f", self.velocity.x),
             'SpeedY: ' .. string.format("%5.1f", self.velocity.y),
-            'AccelerationX: ' .. string.format("%5.1f", self.acceleration.x),
-            'AccelerationY: ' .. string.format("%5.1f", self.acceleration.y),
+            'VelocityMaxX: ' .. string.format("%5.1f", self.velocityMax.x),
+            'VelocityMaxY: ' .. string.format("%5.1f", self.velocityMax.y),
         }, '\n'), printX, printY)
     end
 
     function self.graphic_infos()
         local factor = 20 / 60
         love.graphics.setColor(255, 0, 0)
-        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.acceleration.x * factor),
-            self.position.y + (self.acceleration.y * factor))
+        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.velocityMax.x * factor),
+            self.position.y + (self.velocityMax.y * factor))
         love.graphics.setColor(0, 255, 0)
-        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.velocity.x * factor),
-            self.position.y + (self.velocity.y * factor))
+        love.graphics.line(self.position.x, self.position.y, self.position.x + (self.velocityMax.x * factor),
+            self.position.y + (self.velocityMax.y * factor))
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.circle("line", self.position.x, self.position.y, self.imageRadius)
     end
@@ -306,9 +309,9 @@ Vaisseau.new = function(level)
     self.toggleShootLeftRight = false
 
     -- scalar thrust (rename to avoid conflict with vector `acceleration` in GameObject)
-    self.thrust = 180
+    self.speed = 180
 	self.accelerationMax = 6
-	self.missileAcceleration = 5*60
+	self.missileSpeedMax = 5*60
 	self.missileAccelerationMax = 60
 
 	self.colorValueIncrease = 0
