@@ -1,5 +1,10 @@
 -- Helper for bounce
 local Vector2 = require("Vector2")
+-- Explicit module imports (avoid globals)
+local Asteroid = require("Asteroid")
+local AsteroidExplosions = require("AsteroidExplosions")
+local Bonus = require("Bonus")
+local Missile = require("Missile")
 
 -- When predicting next-frame positions, compute the distance between the
 -- predicted positions using vector operations. This is clearer and less

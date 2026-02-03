@@ -1,9 +1,16 @@
-require("models")
 require("collision")
 require("update")
 require("debugMode")
 require("level")
 require("menu")
+
+-- Explicit module imports to avoid relying on globals
+local GameObject = require("GameObject")
+local Vaisseau = require("Vaisseau")
+local Missile = require("Missile")
+local Asteroid = require("Asteroid")
+local AsteroidExplosions = require("AsteroidExplosions")
+local Bonus = require("Bonus")
 
 -- Pour debugger avec zeroBrane
 -- if arg[#arg] == "-debug" then
