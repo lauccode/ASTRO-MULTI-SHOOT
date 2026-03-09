@@ -53,12 +53,12 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     end
 
     -- MENU KEYBOARD UPDATE
-    if love.keyboard.isDown("up") then
+    if love.keyboard.isDown("up") or gamepadIsDown('dpup') or gamepadAxisValue('lefty') < -0.5 then
         if not keyPressed then
             menu.positionMenu = menu.positionMenu - 1
             keyPressed = true
         end
-    elseif love.keyboard.isDown("down") then
+    elseif love.keyboard.isDown("down") or gamepadIsDown('dpdown') or gamepadAxisValue('lefty') > 0.5 then
         if not keyPressed then
             menu.positionMenu = menu.positionMenu + 1
             keyPressed = true
@@ -124,16 +124,20 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
     end
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
-        if love.keyboard.isDown("right") then
+        -- rotation: right/left keys OR left stick horizontal OR dpad left/right
+        if love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 or gamepadIsDown('dpright') then
             vaisseaux[1].rotate(true, dt)
-        elseif love.keyboard.isDown("left") then
+        elseif love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 or gamepadIsDown('dpleft') then
             vaisseaux[1].rotate(false, dt)
         else
             vaisseaux[1].rotateRightorLeft = "neutral"
         end
-        if love.keyboard.isDown("up") then
+        -- forward/back: up/down keys OR triggers (right trigger = forward, left trigger = backward) OR left stick vertical OR dpad
+        local rt = gamepadAxisValue('triggerright', 'righttrigger', 'rtrigger', 'triggerright')
+        local lt = gamepadAxisValue('triggerleft', 'lefttrigger', 'ltrigger')
+        if love.keyboard.isDown("up") or rt > 0.3 or gamepadAxisValue('lefty') < -0.5 or gamepadIsDown('dpup') then
             vaisseaux[1].accelerate(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
-        elseif love.keyboard.isDown("down") then
+        elseif love.keyboard.isDown("down") or lt > 0.3 or gamepadAxisValue('lefty') > 0.5 or gamepadIsDown('dpdown') then
             vaisseaux[1].accelerateBack(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("s") then
             vaisseaux[1].accelerateBack(dt, 0, 0.1)
@@ -224,7 +228,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         local missileType = { vaisseaux[1].MSL_PKG_STD, vaisseaux[1].missilePackBigger, vaisseaux[1].missilePackQuicker,
             vaisseaux[1].missileSinus }
 
-        if love.keyboard.isDown("space") then
+        if love.keyboard.isDown("space") or gamepadIsDown('a') or gamepadIsDown('rightshoulder') then
             if (shoot_timer_pulse_to_use) then
                 if (vaisseaux[1].missilePackLateral == vaisseaux[1].MSL_PKG_STD) then
                     love.audio.stop(shootSound)
