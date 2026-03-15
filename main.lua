@@ -236,7 +236,7 @@ function love.update(dt) -- 60 fps by defaut
 	if menu.selectionMenu == menu.PRESENT_STAGE then
 		menu.updatePresentStage(dt)
 		particlesTransitionStage:update(dt)
-		if love.keyboard.isDown("s") then
+		if love.keyboard.isDown("s") or gamepadIsDown('b') then
 			particlesTransitionStage = nil  -- optim(TBT)
 			menu.isPresentStageDone = true
 			menu.selectionMenu = menu.menuValues[menu.START]
@@ -244,14 +244,14 @@ function love.update(dt) -- 60 fps by defaut
 	end
 
 	if menu.selectionMenu == menu.GAMEOVER or menu.selectionMenu == menu.CONGRATULATION then
-		if love.keyboard.isDown("r") then
+		if love.keyboard.isDown("r") or gamepadIsDown('b') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 			love.load()
 		end
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
-		if love.keyboard.isDown("q") then
+		if love.keyboard.isDown("q") or gamepadIsDown('b') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 			-- love.audio.stop(creditsSound)
 		end
@@ -259,7 +259,7 @@ function love.update(dt) -- 60 fps by defaut
 
 	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
 		menu.updateResetOffsetPrintCreditsStart(dt)
-		if love.keyboard.isDown("q") then
+		if love.keyboard.isDown("q") or gamepadIsDown('b') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 			love.audio.stop(creditsSound)
 		end

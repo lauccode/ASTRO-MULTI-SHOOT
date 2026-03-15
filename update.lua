@@ -67,7 +67,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         keyPressed = false
     end
 
-    if love.keyboard.isDown("space") then
+    if love.keyboard.isDown("space") or gamepadIsDown('a') then
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
             menu.selectionMenu = menu.menuValues[menu.START]
         end
@@ -96,14 +96,15 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     else
         keyPressedDebug = false
     end
-    if love.keyboard.isDown("escape") then
+
+    if love.keyboard.isDown("escape")then
         love.event.quit()
     end
     return DEBUG_MODE, toggleDebug, creditsSound
 end
 
 function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, shootSound, dt)
-    if love.keyboard.isDown("q") then -- restart game
+    if love.keyboard.isDown("q") or gamepadIsDown('guide') or gamepadIsDown('start') then -- restart game
         if gameSound ~= nil then
             love.audio.stop(gameSound)
         end
@@ -139,7 +140,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             vaisseaux[1].accelerate(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("down") or lt > 0.3 or gamepadAxisValue('lefty') > 0.5 or gamepadIsDown('dpdown') then
             vaisseaux[1].accelerateBack(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
-        elseif love.keyboard.isDown("s") then
+        elseif love.keyboard.isDown("s") or gamepadIsDown('leftshoulder') then
             vaisseaux[1].accelerateBack(dt, 0, 0.1)
             vaisseaux[1].accelerateFWorWW = "neutral"
         else
@@ -228,7 +229,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         local missileType = { vaisseaux[1].MSL_PKG_STD, vaisseaux[1].missilePackBigger, vaisseaux[1].missilePackQuicker,
             vaisseaux[1].missileSinus }
 
-        if love.keyboard.isDown("space") or gamepadIsDown('a') or gamepadIsDown('rightshoulder') then
+        if love.keyboard.isDown("space") or gamepadIsDown('a') then
             if (shoot_timer_pulse_to_use) then
                 if (vaisseaux[1].missilePackLateral == vaisseaux[1].MSL_PKG_STD) then
                     love.audio.stop(shootSound)
