@@ -140,7 +140,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             vaisseaux[1].accelerate(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("down") or lt > 0.3 or gamepadAxisValue('lefty') > 0.5 or gamepadIsDown('dpdown') then
             vaisseaux[1].accelerateBack(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
-        elseif love.keyboard.isDown("s") or gamepadIsDown('leftshoulder') then
+        elseif love.keyboard.isDown("s") or gamepadIsDown('leftshoulder') or gamepadIsDown('rightshoulder') then
             vaisseaux[1].accelerateBack(dt, 0, 0.1)
             vaisseaux[1].accelerateFWorWW = "neutral"
         else
