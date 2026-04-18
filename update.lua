@@ -71,6 +71,9 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
             menu.selectionMenu = menu.menuValues[menu.START]
         end
+        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TUTO_PAD]) then
+            menu.selectionMenu = menu.menuValues[menu.TUTO_PAD]
+        end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TUTO]) then
             menu.selectionMenu = menu.menuValues[menu.TUTO]
         end

@@ -250,6 +250,13 @@ function love.update(dt) -- 60 fps by defaut
 		end
 	end
 
+	if menu.selectionMenu == menu.menuValues[menu.TUTO_PAD] then
+		if love.keyboard.isDown("q") or gamepadIsDown('b') then
+			menu.selectionMenu = menu.MENU -- come back to menu
+			-- love.audio.stop(creditsSound)
+		end
+	end
+
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
 		if love.keyboard.isDown("q") or gamepadIsDown('b') then
 			menu.selectionMenu = menu.MENU -- come back to menu
@@ -334,6 +341,11 @@ function love.draw()
 	if menu.selectionMenu == menu.CONGRATULATION then
 		love.graphics.setFont(Assets.fonts.nerd14)
 		menu.congratulation()
+	end
+
+	if menu.selectionMenu == menu.menuValues[menu.TUTO_PAD] then
+		-- love.graphics.setFont(Assets.fonts.vt12)
+		menu.gamepadShortcuts()
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
