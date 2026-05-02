@@ -91,6 +91,8 @@ Vaisseau.new = function(level)
     local VaisseauPngOrange = Assets.images.vaisseauOrange
     local VaisseauPngRed = Assets.images.vaisseauRouge
 
+    self.selectWeaponBar = 1
+
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
             love.graphics.circle("line", self.position.x, self.position.y,
@@ -272,6 +274,34 @@ Vaisseau.new = function(level)
         end
     end
 
+    local function selectBar(OFF_SET_PRINT_CREDITS_ADDED, valueOffset)
+        local width = 10
+        local high = SCREEN_HIGH - 20
+
+        if (self.selectWeaponBar == 1) then
+            love.graphics.print("Lateral Weapon", width, high)
+            drawBar(self.lookupWeaponsLevel[self.missilePackLateral], width + valueOffset, high,
+                MAX_WEAPON);
+        elseif (self.selectWeaponBar == 2) then
+            love.graphics.print("Bigger Weapon", width, high)
+            drawBar(self.lookupWeaponsLevel[self.missilePackBigger], width + valueOffset, high, MAX_WEAPON);
+        elseif (self.selectWeaponBar == 3) then
+            love.graphics.print("Quick Weapon", width, high)
+            drawBar(self.lookupWeaponsLevel[self.missilePackQuicker], width + valueOffset, high,
+                MAX_WEAPON);
+        elseif (self.selectWeaponBar == 4) then
+            love.graphics.print("Laser Sight", width, high)
+            drawBar(self.lookupWeaponsLevel[self.missileLaserSight], width + valueOffset, high,
+                MAX_WEAPON - 1);
+        elseif (self.selectWeaponBar == 5) then
+            love.graphics.print("Sinus", width, high)
+            drawBar(self.lookupWeaponsLevel[self.missileSinus], width + valueOffset, high, MAX_WEAPON - 1);
+        elseif (self.selectWeaponBar == 6) then
+            love.graphics.print("Shield Protection", width, high)
+            drawBar(self.lookupWeaponsLevel[self.shield], width + valueOffset, high, MAX_WEAPON - 1);
+        end
+    end
+
     function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
             VaisseauPng = VaisseauPngGreen
@@ -293,38 +323,16 @@ Vaisseau.new = function(level)
         local valueOffset = 100
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255)
-        love.graphics.print("Protection", (SCREEN_WIDTH / 3), offsetPrintV)
+        love.graphics.print("Protection", (SCREEN_WIDTH / 4), offsetPrintV)
         love.graphics.setColor(255, 255, 255, 255)
-        drawBar(self.protection, (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_PROTECTION);
+        drawBar(self.protection, (SCREEN_WIDTH / 5) + valueOffset, offsetPrintV, MAX_PROTECTION);
+
+        selectBar(OFF_SET_PRINT_CREDITS_ADDED, valueOffset)
 
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Lateral Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.missilePackLateral], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Bigger Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.missilePackBigger], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Quick Weapon", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.missilePackQuicker], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Laser Sight", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.missileLaserSight], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Shield Protection", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.shield], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Sinus", (SCREEN_WIDTH / 3), offsetPrintV)
-        drawBar(self.lookupWeaponsLevel[self.missileSinus], (SCREEN_WIDTH / 3) + valueOffset, offsetPrintV, MAX_WEAPON - 1);
-
-        offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-        love.graphics.print("Stage", (SCREEN_WIDTH / 3), offsetPrintV)
-        love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH / 3) + valueOffset,
-            offsetPrintV)
+        love.graphics.print("Stage", (SCREEN_WIDTH - 60), SCREEN_HIGH - 20)
+        love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH - (60 - 30)),
+            SCREEN_HIGH - 20)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
         if (self.missilePackLateral == self.MSL_PKG_STD or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
