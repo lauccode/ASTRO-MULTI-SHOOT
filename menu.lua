@@ -399,7 +399,7 @@ Menu.new = function()
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 4
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("**** BONUS *****", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        love.graphics.print("**** BONUS (w) to select and (x) to activate/desactivate *****", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255)            -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 
@@ -412,7 +412,7 @@ Menu.new = function()
             VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(w) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
@@ -424,7 +424,7 @@ Menu.new = function()
             VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(x) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
@@ -436,7 +436,7 @@ Menu.new = function()
             VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(c) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
@@ -447,7 +447,7 @@ Menu.new = function()
         love.graphics.print("Laser sight", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(v) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
@@ -458,7 +458,7 @@ Menu.new = function()
         love.graphics.print("Shot with sinusoidal trajectory", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(b) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
@@ -470,7 +470,7 @@ Menu.new = function()
             VERTICAL_POSITION + OffsetPrintBonus)
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS
         love.graphics.setColor(255, 0, 0) -- red
-        love.graphics.print("(n) to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
+        love.graphics.print("    to activate/desactivate in debug mode", HORIZONTAL_SHORTCUT_POSITION,
             VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 3
