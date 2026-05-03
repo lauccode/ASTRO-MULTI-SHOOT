@@ -93,6 +93,8 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
             menu.selectionMenu = menu.menuValues[menu.CREDITS]
             creditsSound:setVolume(0.4)
+            creditsSound:seek(0)  -- restart the sound from the beginning
+            menu.startCredits() -- reset the credits scroll position
             love.audio.play(creditsSound)
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.QUIT]) then

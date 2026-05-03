@@ -204,6 +204,12 @@ Menu.new = function()
         end
     end
 
+    -- call this when entering the credits screen to restart from the beginning
+    function self.startCredits()
+        offsetPrintCreditsStart = 0
+        offsetPrintCredits = offsetPrintCreditsStart
+    end
+
     local function printNextCredit(stringToPrint, setRedColor)
         local OFF_SET_PRINT_CREDITS = 10
         local HORIZONTAL_POSITION = 50
