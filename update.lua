@@ -127,9 +127,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         vaisseaux[1].updatePropulsor(dt)
 
     -- shield update
-    if (vaisseaux[1].timeShieldStart < vaisseaux[1].TIME_SHIELD_START_MAX) then
+    -- if (vaisseaux[1].timeShieldStart < vaisseaux[1].timeShieldStartMax) then
         vaisseaux[1].updatePrintWarningStartLevel(dt)
-    end
+    -- end
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
         -- rotation: right/left keys OR left stick horizontal OR dpad left/right
@@ -168,7 +168,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             elseif love.keyboard.isDown("w") or gamepadIsDown('x') then
                 if not keyPressed then
                     selectWeaponBar = selectWeaponBar + 1
-                    if selectWeaponBar > 5 then selectWeaponBar = 1 end
+                    if selectWeaponBar > 6 then selectWeaponBar = 1 end
                     vaisseaux[1].selectWeaponBar = selectWeaponBar
                     keyPressed = true
                 end
@@ -219,11 +219,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                 end
             elseif selectWeaponBar == 6 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
-                    if (weaponCycleQuicker == 0) then vaisseaux[1].shield = vaisseaux[1].MSL_PKG_STD end
-                    if (weaponCycleQuicker == 1) then
-                        -- vaisseaux[1].shield = vaisseaux[1].SHIELD
-                        vaisseaux[1].activateShield()
-                    end
+                    -- if (weaponCycleQuicker == 0) then vaisseaux[1].shield = vaisseaux[1].MSL_PKG_STD end
+                    if (weaponCycleQuicker == 0) then vaisseaux[1].activateShield(false) end-- deactivate infinite shield
+                    if (weaponCycleQuicker == 1) then vaisseaux[1].activateShield(true) end-- activate infinite shield
                     weaponCycleQuicker = weaponCycleQuicker + 1
                     if (weaponCycleQuicker > 1) then weaponCycleQuicker = 0 end
                     keyPressed = true

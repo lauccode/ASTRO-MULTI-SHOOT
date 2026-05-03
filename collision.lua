@@ -156,7 +156,7 @@ function CollisionManagerVaisseauxAndAsteroids(dt, level, vaisseaux, asteroids, 
         for j = 1, #asteroids do
             if not checkDone then
                 if (vaisseaux[i].nameInstance == "VAISSEAU" and asteroids[j].nameInstance == "ASTEROID") then
-                    if vaisseaux[i].timeShieldStart < vaisseaux[i].TIME_SHIELD_START_MAX then
+                    if vaisseaux[i].timeShieldStart < vaisseaux[i].timeShieldStartMax then
                         if vaisseaux[i].collisionWith(asteroids[j], true) then
                             object_number = object_number + 1
                             objects_to_manage[object_number] = i
@@ -184,7 +184,7 @@ function CollisionManagerVaisseauxAndAsteroids(dt, level, vaisseaux, asteroids, 
                 local asteroid = asteroids[objects_to_manage2[object_number2]]
                 if vaisseau.protection > 0 then
                     objectBounce(dt, vaisseaux, asteroids, objects_to_manage, objects_to_manage2)
-                    if vaisseau.timeShieldStart < vaisseau.TIME_SHIELD_START_MAX then
+                    if vaisseau.timeShieldStart < vaisseau.timeShieldStartMax then
                     else
                         vaisseau.protection = vaisseau.protection - 1
                         love.audio.play(vaisseauImpactSound)
@@ -228,7 +228,10 @@ function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
                     vaisseau.missileLaserSight = vaisseau.MSL_LASER_SIGHT 
                 end
                 if bonus.bonus == bonus.SHIELD then
-                    vaisseau.activateShield()
+                    if not vaisseau.timeShieldInfinite then
+                        vaisseau.timeShieldStartMax = 60 * 15 -- 15 seconds
+                        vaisseau.activateShield()
+                    end
                 end
                 if bonus.bonus == bonus.MSL_SINUS then
                     vaisseau.missileSinus = vaisseau.MSL_SINUS

@@ -56,8 +56,9 @@ Vaisseau.new = function(level)
     local widthImageProp = PropulsorPng:getWidth()
     self.imageRadius = (widthImage / 2) * self.imageRatio
 
-    self.TIME_SHIELD_START_MAX = 60 * 5
+    self.timeShieldStartMax = 60 * 5 -- 5 seconds
     self.timeShieldStart = nil
+    self.timeShielInfinite = false
 
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
@@ -101,21 +102,36 @@ Vaisseau.new = function(level)
     end
 
     function self.updatePrintWarningStartLevel(dt)
-        self.timeShieldStart = self.timeShieldStart + (60*dt)
+        if (self.timeShieldStart < self.timeShieldStartMax and not self.timeShieldInfinite) then
+            self.timeShieldStart = self.timeShieldStart + (60*dt)
+        end
         self.colorValueIncrease = self.colorValueIncrease + (5*60*dt)
     end
 
     local function printWarningStartLevel()
         if (self.colorValueIncrease > 255) then self.colorValueIncrease = 0 end
-        love.graphics.setFont(Assets.fonts.nerd18)
-        love.graphics.setColor(255, 255, 0)
-        love.graphics.print("WARNING - SHIELD OFF IN : " ..
-            tostring(string.format("%d", (self.TIME_SHIELD_START_MAX / 60 - self.timeShieldStart / 60))),
-            self.position.x - widthImage, self.position.y - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
+        if not self.timeShieldInfinite then
+            love.graphics.setFont(Assets.fonts.nerd18)
+            love.graphics.setColor(255, 255, 0)
+                love.graphics.print("WARNING - SHIELD OFF IN : " ..
+                    tostring(string.format("%d", (self.timeShieldStartMax / 60 - self.timeShieldStart / 60))),
+                    self.position.x - widthImage, self.position.y - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
+        end
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setColor(love.math.colorFromBytes(self.colorValueIncrease, 0, 0))
         shieldCircle(3)
         love.graphics.setColor(255, 255, 255, 255)
+    end
+
+    function self.activateShield(infinite)
+        infinite = infinite or false
+        self.timeShieldInfinite = infinite
+        self.timeShieldStart = 0
+        if (infinite) then
+            self.shield = self.SHIELD
+        else
+            self.shield = self.MSL_PKG_STD
+        end
     end
 
     local function propulsorIncreasePow(PropulsorWithV, active)
@@ -313,7 +329,7 @@ Vaisseau.new = function(level)
 
         drawPropulsorPositionXY()
 
-        if (self.timeShieldStart < self.TIME_SHIELD_START_MAX) then
+        if (self.timeShieldStart < self.timeShieldStartMax) then
             printWarningStartLevel()
         end
 
@@ -428,11 +444,6 @@ Vaisseau.new = function(level)
         self.toggleShootLeftRight = toggleBool(self.toggleShootLeftRight)
         return Missile.new(self.angle, self.position.x, self.position.y, self.velocity.x, self.velocity.y, typeOfMissile,
             self.toggleShootLeftRight)
-    end
-
-    function self.activateShield()
-        self.shield = self.SHIELD
-        self.timeShieldStart = 0
     end
 
     return self
