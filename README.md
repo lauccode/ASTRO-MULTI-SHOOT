@@ -73,10 +73,13 @@ It allows to cheat during game and also to activate the game information as :
 - `d`           activate/desactivate debug game information
 
 #### for BONUS
-- `w`           Side fire activated FIRST, main fire put back in SECOND
-- `x`           Missile size can be increased TWICE
-- `c`           Rate of fire can be increased TWICE
-- `v`           Laser sight
-- `b`           Shot with sinusoidal trajectory
-- `n`           Shield protection for limited time
+- `w`           to select cyclically
+- `x`           to activate/desactivate
+
+1. `Side fire activated FIRST, main fire put back in SECOND`
+2. `Missile size can be increased TWICE`
+3. `Rate of fire can be increased TWICE`
+4. `Laser sight`
+5. `Shot with sinusoidal trajectory`
+6. `Shield protection for limited time`
 
