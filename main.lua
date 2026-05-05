@@ -92,6 +92,7 @@ Assets = {
         bonusMachineGunShoot = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png"),
         bonusVise = love.graphics.newImage("sprites/bonus_vise.png"),
         bonusBouclier = love.graphics.newImage("sprites/bonus_bouclier.png"),
+        bonusSinusShoot = love.graphics.newImage("sprites/bonus_sinus_shoot.png")
     },
 	fonts = {
 		nerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10),

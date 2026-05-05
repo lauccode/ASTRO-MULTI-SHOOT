@@ -25,7 +25,8 @@ Bonus.new = function()
     local counterIncrease = 1
     local imageRatioChange = nil
 
-    self.bonus = math.floor(2 + love.math.random() * MAX_BONUS_NUMBER)
+    self.bonus = math.floor(self.MSL_PKG_LATERAL + love.math.random() * MAX_BONUS_NUMBER)
+
     if (self.bonus == self.MSL_PKG_LATERAL or self.bonus == self.MSL_PKG_MUCH_LATERAL) then
         BonusPng = Assets.images.bonusTripleShoot
     end
@@ -42,7 +43,7 @@ Bonus.new = function()
         BonusPng = Assets.images.bonusBouclier
     end
     if (self.bonus == self.MSL_SINUS) then
-        BonusPng = love.graphics.newImage("sprites/bonus_sinus_shoot.png")
+        BonusPng = Assets.images.bonusSinusShoot
     end
 
     local widthImage = BonusPng:getWidth()
