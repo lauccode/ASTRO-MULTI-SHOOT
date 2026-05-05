@@ -80,7 +80,7 @@ function CreateAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
 end
 
 -- Asteroids <-> Asteroids
-function CollisionManagerAsteroids(dt, level, asteroids1, asteroids2)
+function CollisionManagerAsteroids(dt, asteroids1, asteroids2)
     local objects_to_manage, object_number, objects_to_manage2, object_number2 = findFirstCollisionSimple(asteroids1, asteroids2)
     if asteroids1[objects_to_manage[object_number]] and asteroids2[objects_to_manage2[object_number2]] then
         if asteroids1[objects_to_manage[object_number]].nameInstance == "ASTEROID" and asteroids2[objects_to_manage2[object_number2]].nameInstance == "ASTEROID" then
@@ -90,7 +90,7 @@ function CollisionManagerAsteroids(dt, level, asteroids1, asteroids2)
 end
 
 -- Missiles <-> Asteroids
-function CollisionManagerAsteroidsAndMissiles(dt, level, missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
+function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
     local objects_to_manage, object_number, objects_to_manage2, object_number2 = findFirstCollisionSimple(missiles, asteroids)
     if missiles[objects_to_manage[object_number]] and asteroids[objects_to_manage2[object_number2]] then
         for i = #objects_to_manage, 1, -1 do
@@ -145,7 +145,7 @@ function CollisionManagerAsteroidsAndMissiles(dt, level, missiles, asteroids, as
 end
 
 -- Vaisseaux <-> Asteroids
-function CollisionManagerVaisseauxAndAsteroids(dt, level, vaisseaux, asteroids, vaisseauImpactSound)
+function CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
     local objects_to_manage = {}
     local object_number = 0
     local objects_to_manage2 = {}

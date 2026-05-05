@@ -210,10 +210,10 @@ function love.update(dt) -- 60 fps by defaut
 		-----------------------------------------
 		-- COLLISION MANAGER (REFACTORED) --
 		-----------------------------------------
-		CollisionManagerAsteroids(dt, level, asteroids, asteroids)
-		CollisionManagerAsteroidsAndMissiles(dt, level, missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
+		CollisionManagerAsteroids(dt, asteroids, asteroids)
+		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
 		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
-		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, level, vaisseaux, asteroids, vaisseauImpactSound)
+		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
 		
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
