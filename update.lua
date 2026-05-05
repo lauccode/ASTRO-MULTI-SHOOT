@@ -179,54 +179,54 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             elseif selectWeaponBar == 1 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleLateral = weaponCycleLateral + 1
+                    if (weaponCycleLateral > 2) then weaponCycleLateral = 0 end
                     if (weaponCycleLateral == 0) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleLateral == 1) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_LATERAL end
                     if (weaponCycleLateral == 2) then vaisseaux[1].missilePackLateral = vaisseaux[1]
                         .MSL_PKG_MUCH_LATERAL end
-                    if (weaponCycleLateral > 2) then weaponCycleLateral = 0 end
                     keyPressed = true
                 end
             elseif selectWeaponBar == 2 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleBigger = weaponCycleBigger + 1
+                    if (weaponCycleBigger > 2) then weaponCycleBigger = 0 end
                     if (weaponCycleBigger == 0) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleBigger == 1) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_BIGGER end
                     if (weaponCycleBigger == 2) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_MUCH_BIGGER end
-                    if (weaponCycleBigger > 2) then weaponCycleBigger = 0 end
                     keyPressed = true
                 end
             elseif selectWeaponBar == 3 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleQuicker = weaponCycleQuicker + 1
+                    if (weaponCycleQuicker > 2) then weaponCycleQuicker = 0 end
                     if (weaponCycleQuicker == 0) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_QUICKER end
                     if (weaponCycleQuicker == 2) then vaisseaux[1].missilePackQuicker = vaisseaux[1]
                         .MSL_PKG_MUCH_QUICKER end
-                    if (weaponCycleQuicker > 2) then weaponCycleQuicker = 0 end
                     keyPressed = true
                 end
             elseif selectWeaponBar == 4 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleLaserSight = weaponCycleLaserSight + 1
+                    if (weaponCycleLaserSight > 1) then weaponCycleLaserSight = 0 end
                     if (weaponCycleLaserSight == 0) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleLaserSight == 1) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_LASER_SIGHT end
-                    if (weaponCycleLaserSight > 1) then weaponCycleLaserSight = 0 end
                     keyPressed = true
                 end
             elseif selectWeaponBar == 5 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleSinus = weaponCycleSinus + 1
+                    if (weaponCycleSinus > 1) then weaponCycleSinus = 0 end
                     if (weaponCycleSinus == 0) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleSinus == 1) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_SINUS end
-                    if (weaponCycleSinus > 1) then weaponCycleSinus = 0 end
                     keyPressed = true
                 end
             elseif selectWeaponBar == 6 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
                 if not keyPressed then
                     weaponCycleShield = weaponCycleShield + 1
+                    if (weaponCycleShield > 1) then weaponCycleShield = 0 end
                     if (weaponCycleShield == 0) then vaisseaux[1].activateShield(false) end-- deactivate infinite shield
                     if (weaponCycleShield == 1) then vaisseaux[1].activateShield(true) end-- activate infinite shield
-                    if (weaponCycleShield > 1) then weaponCycleShield = 0 end
                     keyPressed = true
                 end
             else
