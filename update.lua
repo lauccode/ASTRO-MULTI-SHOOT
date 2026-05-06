@@ -158,6 +158,24 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             vaisseaux[1].accelerateFWorWW = "neutral"
         end
 
+        if love.keyboard.isDown("c") or gamepadIsDown('dpright') then
+            if not keyPressed then
+                selectWeaponBar = selectWeaponBar + 1
+                if selectWeaponBar > 6 then selectWeaponBar = 1 end
+                vaisseaux[1].selectWeaponBar = selectWeaponBar
+                keyPressed = true
+            end
+        elseif love.keyboard.isDown("w") or gamepadIsDown('dpleft') then
+            if not keyPressed then
+                selectWeaponBar = selectWeaponBar - 1
+                if selectWeaponBar < 1 then selectWeaponBar = 6 end
+                vaisseaux[1].selectWeaponBar = selectWeaponBar
+                keyPressed = true
+            end
+        else
+            keyPressed = false
+        end
+
         if (toggleDebug == true) then
             if love.keyboard.isDown("d") or gamepadIsDown('dpdown') then
                 if not keyPressed then
@@ -166,21 +184,6 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                     elseif DEBUG_MODE == false then
                         DEBUG_MODE = true
                     end
-                    keyPressed = true
-                end
-
-            elseif love.keyboard.isDown("c") or gamepadIsDown('dpright') then
-                if not keyPressed then
-                    selectWeaponBar = selectWeaponBar + 1
-                    if selectWeaponBar > 6 then selectWeaponBar = 1 end
-                    vaisseaux[1].selectWeaponBar = selectWeaponBar
-                    keyPressed = true
-                end
-            elseif love.keyboard.isDown("w") or gamepadIsDown('dpleft') then
-                if not keyPressed then
-                    selectWeaponBar = selectWeaponBar - 1
-                    if selectWeaponBar < 1 then selectWeaponBar = 6 end
-                    vaisseaux[1].selectWeaponBar = selectWeaponBar
                     keyPressed = true
                 end
             elseif selectWeaponBar == 1 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
