@@ -90,7 +90,7 @@ function CollisionManagerAsteroids(dt, asteroids1, asteroids2)
 end
 
 -- Missiles <-> Asteroids
-function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
+function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
     local objects_to_manage, object_number, objects_to_manage2, object_number2 = findFirstCollisionSimple(missiles, asteroids)
     if missiles[objects_to_manage[object_number]] and asteroids[objects_to_manage2[object_number2]] then
         for i = #objects_to_manage, 1, -1 do
@@ -101,9 +101,11 @@ function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplo
                 local asteroid = asteroids[objects_to_manage2[j]]
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
                     if asteroid.asteroidDivision == 2 then
-                        table.insert(bonuss, Bonus.new())
-                        bonuss[#bonuss].position.x = asteroid.position.x
-                        bonuss[#bonuss].position.y = asteroid.position.y
+                        if not vaisseaux[1].isAllWeaponFulllyUpgraded() then
+                            table.insert(bonuss, Bonus.new(vaisseaux[1]))
+                            bonuss[#bonuss].position.x = asteroid.position.x
+                            bonuss[#bonuss].position.y = asteroid.position.y
+                        end
                     end
                     for k = 1, 2 do
                         table.insert(asteroids, Asteroid.new())

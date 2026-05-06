@@ -66,8 +66,6 @@ local gameSound = nil
 menu = Menu.new()
 level = Level.new()
 
-
-
 -- Central table for assets (images, fonts, etc.)
 Assets = {
     images = {
@@ -92,7 +90,8 @@ Assets = {
         bonusMachineGunShoot = love.graphics.newImage("sprites/bonus_machine_gun_shoot.png"),
         bonusVise = love.graphics.newImage("sprites/bonus_vise.png"),
         bonusBouclier = love.graphics.newImage("sprites/bonus_bouclier.png"),
-        bonusSinusShoot = love.graphics.newImage("sprites/bonus_sinus_shoot.png")
+        bonusSinusShoot = love.graphics.newImage("sprites/bonus_sinus_shoot.png"),
+		star = love.graphics.newImage("sprites/star.png")
     },
 	fonts = {
 		nerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10),
@@ -123,6 +122,26 @@ Assets = {
 -- ██      ██    ██ ███████ ██   ██
 -- ██      ██    ██ ██   ██ ██   ██
 -- ███████  ██████  ██   ██ ██████
+
+
+
+local function resetVaisseau()
+	vaisseaux = {}
+	table.insert(vaisseaux, Vaisseau.new(level))
+	vaisseaux[1].timeShieldStart = 0 --seconds
+
+end
+
+local function resetGame()
+	asteroids = {}
+	missiles = {}
+	bonuss = {}
+	asteroidExplosions = {}
+	menu.isPresentStageDone = false
+	-- img = love.graphics.newImage("sprites/star.png")
+	particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
+end
+
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest") -- keep pixel effect
 	love.window.setMode(SCREEN_WIDTH * GRAPHICS_SCALE, SCREEN_HIGH * GRAPHICS_SCALE, {
@@ -145,19 +164,12 @@ function love.load()
     -- gameSound:setVolume(0.4)
 
 	DEBUG_MODE = false
-	vaisseaux = {}
-	table.insert(vaisseaux, Vaisseau.new(level))
-	vaisseaux[1].timeShieldStart = 0 --seconds
-	missiles = {}
-	asteroids = {} --also to manage bonus
-    asteroidExplosions = {}
-	bonuss = {}
 	menu.positionMenu = menu.START
+
+	level.levelNumber = 1
 	level.levelDone = false
-
-	local img = love.graphics.newImage("sprites/star.png")
-	particlesTransitionStage = love.graphics.newParticleSystem(img, 450)
-
+	resetGame()
+	resetVaisseau()
 end
 
 -- ██    ██ ██████  ██████   █████  ████████ ███████
@@ -183,7 +195,15 @@ function love.update(dt) -- 60 fps by defaut
 		-- level manager
 		if level.levelDone == false then
 			if level.levelNumber > 1 then
-				love.load() -- reset all before new level
+				-- love.load() -- reset all before new level
+				resetGame()
+				if toggleDebug then
+            		vaisseaux[1].timeShieldStart = 0 --seconds
+				else
+					resetVaisseau()
+					-- level.levelNumber = 1
+					-- level.levelDone = false
+				end
 			end
 			asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
 			level.levelDone = true
@@ -211,7 +231,7 @@ function love.update(dt) -- 60 fps by defaut
 		-- COLLISION MANAGER (REFACTORED) --
 		-----------------------------------------
 		CollisionManagerAsteroids(dt, asteroids, asteroids)
-		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
+		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
 		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
 		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
 		
@@ -247,7 +267,11 @@ function love.update(dt) -- 60 fps by defaut
 	if menu.selectionMenu == menu.GAMEOVER or menu.selectionMenu == menu.CONGRATULATION then
 		if love.keyboard.isDown("r") or gamepadIsDown('b') then
 			menu.selectionMenu = menu.MENU -- come back to menu
-			love.load()
+			love.audio.stop(gameSound)
+			level.levelNumber = 1
+			level.levelDone = false
+			resetGame()
+			resetVaisseau()
 		end
 	end
 

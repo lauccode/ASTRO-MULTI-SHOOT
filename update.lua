@@ -137,9 +137,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
         -- rotation: right/left keys OR left stick horizontal OR dpad left/right
-        if love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 or gamepadIsDown('dpright') then
+        if love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 then
             vaisseaux[1].rotate(true, dt)
-        elseif love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 or gamepadIsDown('dpleft') then
+        elseif love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 then
             vaisseaux[1].rotate(false, dt)
         else
             vaisseaux[1].rotateRightorLeft = "neutral"
@@ -147,9 +147,9 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         -- forward/back: up/down keys OR triggers (right trigger = forward, left trigger = backward) OR left stick vertical OR dpad
         local rt = gamepadAxisValue('triggerright', 'righttrigger', 'rtrigger', 'triggerright')
         local lt = gamepadAxisValue('triggerleft', 'lefttrigger', 'ltrigger')
-        if love.keyboard.isDown("up") or rt > 0.3 or gamepadAxisValue('lefty') < -0.5 or gamepadIsDown('dpup') then
+        if love.keyboard.isDown("up") or rt > 0.3 or gamepadAxisValue('lefty') < -0.5 then
             vaisseaux[1].accelerate(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
-        elseif love.keyboard.isDown("down") or lt > 0.3 or gamepadAxisValue('lefty') > 0.5 or gamepadIsDown('dpdown') then
+        elseif love.keyboard.isDown("down") or lt > 0.3 or gamepadAxisValue('lefty') > 0.5 then
             vaisseaux[1].accelerateBack(dt, vaisseaux[1].speed, vaisseaux[1].accelerationMax)
         elseif love.keyboard.isDown("s") or gamepadIsDown('leftshoulder') or gamepadIsDown('rightshoulder') then
             vaisseaux[1].accelerateBack(dt, 0, 0.1)
@@ -159,7 +159,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         end
 
         if (toggleDebug == true) then
-            if love.keyboard.isDown("d") then
+            if love.keyboard.isDown("d") or gamepadIsDown('dpdown') then
                 if not keyPressed then
                     if DEBUG_MODE == true then
                         DEBUG_MODE = false
@@ -169,14 +169,21 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                     keyPressed = true
                 end
 
-            elseif love.keyboard.isDown("w") or gamepadIsDown('x') then
+            elseif love.keyboard.isDown("c") or gamepadIsDown('dpright') then
                 if not keyPressed then
                     selectWeaponBar = selectWeaponBar + 1
                     if selectWeaponBar > 6 then selectWeaponBar = 1 end
                     vaisseaux[1].selectWeaponBar = selectWeaponBar
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 1 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif love.keyboard.isDown("w") or gamepadIsDown('dpleft') then
+                if not keyPressed then
+                    selectWeaponBar = selectWeaponBar - 1
+                    if selectWeaponBar < 1 then selectWeaponBar = 6 end
+                    vaisseaux[1].selectWeaponBar = selectWeaponBar
+                    keyPressed = true
+                end
+            elseif selectWeaponBar == 1 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleLateral = weaponCycleLateral + 1
                     if (weaponCycleLateral > 2) then weaponCycleLateral = 0 end
@@ -186,7 +193,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                         .MSL_PKG_MUCH_LATERAL end
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 2 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif selectWeaponBar == 2 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleBigger = weaponCycleBigger + 1
                     if (weaponCycleBigger > 2) then weaponCycleBigger = 0 end
@@ -195,7 +202,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                     if (weaponCycleBigger == 2) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_MUCH_BIGGER end
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 3 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif selectWeaponBar == 3 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleQuicker = weaponCycleQuicker + 1
                     if (weaponCycleQuicker > 2) then weaponCycleQuicker = 0 end
@@ -205,7 +212,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                         .MSL_PKG_MUCH_QUICKER end
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 4 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif selectWeaponBar == 4 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleLaserSight = weaponCycleLaserSight + 1
                     if (weaponCycleLaserSight > 1) then weaponCycleLaserSight = 0 end
@@ -213,7 +220,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                     if (weaponCycleLaserSight == 1) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_LASER_SIGHT end
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 5 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif selectWeaponBar == 5 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleSinus = weaponCycleSinus + 1
                     if (weaponCycleSinus > 1) then weaponCycleSinus = 0 end
@@ -221,7 +228,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
                     if (weaponCycleSinus == 1) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_SINUS end
                     keyPressed = true
                 end
-            elseif selectWeaponBar == 6 and (love.keyboard.isDown("x") or gamepadIsDown('y')) then
+            elseif selectWeaponBar == 6 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
                 if not keyPressed then
                     weaponCycleShield = weaponCycleShield + 1
                     if (weaponCycleShield > 1) then weaponCycleShield = 0 end

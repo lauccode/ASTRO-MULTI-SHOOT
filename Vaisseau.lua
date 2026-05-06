@@ -446,6 +446,19 @@ Vaisseau.new = function(level)
             self.toggleShootLeftRight)
     end
 
+    function self.isAllWeaponFulllyUpgraded()
+        if (self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) and
+            (self.missilePackBigger == self.MSL_PKG_MUCH_BIGGER) and
+            (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) and
+            (self.missileLaserSight == self.MSL_LASER_SIGHT) and
+            (self.missileSinus == self.MSL_SINUS) and
+            (self.shield == self.SHIELD) then
+            return true
+        else
+            return false
+        end
+    end
+
     return self
 end
 

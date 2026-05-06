@@ -2,7 +2,7 @@ require("utils")
 local GameObject = require("GameObject")
 
 local Bonus = {}
-Bonus.new = function()
+Bonus.new = function(vaisseau)
     local self = GameObject.new()
     self.nameInstance = "BONUS"
 
@@ -25,7 +25,16 @@ Bonus.new = function()
     local counterIncrease = 1
     local imageRatioChange = nil
 
+    -- do not generate bonus already at the maximum level for the player
     self.bonus = math.floor(self.MSL_PKG_LATERAL + love.math.random() * MAX_BONUS_NUMBER)
+    while (vaisseau.missilePackLateral == vaisseau.MSL_PKG_MUCH_LATERAL and (self.bonus == self.MSL_PKG_MUCH_LATERAL or self.bonus == self.MSL_PKG_LATERAL) ) or 
+     (vaisseau.missilePackBigger == vaisseau.MSL_PKG_MUCH_BIGGER and (self.bonus == self.MSL_PKG_MUCH_BIGGER or self.bonus == self.MSL_PKG_BIGGER) ) or 
+     (vaisseau.missilePackQuicker == vaisseau.MSL_PKG_MUCH_QUICKER and (self.bonus == self.MSL_PKG_MUCH_QUICKER or self.bonus == self.MSL_PKG_QUICKER) ) or 
+     (vaisseau.missileLaserSight == vaisseau.MSL_LASER_SIGHT and self.bonus == self.MSL_LASER_SIGHT ) or 
+     (vaisseau.missileSinus == vaisseau.MSL_SINUS and self.bonus == self.MSL_SINUS ) or 
+     (vaisseau.shield == vaisseau.SHIELD and self.bonus == self.SHIELD ) do
+        self.bonus = math.floor(self.MSL_PKG_LATERAL + love.math.random() * MAX_BONUS_NUMBER)
+    end
 
     if (self.bonus == self.MSL_PKG_LATERAL or self.bonus == self.MSL_PKG_MUCH_LATERAL) then
         BonusPng = Assets.images.bonusTripleShoot
