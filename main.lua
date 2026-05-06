@@ -166,7 +166,7 @@ function love.load()
 	DEBUG_MODE = false
 	menu.positionMenu = menu.START
 
-	level.levelNumber = 1
+	-- level.levelNumber = 1
 	level.levelDone = false
 	resetGame()
 	resetVaisseau()
@@ -201,8 +201,6 @@ function love.update(dt) -- 60 fps by defaut
             		vaisseaux[1].timeShieldStart = 0 --seconds
 				else
 					resetVaisseau()
-					-- level.levelNumber = 1
-					-- level.levelDone = false
 				end
 			end
 			asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
