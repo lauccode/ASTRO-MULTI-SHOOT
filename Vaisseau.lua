@@ -91,6 +91,10 @@ Vaisseau.new = function(level)
     local VaisseauPngGreen = Assets.images.vaisseauGreen
     local VaisseauPngOrange = Assets.images.vaisseauOrange
     local VaisseauPngRed = Assets.images.vaisseauRouge
+    local VaisseauPngMuzzleFlash = Assets.images.muzzleFlash
+
+    local pngMuzzleFlashWidthImage = VaisseauPngMuzzleFlash:getWidth()
+    local pngMuzzleFlashHeightImage = VaisseauPngMuzzleFlash:getHeight()
 
     self.selectWeaponBar = 1
 
@@ -358,6 +362,13 @@ Vaisseau.new = function(level)
             (self.imageRatio / self.imageRatioRef)
             local X_offsetMissilePositionWithVaisseauAway = SCREEN_WIDTH * (self.imageRatio / self.imageRatioRef)
             local Y_offsetMissilePositionWithVaisseauAway = 0 * (self.imageRatio / self.imageRatioRef)
+
+            local X_offsetMissilePositionWithVaisseau_withAngle = self.position.x + (math.cos(self.angle) * X_offsetMissilePositionWithVaisseau) -
+                (math.sin(self.angle) * Y_offsetMissilePositionWithVaisseau)
+            local Y_offsetMissilePositionWithVaisseau_withAngle = self.position.y + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
+                (math.cos(self.angle) * Y_offsetMissilePositionWithVaisseau)
+
+            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseau_withAngle, Y_offsetMissilePositionWithVaisseau_withAngle, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
             if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
                 love.graphics.setColor(255, 0, 0)
                 love.graphics.line(
@@ -387,6 +398,27 @@ Vaisseau.new = function(level)
             (self.imageRatio / self.imageRatioRef)
             local X_offsetMissilePositionWithVaisseauLeftAway = FAR_AWAY * (self.imageRatio / self.imageRatioRef)
             local Y_offsetMissilePositionWithVaisseauLeftAway = 0 * (self.imageRatio / self.imageRatioRef)
+            
+            local X_offsetMissilePositionWithVaisseauRight_withAngle = self.position.x +
+                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) -
+                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight)
+
+            local Y_offsetMissilePositionWithVaisseauRight_withAngle = self.position.y +
+                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) +
+                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight)
+
+            local X_offsetMissilePositionWithVaisseauLeft_withAngle = self.position.x +
+                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) -
+                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft)
+            local Y_offsetMissilePositionWithVaisseauLeft_withAngle = self.position.y +
+                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) +
+                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft)
+
+            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauRight_withAngle, Y_offsetMissilePositionWithVaisseauRight_withAngle, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+                    self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+
+            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauLeft_withAngle, Y_offsetMissilePositionWithVaisseauLeft_withAngle, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+                    self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
 
             if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
                 love.graphics.setColor(255, 0, 0)
@@ -421,8 +453,10 @@ Vaisseau.new = function(level)
             end
         end
 
+
         love.graphics.draw(VaisseauPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
             self.imageRatio, widthImage / 2, heightImage / 2)
+            
 
         if (self.vaisseauImpact == true) then
             love.graphics.draw(VaisseauPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi),
