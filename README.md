@@ -75,6 +75,7 @@ It allows to cheat during game and also to activate the game information as :
 #### for BONUS
 - `w`           to select cyclically
 - `x`           to activate/desactivate
+- `c`           to select cyclically in the reverse direction
 
 1. `Side fire activated FIRST, main fire put back in SECOND`
 2. `Missile size can be increased TWICE`
