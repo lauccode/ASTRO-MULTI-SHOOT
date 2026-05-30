@@ -1,6 +1,6 @@
 require("utils")
 
-local KEY_TIMER_LIMIT = 10               -- tempo key push
+local KEY_TIMER_LIMIT = 10/60               -- tempo key push (converted to seconds)
 local updateTimer = 0
 local weaponCycleLateral = 0
 local weaponCycleBigger = 0
@@ -25,7 +25,7 @@ local shootMuchMachineGunTimerCounter = 0
 local selectWeaponBar = 1
 
 function timerPulse(dt, updateTimerCounterSpecific, timerLimit)
-    updateTimerCounterSpecific = updateTimerCounterSpecific + (60*dt)
+    updateTimerCounterSpecific = updateTimerCounterSpecific + dt
     if (updateTimerCounterSpecific > timerLimit) then
         return 0 , true
     else
@@ -45,6 +45,8 @@ function timerUpdate(dt, vaisseaux)
             shootMachineGunTimerCounter, vaisseaux[1].SHOOT_MACHINE_GUN_TIMER_LIMIT)
         shootMuchMachineGunTimerCounter, shootMuchMachineGun_Pulse = timerPulse(dt,
             shootMuchMachineGunTimerCounter, vaisseaux[1].SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT)
+        
+        vaisseaux[1].updateShootMuzzleTimerCounter(dt)
     end
  end
 

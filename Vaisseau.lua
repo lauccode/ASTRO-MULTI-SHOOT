@@ -9,7 +9,7 @@ Vaisseau.new = function(level)
     local PropulsorPng = Assets.images.propulsor
     local VaisseauPngImpact = Assets.images.vaisseauImpact
     self.vaisseauImpact = false
-    local IMPACT_DURATION = 10     -- 1/6 second
+    local IMPACT_DURATION = 1/6     -- 1/6 second
     local vaisseauImpactDuration = IMPACT_DURATION
     local PROPULSOR_POWER_MAX = 60 -- 1/6 second
     local propulsorIncreasePowerTab = { 0, 0, 0, 0 }
@@ -24,9 +24,9 @@ Vaisseau.new = function(level)
     self.missileSinus = self.MSL_PKG_STD
     self.shield = self.MSL_PKG_STD
 
-    self.SHOOT_TIMER_LIMIT = 30
-    self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20
-    self.SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 10
+    self.SHOOT_TIMER_LIMIT = 30/60
+    self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20/60
+    self.SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT = 10/60
 
     local PROPULSOR_LOW_LEFT = 1
     local PROPULSOR_LOW_RIGHT = 2
@@ -56,9 +56,9 @@ Vaisseau.new = function(level)
     local widthImageProp = PropulsorPng:getWidth()
     self.imageRadius = (widthImage / 2) * self.imageRatio
 
-    self.timeShieldStartMax = 60 * 5 -- 5 seconds
-    self.timeShieldStart = nil
-    self.timeShielInfinite = false
+    self.timeShieldStartMax = 5 -- 5 seconds
+    self.timeShieldStart = 0
+    self.timeShieldInfinite = false
 
     self.imageRatio = 0.55
     self.imageRatioRef = 0.35
@@ -95,11 +95,13 @@ Vaisseau.new = function(level)
 
     local pngMuzzleFlashWidthImage = VaisseauPngMuzzleFlash:getWidth()
     local pngMuzzleFlashHeightImage = VaisseauPngMuzzleFlash:getHeight()
+    
     local timeMuzzleFlashEnable = false
     local timeMuzzleFlash = 0
-    local TIME_MUZZLE_FLASH_END = 10 -- 1/6 second
+    local TIME_MUZZLE_FLASH_END = 1/10 -- 1/10 second
 
     self.selectWeaponBar = 1
+
 
     local function shieldCircle(extension)
         for extensionToDo = 1, extension do
@@ -110,9 +112,9 @@ Vaisseau.new = function(level)
 
     function self.updatePrintWarningStartLevel(dt)
         if (self.timeShieldStart < self.timeShieldStartMax and not self.timeShieldInfinite) then
-            self.timeShieldStart = self.timeShieldStart + (60*dt)
+            self.timeShieldStart = self.timeShieldStart + dt
         end
-        self.colorValueIncrease = self.colorValueIncrease + (5*60*dt)
+        self.colorValueIncrease = self.colorValueIncrease + (300*dt)
     end
 
     local function printWarningStartLevel()
@@ -121,7 +123,7 @@ Vaisseau.new = function(level)
             love.graphics.setFont(Assets.fonts.nerd18)
             love.graphics.setColor(255, 255, 0)
                 love.graphics.print("WARNING - SHIELD OFF IN : " ..
-                    tostring(string.format("%d", (self.timeShieldStartMax / 60 - self.timeShieldStart / 60))),
+                    tostring(string.format("%d", (self.timeShieldStartMax - self.timeShieldStart))),
                     self.position.x - widthImage, self.position.y - self.imageRadius * (self.MAX_EXTENDED_IMAGE_RADIUS_FACTOR + 1))
         end
         love.graphics.setColor(255, 255, 255, 255)
@@ -325,6 +327,14 @@ Vaisseau.new = function(level)
         end
     end
 
+    function self.updateShootMuzzleTimerCounter(dt)
+        timeMuzzleFlash = timeMuzzleFlash + dt
+        if (timeMuzzleFlash > TIME_MUZZLE_FLASH_END) then
+            timeMuzzleFlashEnable = false
+            timeMuzzleFlash = 0
+        end
+    end
+
     function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
             VaisseauPng = VaisseauPngGreen
@@ -357,15 +367,6 @@ Vaisseau.new = function(level)
         love.graphics.print(": " .. tostring(string.format("%d", level.levelNumber)), (SCREEN_WIDTH - (60 - 30)),
             SCREEN_HIGH - 20)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
-
-        local function shootMuzzleTimerCounter()
-            timeMuzzleFlash = timeMuzzleFlash + 1
-            if (timeMuzzleFlash > TIME_MUZZLE_FLASH_END) then
-                timeMuzzleFlashEnable = false
-                timeMuzzleFlash = 0
-            end
-        end
-        shootMuzzleTimerCounter()
 
         if (self.missilePackLateral == self.MSL_PKG_STD or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
             local X_offsetMissilePositionWithVaisseau = self.GUN_POSITION_X_OFFSET *
@@ -476,9 +477,8 @@ Vaisseau.new = function(level)
         if (self.vaisseauImpact == true) then
             love.graphics.draw(VaisseauPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi),
                 self.imageRatio, self.imageRatio, widthImage / 2, heightImage / 2)
-
             vaisseauImpactDuration = vaisseauImpactDuration - 1
-            if (vaisseauImpactDuration < 1) then
+            if (vaisseauImpactDuration <= 0) then
                 vaisseauImpactDuration = IMPACT_DURATION
                 self.vaisseauImpact = false
             end
@@ -491,6 +491,7 @@ Vaisseau.new = function(level)
 
     function self.shoot(typeOfMissile)
         timeMuzzleFlashEnable = true
+        timeMuzzleFlash = 0
         self.toggleShootLeftRight = toggleBool(self.toggleShootLeftRight)
         return Missile.new(self.angle, self.position.x, self.position.y, self.velocity.x, self.velocity.y, typeOfMissile,
             self.toggleShootLeftRight)
