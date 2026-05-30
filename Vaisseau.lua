@@ -95,6 +95,9 @@ Vaisseau.new = function(level)
 
     local pngMuzzleFlashWidthImage = VaisseauPngMuzzleFlash:getWidth()
     local pngMuzzleFlashHeightImage = VaisseauPngMuzzleFlash:getHeight()
+    local timeMuzzleFlashEnable = false
+    local timeMuzzleFlash = 0
+    local TIME_MUZZLE_FLASH_END = 10 -- 1/6 second
 
     self.selectWeaponBar = 1
 
@@ -355,6 +358,15 @@ Vaisseau.new = function(level)
             SCREEN_HIGH - 20)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
+        local function shootMuzzleTimerCounter()
+            timeMuzzleFlash = timeMuzzleFlash + 1
+            if (timeMuzzleFlash > TIME_MUZZLE_FLASH_END) then
+                timeMuzzleFlashEnable = false
+                timeMuzzleFlash = 0
+            end
+        end
+        shootMuzzleTimerCounter()
+
         if (self.missilePackLateral == self.MSL_PKG_STD or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
             local X_offsetMissilePositionWithVaisseau = self.GUN_POSITION_X_OFFSET *
             (self.imageRatio / self.imageRatioRef)
@@ -368,7 +380,9 @@ Vaisseau.new = function(level)
             local Y_offsetMissilePositionWithVaisseau_withAngle = self.position.y + (math.sin(self.angle) * X_offsetMissilePositionWithVaisseau) +
                 (math.cos(self.angle) * Y_offsetMissilePositionWithVaisseau)
 
-            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseau_withAngle, Y_offsetMissilePositionWithVaisseau_withAngle, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+            if(timeMuzzleFlashEnable) then
+                love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseau_withAngle, Y_offsetMissilePositionWithVaisseau_withAngle, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+            end
             if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
                 love.graphics.setColor(255, 0, 0)
                 love.graphics.line(
@@ -414,11 +428,12 @@ Vaisseau.new = function(level)
                     (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) +
                     (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft)
 
-            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauRight_withAngle, Y_offsetMissilePositionWithVaisseauRight_withAngle, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+            if(timeMuzzleFlashEnable) then
+                love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauRight_withAngle, Y_offsetMissilePositionWithVaisseauRight_withAngle, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
                     self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
-
-            love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauLeft_withAngle, Y_offsetMissilePositionWithVaisseauLeft_withAngle, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+                love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauLeft_withAngle, Y_offsetMissilePositionWithVaisseauLeft_withAngle, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
                     self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+            end
 
             if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
                 love.graphics.setColor(255, 0, 0)
@@ -475,6 +490,7 @@ Vaisseau.new = function(level)
     end
 
     function self.shoot(typeOfMissile)
+        timeMuzzleFlashEnable = true
         self.toggleShootLeftRight = toggleBool(self.toggleShootLeftRight)
         return Missile.new(self.angle, self.position.x, self.position.y, self.velocity.x, self.velocity.y, typeOfMissile,
             self.toggleShootLeftRight)
