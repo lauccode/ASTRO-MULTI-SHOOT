@@ -335,6 +335,16 @@ Vaisseau.new = function(level)
         end
     end
 
+    function self.updateImpact(dt)
+        if (self.vaisseauImpact == true) then
+            vaisseauImpactDuration = vaisseauImpactDuration - dt
+            if (vaisseauImpactDuration <= 0) then
+                vaisseauImpactDuration = IMPACT_DURATION
+                self.vaisseauImpact = false
+            end
+        end
+    end
+
     function self.draw()
         if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
             VaisseauPng = VaisseauPngGreen
@@ -477,11 +487,6 @@ Vaisseau.new = function(level)
         if (self.vaisseauImpact == true) then
             love.graphics.draw(VaisseauPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi),
                 self.imageRatio, self.imageRatio, widthImage / 2, heightImage / 2)
-            vaisseauImpactDuration = vaisseauImpactDuration - 1
-            if (vaisseauImpactDuration <= 0) then
-                vaisseauImpactDuration = IMPACT_DURATION
-                self.vaisseauImpact = false
-            end
         end
     end
 

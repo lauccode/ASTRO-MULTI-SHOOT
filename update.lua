@@ -47,6 +47,7 @@ function timerUpdate(dt, vaisseaux)
             shootMuchMachineGunTimerCounter, vaisseaux[1].SHOOT_MUCH_MACHINE_GUN_TIMER_LIMIT)
         
         vaisseaux[1].updateShootMuzzleTimerCounter(dt)
+        vaisseaux[1].updateImpact(dt)
     end
  end
 
