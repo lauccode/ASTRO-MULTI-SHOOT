@@ -30,6 +30,11 @@ GameObject.new = function()
     self.SIDE_GUN_POSITION_X_OFFSET = 7
     self.SIDE_GUN_POSITION_Y_OFFSET = 11
 
+    self.FLASH_POSITION_X_OFFSET = 9
+    self.FLASH_POSITION_Y_OFFSET = 0
+    self.SIDE_FLASH_POSITION_X_OFFSET = 7
+    self.SIDE_FLASH_POSITION_Y_OFFSET = 11
+
     self.RIGHT = 102
     self.LEFT = 103
     -- type_missile shared between vaisseau and bonus
