@@ -379,10 +379,11 @@ Vaisseau.new = function(level)
             SCREEN_HIGH - 20)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
-        local function calculateChangeOfPlanByRotating(offset)
+        local function calculateChangeOfPlanByRotating(offset, angle)
+            angle = angle or self.angle
             local offsetWithAngle = Vector2.new(
-                self.position.x + (math.cos(self.angle) * offset.x) - (math.sin(self.angle) * offset.y),
-                self.position.y + (math.sin(self.angle) * offset.x) + (math.cos(self.angle) * offset.y)
+                self.position.x + (math.cos(angle) * offset.x) - (math.sin(angle) * offset.y),
+                self.position.y + (math.sin(angle) * offset.x) + (math.cos(angle) * offset.y)
             )
             return offsetWithAngle
         end
@@ -412,38 +413,24 @@ Vaisseau.new = function(level)
 
         if (self.missilePackLateral == self.MSL_PKG_LATERAL or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
             local FAR_AWAY = 5000
-            local X_offsetMissilePositionWithVaisseauRight = self.SIDE_GUN_POSITION_X_OFFSET *
-            (self.imageRatio / self.imageRatioRef)
-            local Y_offsetMissilePositionWithVaisseauRight = self.SIDE_GUN_POSITION_Y_OFFSET *
-            (self.imageRatio / self.imageRatioRef)
-            local X_offsetMissilePositionWithVaisseauRightAway = FAR_AWAY * (self.imageRatio / self.imageRatioRef)
-            local Y_offsetMissilePositionWithVaisseauRightAway = 0 * (self.imageRatio / self.imageRatioRef)
-            local X_offsetMissilePositionWithVaisseauLeft = self.SIDE_GUN_POSITION_X_OFFSET *
-            (self.imageRatio / self.imageRatioRef)
-            local Y_offsetMissilePositionWithVaisseauLeft = -self.SIDE_GUN_POSITION_Y_OFFSET *
-            (self.imageRatio / self.imageRatioRef)
-            local X_offsetMissilePositionWithVaisseauLeftAway = FAR_AWAY * (self.imageRatio / self.imageRatioRef)
-            local Y_offsetMissilePositionWithVaisseauLeftAway = 0 * (self.imageRatio / self.imageRatioRef)
+            local offsetMissilePositionWithVaisseauRight = Vector2.new(self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            local offsetMissilePositionWithVaisseauLeft = Vector2.new(self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), -self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            local offsetMissilePositionWithVaisseauRightAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0 * (self.imageRatio / self.imageRatioRef))
+            local offsetMissilePositionWithVaisseauLeftAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0 * (self.imageRatio / self.imageRatioRef))
             
-            local X_offsetMissilePositionWithVaisseauRight_withAngle = self.position.x +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) -
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight)
+            local offsetMissilePositionWithVaisseauRight_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            local offsetMissilePositionWithVaisseauLeft_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+            local offsetMissilePositionWithVaisseauRightAway_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauRightAway, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            local offsetMissilePositionWithVaisseauLeftAway_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauLeftAway, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
 
-            local Y_offsetMissilePositionWithVaisseauRight_withAngle = self.position.y +
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight)
-
-            local X_offsetMissilePositionWithVaisseauLeft_withAngle = self.position.x +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) -
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft)
-            local Y_offsetMissilePositionWithVaisseauLeft_withAngle = self.position.y +
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft)
-
+            local offsetFlashPositionWithVaisseauRight = Vector2.new(self.SIDE_FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.SIDE_FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            local offsetFlashPositionWithVaisseauLeft = Vector2.new(self.SIDE_FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), -self.SIDE_FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            local offsetFlashPositionWithVaisseauRight_withAngle = calculateChangeOfPlanByRotating(offsetFlashPositionWithVaisseauRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            local offsetFlashPositionWithVaisseauLeft_withAngle = calculateChangeOfPlanByRotating(offsetFlashPositionWithVaisseauLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
             if(timeMuzzleFlashEnable) then
-                love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauRight_withAngle, Y_offsetMissilePositionWithVaisseauRight_withAngle, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+                love.graphics.draw(VaisseauPngMuzzleFlash, offsetFlashPositionWithVaisseauRight_withAngle.x, offsetFlashPositionWithVaisseauRight_withAngle.y, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
                     self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
-                love.graphics.draw(VaisseauPngMuzzleFlash, X_offsetMissilePositionWithVaisseauLeft_withAngle, Y_offsetMissilePositionWithVaisseauLeft_withAngle, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
+                love.graphics.draw(VaisseauPngMuzzleFlash, offsetFlashPositionWithVaisseauLeft_withAngle.x, offsetFlashPositionWithVaisseauLeft_withAngle.y, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
                     self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
             end
 
@@ -451,31 +438,15 @@ Vaisseau.new = function(level)
                 love.graphics.setColor(255, 0, 0)
 
                 love.graphics.line(
-                    self.position.x +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) -
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight),
-                    self.position.y +
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRight) +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRight),
-                    self.position.x +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRightAway) -
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRightAway),
-                    self.position.y +
-                    (math.sin(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauRightAway) +
-                    (math.cos(self.angle - self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauRightAway))
+                    offsetMissilePositionWithVaisseauRight_withAngle.x,
+                    offsetMissilePositionWithVaisseauRight_withAngle.y,
+                    offsetMissilePositionWithVaisseauRightAway_withAngle.x,
+                    offsetMissilePositionWithVaisseauRightAway_withAngle.y)
                 love.graphics.line(
-                    self.position.x +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) -
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft),
-                    self.position.y +
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeft) +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeft),
-                    self.position.x +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeftAway) -
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeftAway),
-                    self.position.y +
-                    (math.sin(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * X_offsetMissilePositionWithVaisseauLeftAway) +
-                    (math.cos(self.angle + self.SIDE_GUN_ANGLE_OFFSET) * Y_offsetMissilePositionWithVaisseauLeftAway))
+                    offsetMissilePositionWithVaisseauLeft_withAngle.x,
+                    offsetMissilePositionWithVaisseauLeft_withAngle.y,
+                    offsetMissilePositionWithVaisseauLeftAway_withAngle.x,
+                    offsetMissilePositionWithVaisseauLeftAway_withAngle.y)
                 love.graphics.setColor(255, 255, 255, 255)
             end
         end
