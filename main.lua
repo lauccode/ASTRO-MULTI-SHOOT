@@ -50,7 +50,7 @@ local menu = nil
 
 local toggleDebug = false
 
-local GRAPHICS_SCALE = 1.5
+local GRAPHICS_SCALE = 2 -- 1.5
 
 -- global to be used everywhere
 SCREEN_WIDTH = 512
@@ -211,7 +211,9 @@ function love.update(dt) -- 60 fps by defaut
 
 		asteroidsUpdate(dt, asteroids)
 		missilesUpdate(dt, vaisseaux, missiles)
-		vaisseaux[1].smokeParticlesUpdate(dt)
+		if vaisseaux[1].update then
+			vaisseaux[1].update(dt)
+		end
 
         -- update explosion
         local removeAsteroidExplosionNumber = nil

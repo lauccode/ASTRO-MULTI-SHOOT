@@ -130,13 +130,7 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         love.update(dt)
     end
 
-    -- reactor and smoke update
-        vaisseaux[1].updatePropulsor(dt)
-
-    -- shield update
-    -- if (vaisseaux[1].timeShieldStart < vaisseaux[1].timeShieldStartMax) then
-        vaisseaux[1].updatePrintWarningStartLevel(dt)
-    -- end
+    -- input-handling leaves per-frame updates to the vaisseau.update(dt)
     -- VAISSEAU KEYBOARD UPDATE
     if (vaisseaux[1] ~= nil) then
         -- rotation: right/left keys OR left stick horizontal OR dpad left/right
@@ -295,22 +289,29 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
         end
 
-        vaisseaux[1].move(dt)
+        -- move and particle updates are handled in vaisseau.update(dt) from main loop
     end
     return DEBUG_MODE, gameSound
 end
 
 function asteroidsUpdate(dt, asteroids)
     for asteroids_it = 1, #asteroids do
-        asteroids[asteroids_it].move(dt)
-        -- asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, asteroids[asteroids_it].MANEUVERABILITY, dt)
-        asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, dt)
+        if asteroids[asteroids_it].update then
+            asteroids[asteroids_it].update(dt)
+        else
+            asteroids[asteroids_it].move(dt)
+            asteroids[asteroids_it].rotate(asteroids[asteroids_it].CLOCKWISE, dt)
+        end
     end
 end
 
 function missilesUpdate(dt, vaisseaux, missiles)
     for missiles_it = 1, #missiles do
-        missiles[missiles_it].accelerate(dt, vaisseaux[1].missileSpeedMax, vaisseaux[1].missileAccelerationMax)
-        missiles[missiles_it].move(dt)
+        if missiles[missiles_it].update then
+            missiles[missiles_it].update(dt, vaisseaux and vaisseaux[1] or nil)
+        else
+            missiles[missiles_it].accelerate(dt, vaisseaux[1].missileSpeedMax, vaisseaux[1].missileAccelerationMax)
+            missiles[missiles_it].move(dt)
+        end
     end
 end

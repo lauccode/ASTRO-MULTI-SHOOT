@@ -188,6 +188,10 @@ GameObject.new = function()
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.circle("line", self.position.x, self.position.y, self.imageRadius)
     end
+    -- Default update: move the object. Subclasses can override for extra behavior.
+    function self.update(dt)
+        self.move(dt)
+    end
     return self
 end
 

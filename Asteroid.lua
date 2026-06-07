@@ -8,7 +8,8 @@ Asteroid.new = function()
     local AsteroidPng = Assets.images.asteroid
     local AsteroidPngImpact = Assets.images.asteroidImpact
     self.asteroidImpact = false
-    local IMPACT_DURATION = 10
+    -- duration in seconds (was 10 frames at 60fps)
+    local IMPACT_DURATION = 10/60
     local asteroidImpactDuration = IMPACT_DURATION
     self.asteroidDivision = 2
     self.protection = 3
@@ -31,12 +32,22 @@ Asteroid.new = function()
         else
             love.graphics.draw(AsteroidPngImpact, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
                 self.imageRatio, widthImage / 2, heightImage / 2)
-            asteroidImpactDuration = asteroidImpactDuration - 1
-            if (asteroidImpactDuration < 1) then
+            -- impact lifetime handled in update(dt)
+        end
+    end
+
+    function self.update(dt)
+        -- handle impact lifetime
+        if (self.asteroidImpact == true) then
+            asteroidImpactDuration = asteroidImpactDuration - dt
+            if (asteroidImpactDuration <= 0) then
                 asteroidImpactDuration = IMPACT_DURATION
                 self.asteroidImpact = false
             end
         end
+        -- movement and rotation
+        self.move(dt)
+        self.rotate(self.CLOCKWISE, dt)
     end
 
     self.CLOCKWISE = randomBool()

@@ -120,6 +120,14 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
         end
     end
 
+    function self.update(dt, vaisseau)
+        -- accelerate based on vaisseau missile parameters if provided
+        if vaisseau then
+            self.accelerate(dt, vaisseau.missileSpeedMax, vaisseau.missileAccelerationMax)
+        end
+        self.move(dt)
+    end
+
     return self
 end
 

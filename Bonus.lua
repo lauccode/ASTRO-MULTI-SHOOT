@@ -82,10 +82,7 @@ Bonus.new = function(vaisseau)
     end
 
     function self.draw()
-        local oneSecond = 60
-        local durationSeconds = 2
-        counterIncrease = (counterIncrease + 1) % (durationSeconds * oneSecond)
-        imageRatioChange = (3 * math.sin((counterIncrease * math.pi) / (durationSeconds * oneSecond))) + 1
+        imageRatioChange = (3 * math.sin((counterIncrease * math.pi) / (2 * 60))) + 1
 
         if (self.checkLifeTimeAlmostFinished() == true) then
             if (isEven(math.floor(love.timer.getTime() - startTimeCreation))) then
@@ -98,6 +95,15 @@ Bonus.new = function(vaisseau)
                 self.imageRatio / imageRatioChange,
                 self.imageRatio, widthImage / 2, heightImage / 2)
         end
+    end
+
+    function self.update(dt)
+        -- animate pulsation
+        local oneSecond = 60
+        local durationSeconds = 2
+        counterIncrease = (counterIncrease + 1) % (durationSeconds * oneSecond)
+        -- movement
+        self.move(dt)
     end
 
     return self

@@ -487,6 +487,17 @@ Vaisseau.new = function(level)
         end
     end
 
+    -- Consolidated per-frame update for the vaisseau
+    function self.update(dt)
+        -- update visual/particle systems
+        self.updatePropulsor(dt)
+        -- update warnings and timers (non-critical timers called from timerUpdate remain)
+        self.updatePrintWarningStartLevel(dt)
+        -- update smoke particles and movement
+        self.smokeParticlesUpdate(dt)
+        self.move(dt)
+    end
+
     return self
 end
 
