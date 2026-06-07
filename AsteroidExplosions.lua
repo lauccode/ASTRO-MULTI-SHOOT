@@ -29,13 +29,6 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     end
 
     local function drawParticlesADE()
-        particlesAsteroDivExplosions[1]:setParticleLifetime(1, 1)
-        particlesAsteroDivExplosions[1]:setEmissionRate(emissionRate)
-        particlesAsteroDivExplosions[1]:setSizeVariation(1)
-        particlesAsteroDivExplosions[1]:setLinearAcceleration(-20, -20, 20, 20)
-        particlesAsteroDivExplosions[1]:setSpeed(30, 90)
-        particlesAsteroDivExplosions[1]:setSizes(1, 0.1)
-        particlesAsteroDivExplosions[1]:setDirection((2 * math.pi) * math.random())
         love.graphics.draw(particlesAsteroDivExplosions[1], X_explosionPos, Y_explosionPos)
     end
 
@@ -52,6 +45,24 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
                 emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
             end
             drawParticlesADE()
+        end
+    end
+
+    -- Update particle system parameters (do not modify in draw)
+    function self.update(dt)
+        if (self.asteroDivisionExplosion == true) then
+            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
+                emissionRate = 0
+            else
+                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
+            end
+            particlesAsteroDivExplosions[1]:setParticleLifetime(1, 1)
+            particlesAsteroDivExplosions[1]:setEmissionRate(emissionRate)
+            particlesAsteroDivExplosions[1]:setSizeVariation(1)
+            particlesAsteroDivExplosions[1]:setLinearAcceleration(-20, -20, 20, 20)
+            particlesAsteroDivExplosions[1]:setSpeed(30, 90)
+            particlesAsteroDivExplosions[1]:setSizes(1, 0.1)
+            particlesAsteroDivExplosions[1]:setDirection((2 * math.pi) * math.random())
         end
     end
 

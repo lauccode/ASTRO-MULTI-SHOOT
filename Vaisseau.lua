@@ -261,8 +261,6 @@ Vaisseau.new = function(level)
 
     local function drawPropulsorPositionXY()
         for particles_it = 1, #particles do
-            local powerParticle = particles[particles_it]:getEmissionRate()
-            particles[particles_it]:setEmissionRate(powerParticle / 1.05)
             love.graphics.draw(particles[particles_it], particle.posX[particles_it], particle.posY[particles_it])
         end
 
