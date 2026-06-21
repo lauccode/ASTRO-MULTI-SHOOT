@@ -8,7 +8,9 @@ Vaisseau.new = function(level)
     local self = GameObject.new()
     self.nameInstance = "VAISSEAU"
     local PropulsorPng = Assets.images.propulsor
-    local VaisseauPngImpact = Assets.images.vaisseauImpact
+    local VaisseauPngImpact1 = Assets.images.vaisseauImpact1
+    local VaisseauPngImpact2 = Assets.images.vaisseauImpact2
+    local VaisseauPngImpact3 = Assets.images.vaisseauImpact3
     self.vaisseauImpact = false
     local IMPACT_DURATION = 1/6     -- 1/6 second
     local vaisseauImpactDuration = IMPACT_DURATION
@@ -51,9 +53,41 @@ Vaisseau.new = function(level)
     local particle_number = 1
     local particleTimer = 0
 
-    local VaisseauPng = Assets.images.vaisseauRouge
-    local widthImage = VaisseauPng:getWidth()
-    local heightImage = VaisseauPng:getHeight()
+    local VaisseauPngGreen1 = Assets.images.vaisseauGreen1
+    local VaisseauPngGreen2 = Assets.images.vaisseauGreen2
+    local VaisseauPngGreen3 = Assets.images.vaisseauGreen3
+    local VaisseauPngOrange1 = Assets.images.vaisseauOrange1
+    local VaisseauPngOrange2 = Assets.images.vaisseauOrange2
+    local VaisseauPngOrange3 = Assets.images.vaisseauOrange3
+    local VaisseauPngRed1 = Assets.images.vaisseauRed1
+    local VaisseauPngRed2 = Assets.images.vaisseauRed2
+    local VaisseauPngRed3 = Assets.images.vaisseauRed3
+    -- image lookup tables to avoid nested conditionals and per-frame table rebuild
+    local pngByQuicker = {
+        [self.MSL_PKG_MUCH_QUICKER] = {
+            [self.MSL_PKG_STD] = VaisseauPngGreen1,
+            [self.MSL_PKG_LATERAL] = VaisseauPngGreen2,
+            [self.MSL_PKG_MUCH_LATERAL] = VaisseauPngGreen3
+        },
+        [self.MSL_PKG_QUICKER] = {
+            [self.MSL_PKG_STD] = VaisseauPngOrange1,
+            [self.MSL_PKG_LATERAL] = VaisseauPngOrange2,
+            [self.MSL_PKG_MUCH_LATERAL] = VaisseauPngOrange3
+        },
+        default = {
+            [self.MSL_PKG_STD] = VaisseauPngRed1,
+            [self.MSL_PKG_LATERAL] = VaisseauPngRed2,
+            [self.MSL_PKG_MUCH_LATERAL] = VaisseauPngRed3
+        }
+    }
+
+    local impactByLateral = {
+        [self.MSL_PKG_STD] = VaisseauPngImpact1,
+        [self.MSL_PKG_LATERAL] = VaisseauPngImpact2,
+        [self.MSL_PKG_MUCH_LATERAL] = VaisseauPngImpact3
+    }
+    local widthImage = VaisseauPngGreen3:getWidth()
+    local heightImage = VaisseauPngGreen3:getHeight()
     local widthImageProp = PropulsorPng:getWidth()
     self.imageRadius = (widthImage / 2) * self.imageRatio
 
@@ -89,9 +123,7 @@ Vaisseau.new = function(level)
     local barRed = Assets.images.barRed
     local barOrange = Assets.images.barOrange
     local barGreen = Assets.images.barGreen
-    local VaisseauPngGreen = Assets.images.vaisseauGreen
-    local VaisseauPngOrange = Assets.images.vaisseauOrange
-    local VaisseauPngRed = Assets.images.vaisseauRouge
+
     local VaisseauPngMuzzleFlash = Assets.images.muzzleFlash
 
     local pngMuzzleFlashWidthImage = VaisseauPngMuzzleFlash:getWidth()
@@ -345,13 +377,10 @@ Vaisseau.new = function(level)
     end
 
     function self.draw()
-        if (self.missilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
-            VaisseauPng = VaisseauPngGreen
-        elseif (self.missilePackQuicker == self.MSL_PKG_QUICKER) then
-            VaisseauPng = VaisseauPngOrange
-        else
-            VaisseauPng = VaisseauPngRed
-        end
+        -- select main and impact images via table lookups (faster & clearer)
+        local row = pngByQuicker[self.missilePackQuicker] or pngByQuicker.default
+        VaisseauPng = row[self.missilePackLateral] or row[self.MSL_PKG_STD]
+        VaisseauPngImpact = impactByLateral[self.missilePackLateral] or VaisseauPngImpact1
 
         drawPropulsorPositionXY()
 
