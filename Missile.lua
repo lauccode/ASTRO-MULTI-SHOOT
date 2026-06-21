@@ -43,8 +43,13 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
     end
 
     if (type_missile[LATERAL_TAB] == self.RIGHT) then
-        X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef)
-        Y_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef)
+        if(type_missile[LATERAL_TAB] == self.MSL_PKG_STD) then
+            X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET_3 * (self.imageRatio / self.imageRatioRef)
+            Y_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_Y_OFFSET_3 * (self.imageRatio / self.imageRatioRef)
+        else
+            X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET_2 * (self.imageRatio / self.imageRatioRef)
+            Y_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_Y_OFFSET_2 * (self.imageRatio / self.imageRatioRef)
+        end
         if (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER or type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
             self.angle = angle_missile - self.SIDE_GUN_ANGLE_OFFSET + randomSign() * (0.1 * love.math.random())
         else
@@ -53,8 +58,13 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
     end
 
     if (type_missile[LATERAL_TAB] == self.LEFT) then
-        X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef)
-        Y_offsetMissilePositionWithVaisseau = -self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef)
+        if(type_missile[LATERAL_TAB] == self.MSL_PKG_STD) then
+            X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET_3 * (self.imageRatio / self.imageRatioRef)
+            Y_offsetMissilePositionWithVaisseau = -self.SIDE_GUN_POSITION_Y_OFFSET_3 * (self.imageRatio / self.imageRatioRef)
+        else
+            X_offsetMissilePositionWithVaisseau = self.SIDE_GUN_POSITION_X_OFFSET_2 * (self.imageRatio / self.imageRatioRef)
+            Y_offsetMissilePositionWithVaisseau = -self.SIDE_GUN_POSITION_Y_OFFSET_2 * (self.imageRatio / self.imageRatioRef)
+        end
         if (type_missile[QUICKER_TAB] == self.MSL_PKG_QUICKER or type_missile[QUICKER_TAB] == self.MSL_PKG_MUCH_QUICKER) then
             self.angle = angle_missile + self.SIDE_GUN_ANGLE_OFFSET + randomSign() * (0.1 * love.math.random())
         else

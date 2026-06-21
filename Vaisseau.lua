@@ -376,13 +376,93 @@ Vaisseau.new = function(level)
         end
     end
 
+    -- Precompute weapon/laser/muzzle coordinates in update step
+    function self.updateWeaponCoordinates()
+        local function calc(offset, angle)
+            angle = angle or self.angle
+            return Vector2.new(
+                self.position.x + (math.cos(angle) * offset.x) - (math.sin(angle) * offset.y),
+                self.position.y + (math.sin(angle) * offset.x) + (math.cos(angle) * offset.y)
+            )
+        end
+
+        -- center weapons
+        if (self.missilePackLateral == self.MSL_PKG_STD or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
+            local offsetMissile = Vector2.new(self.GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            local offsetMissileAway = Vector2.new(SCREEN_WIDTH * (self.imageRatio / self.imageRatioRef), 0)
+            self._missileCenterPos = calc(offsetMissile)
+            self._missileCenterAwayPos = calc(offsetMissileAway)
+
+            local offsetFlash = Vector2.new(self.FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
+            self._flashCenterPos = calc(offsetFlash)
+        else
+            self._missileCenterPos = nil
+            self._missileCenterAwayPos = nil
+            self._flashCenterPos = nil
+        end
+
+        -- side weapons
+        local function calcSide(sideGunX, sideGunY, sideFlashX, sideFlashY)
+            local FAR_AWAY = 5000
+
+            local offsetRight = Vector2.new(sideGunX * (self.imageRatio / self.imageRatioRef), sideGunY * (self.imageRatio / self.imageRatioRef))
+            local offsetLeft = Vector2.new(sideGunX * (self.imageRatio / self.imageRatioRef), -sideGunY * (self.imageRatio / self.imageRatioRef))
+            local offsetRightAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0)
+            local offsetLeftAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0)
+
+            self._missileSideRightPos = calc(offsetRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            self._missileSideLeftPos = calc(offsetLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+            self._missileSideRightAwayPos = calc(offsetRightAway, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            self._missileSideLeftAwayPos = calc(offsetLeftAway, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+
+            local offsetFlashR = Vector2.new(sideFlashX * (self.imageRatio / self.imageRatioRef), sideFlashY * (self.imageRatio / self.imageRatioRef))
+            local offsetFlashL = Vector2.new(sideFlashX * (self.imageRatio / self.imageRatioRef), -sideFlashY * (self.imageRatio / self.imageRatioRef))
+            self._flashSideRightPos = calc(offsetFlashR, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
+            self._flashSideLeftPos = calc(offsetFlashL, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+        end
+
+        if (self.missilePackLateral == self.MSL_PKG_LATERAL) then
+            calcSide(self.SIDE_GUN_POSITION_X_OFFSET_2, self.SIDE_GUN_POSITION_Y_OFFSET_2, self.SIDE_FLASH_POSITION_X_OFFSET_2, self.SIDE_FLASH_POSITION_Y_OFFSET_2)
+        elseif (self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
+            calcSide(self.SIDE_GUN_POSITION_X_OFFSET_3, self.SIDE_GUN_POSITION_Y_OFFSET_3, self.SIDE_FLASH_POSITION_X_OFFSET_3, self.SIDE_FLASH_POSITION_Y_OFFSET_3)
+        end
+
+
+    end
+
+    local function drawMuzzleFlash()
+        if timeMuzzleFlashEnable and self._flashCenterPos then
+            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashCenterPos.x, self._flashCenterPos.y, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+        end
+        if timeMuzzleFlashEnable and self._flashSideRightPos then
+            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideRightPos.x, self._flashSideRightPos.y, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+        end
+        if timeMuzzleFlashEnable and self._flashSideLeftPos then
+            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideLeftPos.x, self._flashSideLeftPos.y, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+        end
+    end
+
+    local function drawLaserSight()
+        if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
+            love.graphics.setColor(255, 0, 0)
+            if self._missileCenterPos and self._missileCenterAwayPos then
+                love.graphics.line(self._missileCenterPos.x, self._missileCenterPos.y, self._missileCenterAwayPos.x, self._missileCenterAwayPos.y)
+            end
+            if self._missileSideRightPos and self._missileSideRightAwayPos then
+                love.graphics.line(self._missileSideRightPos.x, self._missileSideRightPos.y, self._missileSideRightAwayPos.x, self._missileSideRightAwayPos.y)
+            end
+            if self._missileSideLeftPos and self._missileSideLeftAwayPos then
+                love.graphics.line(self._missileSideLeftPos.x, self._missileSideLeftPos.y, self._missileSideLeftAwayPos.x, self._missileSideLeftAwayPos.y)
+            end
+            love.graphics.setColor(255, 255, 255, 255)
+        end
+    end
+
     function self.draw()
         -- select main and impact images via table lookups (faster & clearer)
         local row = pngByQuicker[self.missilePackQuicker] or pngByQuicker.default
         VaisseauPng = row[self.missilePackLateral] or row[self.MSL_PKG_STD]
         VaisseauPngImpact = impactByLateral[self.missilePackLateral] or VaisseauPngImpact1
-
-        drawPropulsorPositionXY()
 
         if (self.timeShieldStart < self.timeShieldStartMax) then
             printWarningStartLevel()
@@ -406,78 +486,9 @@ Vaisseau.new = function(level)
             SCREEN_HIGH - 20)
         offsetPrintV = offsetPrintV + OFF_SET_PRINT_CREDITS_ADDED
 
-        local function calculateChangeOfPlanByRotating(offset, angle)
-            angle = angle or self.angle
-            local offsetWithAngle = Vector2.new(
-                self.position.x + (math.cos(angle) * offset.x) - (math.sin(angle) * offset.y),
-                self.position.y + (math.sin(angle) * offset.x) + (math.cos(angle) * offset.y)
-            )
-            return offsetWithAngle
-        end
-
-        if (self.missilePackLateral == self.MSL_PKG_STD or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
-            local offsetMissilePositionWithVaisseau = Vector2.new(self.GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetMissilePositionWithVaisseauAway = Vector2.new(SCREEN_WIDTH * (self.imageRatio / self.imageRatioRef), 0 * (self.imageRatio / self.imageRatioRef))
-            local offsetMissilePositionWithVaisseau_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseau)
-            local offsetMissilePositionWithVaisseauAway_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauAway)
-
-            local offsetFlashPositionWithVaisseau = Vector2.new(self.FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetFlashPositionWithVaisseau_withAngle = calculateChangeOfPlanByRotating(offsetFlashPositionWithVaisseau)
-
-            if(timeMuzzleFlashEnable) then
-                love.graphics.draw(VaisseauPngMuzzleFlash, offsetFlashPositionWithVaisseau_withAngle.x, offsetFlashPositionWithVaisseau_withAngle.y, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
-            end
-            if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
-                love.graphics.setColor(255, 0, 0)
-                love.graphics.line(
-                    offsetMissilePositionWithVaisseau_withAngle.x,
-                    offsetMissilePositionWithVaisseau_withAngle.y,
-                    offsetMissilePositionWithVaisseauAway_withAngle.x,
-                    offsetMissilePositionWithVaisseauAway_withAngle.y)
-                love.graphics.setColor(255, 255, 255, 255)
-            end
-        end
-
-        if (self.missilePackLateral == self.MSL_PKG_LATERAL or self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
-            local FAR_AWAY = 5000
-            local offsetMissilePositionWithVaisseauRight = Vector2.new(self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetMissilePositionWithVaisseauLeft = Vector2.new(self.SIDE_GUN_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), -self.SIDE_GUN_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetMissilePositionWithVaisseauRightAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0 * (self.imageRatio / self.imageRatioRef))
-            local offsetMissilePositionWithVaisseauLeftAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0 * (self.imageRatio / self.imageRatioRef))
-            
-            local offsetMissilePositionWithVaisseauRight_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            local offsetMissilePositionWithVaisseauLeft_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
-            local offsetMissilePositionWithVaisseauRightAway_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauRightAway, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            local offsetMissilePositionWithVaisseauLeftAway_withAngle = calculateChangeOfPlanByRotating(offsetMissilePositionWithVaisseauLeftAway, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
-
-            local offsetFlashPositionWithVaisseauRight = Vector2.new(self.SIDE_FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), self.SIDE_FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetFlashPositionWithVaisseauLeft = Vector2.new(self.SIDE_FLASH_POSITION_X_OFFSET * (self.imageRatio / self.imageRatioRef), -self.SIDE_FLASH_POSITION_Y_OFFSET * (self.imageRatio / self.imageRatioRef))
-            local offsetFlashPositionWithVaisseauRight_withAngle = calculateChangeOfPlanByRotating(offsetFlashPositionWithVaisseauRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            local offsetFlashPositionWithVaisseauLeft_withAngle = calculateChangeOfPlanByRotating(offsetFlashPositionWithVaisseauLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
-            if(timeMuzzleFlashEnable) then
-                love.graphics.draw(VaisseauPngMuzzleFlash, offsetFlashPositionWithVaisseauRight_withAngle.x, offsetFlashPositionWithVaisseauRight_withAngle.y, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
-                    self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
-                love.graphics.draw(VaisseauPngMuzzleFlash, offsetFlashPositionWithVaisseauLeft_withAngle.x, offsetFlashPositionWithVaisseauLeft_withAngle.y, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio,
-                    self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
-            end
-
-            if (self.missileLaserSight == self.MSL_LASER_SIGHT) then
-                love.graphics.setColor(255, 0, 0)
-
-                love.graphics.line(
-                    offsetMissilePositionWithVaisseauRight_withAngle.x,
-                    offsetMissilePositionWithVaisseauRight_withAngle.y,
-                    offsetMissilePositionWithVaisseauRightAway_withAngle.x,
-                    offsetMissilePositionWithVaisseauRightAway_withAngle.y)
-                love.graphics.line(
-                    offsetMissilePositionWithVaisseauLeft_withAngle.x,
-                    offsetMissilePositionWithVaisseauLeft_withAngle.y,
-                    offsetMissilePositionWithVaisseauLeftAway_withAngle.x,
-                    offsetMissilePositionWithVaisseauLeftAway_withAngle.y)
-                love.graphics.setColor(255, 255, 255, 255)
-            end
-        end
-
+        drawMuzzleFlash()
+        drawLaserSight()
+        drawPropulsorPositionXY()
 
         love.graphics.draw(VaisseauPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
             self.imageRatio, widthImage / 2, heightImage / 2)
@@ -518,11 +529,16 @@ Vaisseau.new = function(level)
     function self.update(dt)
         -- update visual/particle systems
         self.updatePropulsor(dt)
-        -- update warnings and timers (non-critical timers called from timerUpdate remain)
+        -- update warnings and timers
         self.updatePrintWarningStartLevel(dt)
         -- update smoke particles and movement
         self.smokeParticlesUpdate(dt)
         self.move(dt)
+        -- precompute weapon coordinates for draw
+        self.updateWeaponCoordinates()
+        -- update muzzle flash timer and impact state
+        self.updateShootMuzzleTimerCounter(dt)
+        self.updateImpact(dt)
     end
 
     return self
