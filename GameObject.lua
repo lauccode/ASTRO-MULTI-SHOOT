@@ -25,19 +25,9 @@ GameObject.new = function()
     local previousAngle = (3 / 2 * math.pi) --1.5 * math.pi
 
     self.SIDE_GUN_ANGLE_OFFSET = 0.5
-    self.GUN_POSITION_X_OFFSET = 9
-    self.GUN_POSITION_Y_OFFSET = 0
-    self.SIDE_GUN_POSITION_X_OFFSET_2 = 7
-    self.SIDE_GUN_POSITION_Y_OFFSET_2 = 11
-    self.SIDE_GUN_POSITION_X_OFFSET_3 = 7
-    self.SIDE_GUN_POSITION_Y_OFFSET_3 = 11
-
-    self.FLASH_POSITION_X_OFFSET = 10
-    self.FLASH_POSITION_Y_OFFSET = 0
-    self.SIDE_FLASH_POSITION_X_OFFSET_2 = 10
-    self.SIDE_FLASH_POSITION_Y_OFFSET_2 = 11
-    self.SIDE_FLASH_POSITION_X_OFFSET_3 = 10
-    self.SIDE_FLASH_POSITION_Y_OFFSET_3 = 11
+    self.SIDE_GUN_ANGLE_OFFSET_1 = 0
+    self.SIDE_GUN_ANGLE_OFFSET_2 = 0
+    self.SIDE_GUN_ANGLE_OFFSET_3 = 0.5
 
     self.RIGHT = 102
     self.LEFT = 103
@@ -53,6 +43,36 @@ GameObject.new = function()
     self.SHIELD = 9
     self.MSL_SINUS = 10
     self.MSL_PKG_LAST_END = 11
+
+    self.sideGunAngleCoordByLateral = {
+        [self.MSL_PKG_STD] = {
+            sideGunAngleOffset = self.SIDE_GUN_ANGLE_OFFSET_1
+        },
+        [self.MSL_PKG_LATERAL] = {
+            sideGunAngleOffset = self.SIDE_GUN_ANGLE_OFFSET_2
+        },
+        [self.MSL_PKG_MUCH_LATERAL] = {
+            sideGunAngleOffset = self.SIDE_GUN_ANGLE_OFFSET_3
+        },
+        default = {
+            sideGunAngleOffset = self.SIDE_GUN_ANGLE_OFFSET_1
+        }
+    }
+
+    self.GUN_POSITION_X_OFFSET = 9
+    self.GUN_POSITION_Y_OFFSET = 0
+    self.SIDE_GUN_POSITION_X_OFFSET_2 = 13
+    self.SIDE_GUN_POSITION_Y_OFFSET_2 = 12
+    self.SIDE_GUN_POSITION_X_OFFSET_3 = 7
+    self.SIDE_GUN_POSITION_Y_OFFSET_3 = 11
+
+    self.FLASH_POSITION_X_OFFSET = 10
+    self.FLASH_POSITION_Y_OFFSET = 0
+    self.SIDE_FLASH_POSITION_X_OFFSET_2 = 10
+    self.SIDE_FLASH_POSITION_Y_OFFSET_2 = 11
+    self.SIDE_FLASH_POSITION_X_OFFSET_3 = 10
+    self.SIDE_FLASH_POSITION_Y_OFFSET_3 = 11
+
 
     -- Create a lookup table
     self.lookupWeaponsLevel = {

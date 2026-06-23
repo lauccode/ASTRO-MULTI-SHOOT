@@ -37,13 +37,43 @@ Vaisseau.new = function(level)
     local PROPULSOR_HIGHT_RIGHT = 4
 
     local X_PROPULSOR_LOW_LEFT = -7
-    local X_PROPULSOR_LOW_RIGHT = -7
-    local X_PROPULSOR_HIGHT_LEFT = 14
-    local X_PROPULSOR_HIGHT_RIGHT = 14
     local Y_PROPULSOR_LOW_LEFT = -11
+    local X_PROPULSOR_LOW_RIGHT = -7
     local Y_PROPULSOR_LOW_RIGHT = 11
-    local Y_PROPULSOR_HIGHT_LEFT = -11
-    local Y_PROPULSOR_HIGHT_RIGHT = 11
+
+    local X_PROPULSOR_HIGHT_LEFT_3 = 14
+    local Y_PROPULSOR_HIGHT_LEFT_3 = -11
+    local X_PROPULSOR_HIGHT_RIGHT_3 = 14
+    local Y_PROPULSOR_HIGHT_RIGHT_3 = 11
+
+    local X_PROPULSOR_HIGHT_LEFT_2 = 4
+    local Y_PROPULSOR_HIGHT_LEFT_2 = -6
+    local X_PROPULSOR_HIGHT_RIGHT_2 = 4
+    local Y_PROPULSOR_HIGHT_RIGHT_2 = 6
+
+    local X_PROPULSOR_HIGHT_LEFT_1 = 4
+    local Y_PROPULSOR_HIGHT_LEFT_1 = -13
+    local X_PROPULSOR_HIGHT_RIGHT_1 = 4
+    local Y_PROPULSOR_HIGHT_RIGHT_1 = 13
+
+    local propulsorCoordByLateral = {
+        [self.MSL_PKG_STD] = {
+            left = { x = X_PROPULSOR_HIGHT_LEFT_1, y = Y_PROPULSOR_HIGHT_LEFT_1 },
+            right = { x = X_PROPULSOR_HIGHT_RIGHT_1, y = Y_PROPULSOR_HIGHT_RIGHT_1 },
+        },
+        [self.MSL_PKG_LATERAL] = {
+            left = { x = X_PROPULSOR_HIGHT_LEFT_2, y = Y_PROPULSOR_HIGHT_LEFT_2 },
+            right = { x = X_PROPULSOR_HIGHT_RIGHT_2, y = Y_PROPULSOR_HIGHT_RIGHT_2 },
+        },
+        [self.MSL_PKG_MUCH_LATERAL] = {
+            left = { x = X_PROPULSOR_HIGHT_LEFT_3, y = Y_PROPULSOR_HIGHT_LEFT_3 },
+            right = { x = X_PROPULSOR_HIGHT_RIGHT_3, y = Y_PROPULSOR_HIGHT_RIGHT_3 },
+        },
+        default = {
+            left = { x = X_PROPULSOR_HIGHT_LEFT_1, y = Y_PROPULSOR_HIGHT_LEFT_1 },
+            right = { x = X_PROPULSOR_HIGHT_RIGHT_1, y = Y_PROPULSOR_HIGHT_RIGHT_1 },
+        }
+    }
 
     local particles = {}
     local smokeImg = Assets.images.smoke
@@ -235,9 +265,11 @@ Vaisseau.new = function(level)
             elseif (PropulsorWithV == PROPULSOR_LOW_RIGHT) then
                 return 2, X_PROPULSOR_LOW_RIGHT, Y_PROPULSOR_LOW_RIGHT
             elseif (PropulsorWithV == PROPULSOR_HIGHT_LEFT) then
-                return 3, X_PROPULSOR_HIGHT_LEFT, Y_PROPULSOR_HIGHT_LEFT
+                local coords = propulsorCoordByLateral[self.missilePackLateral] or propulsorCoordByLateral.default
+                return 3, coords.left.x, coords.left.y
             elseif (PropulsorWithV == PROPULSOR_HIGHT_RIGHT) then
-                return 4, X_PROPULSOR_HIGHT_RIGHT, Y_PROPULSOR_HIGHT_RIGHT
+                local coords = propulsorCoordByLateral[self.missilePackLateral] or propulsorCoordByLateral.default
+                return 4, coords.right.x, coords.right.y
             end
         end
         
@@ -403,6 +435,7 @@ Vaisseau.new = function(level)
 
         -- side weapons
         local function calcSide(sideGunX, sideGunY, sideFlashX, sideFlashY)
+            local angleOffset = self.sideGunAngleCoordByLateral[self.missilePackLateral] or self.sideGunAngleCoordByLateral.default
             local FAR_AWAY = 5000
 
             local offsetRight = Vector2.new(sideGunX * (self.imageRatio / self.imageRatioRef), sideGunY * (self.imageRatio / self.imageRatioRef))
@@ -410,15 +443,15 @@ Vaisseau.new = function(level)
             local offsetRightAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0)
             local offsetLeftAway = Vector2.new(FAR_AWAY * (self.imageRatio / self.imageRatioRef), 0)
 
-            self._missileSideRightPos = calc(offsetRight, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            self._missileSideLeftPos = calc(offsetLeft, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
-            self._missileSideRightAwayPos = calc(offsetRightAway, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            self._missileSideLeftAwayPos = calc(offsetLeftAway, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+            self._missileSideRightPos = calc(offsetRight, self.angle - angleOffset.sideGunAngleOffset)
+            self._missileSideLeftPos = calc(offsetLeft, self.angle + angleOffset.sideGunAngleOffset)
+            self._missileSideRightAwayPos = calc(offsetRightAway, self.angle - angleOffset.sideGunAngleOffset)
+            self._missileSideLeftAwayPos = calc(offsetLeftAway, self.angle + angleOffset.sideGunAngleOffset)
 
             local offsetFlashR = Vector2.new(sideFlashX * (self.imageRatio / self.imageRatioRef), sideFlashY * (self.imageRatio / self.imageRatioRef))
             local offsetFlashL = Vector2.new(sideFlashX * (self.imageRatio / self.imageRatioRef), -sideFlashY * (self.imageRatio / self.imageRatioRef))
-            self._flashSideRightPos = calc(offsetFlashR, self.angle - self.SIDE_GUN_ANGLE_OFFSET)
-            self._flashSideLeftPos = calc(offsetFlashL, self.angle + self.SIDE_GUN_ANGLE_OFFSET)
+            self._flashSideRightPos = calc(offsetFlashR, self.angle - angleOffset.sideGunAngleOffset)
+            self._flashSideLeftPos = calc(offsetFlashL, self.angle + angleOffset.sideGunAngleOffset)
         end
 
         if (self.missilePackLateral == self.MSL_PKG_LATERAL) then
@@ -427,18 +460,19 @@ Vaisseau.new = function(level)
             calcSide(self.SIDE_GUN_POSITION_X_OFFSET_3, self.SIDE_GUN_POSITION_Y_OFFSET_3, self.SIDE_FLASH_POSITION_X_OFFSET_3, self.SIDE_FLASH_POSITION_Y_OFFSET_3)
         end
 
-
     end
 
     local function drawMuzzleFlash()
+        local angleOffset = self.sideGunAngleCoordByLateral[self.missilePackLateral] or self.sideGunAngleCoordByLateral.default
+
         if timeMuzzleFlashEnable and self._flashCenterPos then
             love.graphics.draw(VaisseauPngMuzzleFlash, self._flashCenterPos.x, self._flashCenterPos.y, self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
         end
         if timeMuzzleFlashEnable and self._flashSideRightPos then
-            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideRightPos.x, self._flashSideRightPos.y, self.angle + (0.5 * math.pi) - self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideRightPos.x, self._flashSideRightPos.y, self.angle + (0.5 * math.pi) - angleOffset.sideGunAngleOffset, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
         end
         if timeMuzzleFlashEnable and self._flashSideLeftPos then
-            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideLeftPos.x, self._flashSideLeftPos.y, self.angle + (0.5 * math.pi) + self.SIDE_GUN_ANGLE_OFFSET, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
+            love.graphics.draw(VaisseauPngMuzzleFlash, self._flashSideLeftPos.x, self._flashSideLeftPos.y, self.angle + (0.5 * math.pi) + angleOffset.sideGunAngleOffset, self.imageRatio, self.imageRatio, pngMuzzleFlashWidthImage / 2, pngMuzzleFlashHeightImage / 2)
         end
     end
 
@@ -509,7 +543,7 @@ Vaisseau.new = function(level)
         timeMuzzleFlash = 0
         self.toggleShootLeftRight = toggleBool(self.toggleShootLeftRight)
         return Missile.new(self.angle, self.position.x, self.position.y, self.velocity.x, self.velocity.y, typeOfMissile,
-            self.toggleShootLeftRight)
+            self.toggleShootLeftRight, self.missilePackLateral)
     end
 
     function self.isAllWeaponFulllyUpgraded()
