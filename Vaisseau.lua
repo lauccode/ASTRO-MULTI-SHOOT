@@ -410,6 +410,7 @@ Vaisseau.new = function(level)
 
     -- Precompute weapon/laser/muzzle coordinates in update step
     function self.updateWeaponCoordinates()
+
         local function calc(offset, angle)
             angle = angle or self.angle
             return Vector2.new(
@@ -458,6 +459,13 @@ Vaisseau.new = function(level)
             calcSide(self.SIDE_GUN_POSITION_X_OFFSET_2, self.SIDE_GUN_POSITION_Y_OFFSET_2, self.SIDE_FLASH_POSITION_X_OFFSET_2, self.SIDE_FLASH_POSITION_Y_OFFSET_2)
         elseif (self.missilePackLateral == self.MSL_PKG_MUCH_LATERAL) then
             calcSide(self.SIDE_GUN_POSITION_X_OFFSET_3, self.SIDE_GUN_POSITION_Y_OFFSET_3, self.SIDE_FLASH_POSITION_X_OFFSET_3, self.SIDE_FLASH_POSITION_Y_OFFSET_3)
+        else
+            self._missileSideRightPos = nil
+            self._missileSideLeftPos = nil
+            self._missileSideRightAwayPos = nil
+            self._missileSideLeftAwayPos = nil
+            self._flashSideRightPos = nil
+            self._flashSideLeftPos = nil
         end
 
     end
