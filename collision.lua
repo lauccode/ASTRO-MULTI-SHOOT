@@ -231,7 +231,7 @@ function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
                 end
                 if bonus.bonus == bonus.SHIELD then
                     if not vaisseau.timeShieldInfinite then
-                        vaisseau.timeShieldStartMax = 60 * 15 -- 15 seconds
+                        vaisseau.timeShieldStartMax = 15 -- 15 seconds
                         vaisseau.activateShield()
                     end
                 end
