@@ -155,6 +155,28 @@ Vaisseau.new = function(level)
     local barGreen = Assets.images.barGreen
 
     local VaisseauPngMuzzleFlash = Assets.images.muzzleFlash
+    local shipAnimationSheet = Assets.images.animation12
+    local shipAnimationFrameCount = 7
+    local shipAnimationFrameWidth = 100
+    local shipAnimationFrameHeight = 107
+    local shipAnimationFrameDuration = 0.1 -- 1/10 second
+    local shipAnimationQuads = {}
+    local shipAnimationActive = false
+    local shipAnimationFrame = 1
+    local shipAnimationDirection = 1
+    local shipAnimationTimer = 0
+    local previousMissilePackLateral = self.missilePackLateral
+
+    for frameIndex = 1, shipAnimationFrameCount do
+        shipAnimationQuads[frameIndex] = love.graphics.newQuad(
+            (frameIndex - 1) * shipAnimationFrameWidth,
+            0,
+            shipAnimationFrameWidth,
+            shipAnimationFrameHeight,
+            shipAnimationSheet:getWidth(),
+            shipAnimationSheet:getHeight()
+        )
+    end
 
     local pngMuzzleFlashWidthImage = VaisseauPngMuzzleFlash:getWidth()
     local pngMuzzleFlashHeightImage = VaisseauPngMuzzleFlash:getHeight()
@@ -398,6 +420,45 @@ Vaisseau.new = function(level)
         end
     end
 
+    local function startShipAnimation(previousPackLateral, nextPackLateral)
+        local shouldAnimate = (previousPackLateral == self.MSL_PKG_STD and nextPackLateral ~= self.MSL_PKG_STD)
+            or (previousPackLateral ~= self.MSL_PKG_STD and nextPackLateral == self.MSL_PKG_STD)
+            or (previousPackLateral == self.MSL_PKG_LATERAL and nextPackLateral == self.MSL_PKG_MUCH_LATERAL)
+            or (previousPackLateral == self.MSL_PKG_MUCH_LATERAL and nextPackLateral == self.MSL_PKG_LATERAL)
+
+        if (shouldAnimate == false) then
+            return
+        end
+
+        shipAnimationActive = true
+        shipAnimationTimer = 0
+        if (nextPackLateral == self.MSL_PKG_STD) then
+            shipAnimationDirection = -1
+            shipAnimationFrame = shipAnimationFrameCount
+        else
+            shipAnimationDirection = 1
+            shipAnimationFrame = 1
+        end
+    end
+
+    function self.updateShipAnimation(dt)
+        if (shipAnimationActive == true) then
+            shipAnimationTimer = shipAnimationTimer + dt
+            if (shipAnimationTimer >= shipAnimationFrameDuration) then
+                shipAnimationTimer = shipAnimationTimer - shipAnimationFrameDuration
+                shipAnimationFrame = shipAnimationFrame + shipAnimationDirection
+                if (shipAnimationFrame < 1 or shipAnimationFrame > shipAnimationFrameCount) then
+                    shipAnimationActive = false
+                    if (shipAnimationDirection > 0) then
+                        shipAnimationFrame = shipAnimationFrameCount
+                    else
+                        shipAnimationFrame = 1
+                    end
+                end
+            end
+        end
+    end
+
     function self.updateImpact(dt)
         if (self.vaisseauImpact == true) then
             vaisseauImpactDuration = vaisseauImpactDuration - dt
@@ -532,8 +593,14 @@ Vaisseau.new = function(level)
         drawLaserSight()
         drawPropulsorPositionXY()
 
-        love.graphics.draw(VaisseauPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
-            self.imageRatio, widthImage / 2, heightImage / 2)
+        if (shipAnimationActive == true and shipAnimationSheet ~= nil) then
+            love.graphics.draw(shipAnimationSheet, shipAnimationQuads[shipAnimationFrame], self.position.x, self.position.y,
+                self.angle + (0.5 * math.pi), self.imageRatio, self.imageRatio,
+                shipAnimationFrameWidth / 2, shipAnimationFrameHeight / 2)
+        else
+            love.graphics.draw(VaisseauPng, self.position.x, self.position.y, self.angle + (0.5 * math.pi), self.imageRatio,
+                self.imageRatio, widthImage / 2, heightImage / 2)
+        end
             
 
         if (self.vaisseauImpact == true) then
@@ -569,6 +636,12 @@ Vaisseau.new = function(level)
 
     -- Consolidated per-frame update for the vaisseau
     function self.update(dt)
+        if (self.missilePackLateral ~= previousMissilePackLateral) then
+            startShipAnimation(previousMissilePackLateral, self.missilePackLateral)
+            previousMissilePackLateral = self.missilePackLateral
+        end
+        self.updateShipAnimation(dt)
+
         -- update visual/particle systems
         self.updatePropulsor(dt)
         -- update warnings and timers
