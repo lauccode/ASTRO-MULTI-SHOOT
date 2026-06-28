@@ -50,7 +50,37 @@ local menu = nil
 
 local toggleDebug = false
 
-local GRAPHICS_SCALE = 2 -- 1.5
+-- Graphics scaling: computed at runtime to fill available space while preserving aspect ratio
+local GRAPHICS_SCALE = 1
+local WINDOW_OFFSET_X = 0
+local WINDOW_OFFSET_Y = 0
+
+-- Graphics scale options exposed to the menu
+GraphicsScaleOptions = {
+	{ id = "fullscreen", name = "full screen", mode = "fullscreen" },
+	{ id = "scale1", name = "scale 1", scale = 1 },
+	{ id = "scale1_5", name = "scale 1,5", scale = 1.5 },
+	{ id = "scale2", name = "scale 2", scale = 2 },
+	{ id = "scale0_5", name = "scale 0,5", scale = 0.5 },
+}
+
+-- Default selection: scale 1
+GraphicsScaleChoiceIndex = 2
+
+-- Apply the selected graphics choice (toggle fullscreen or set window size)
+function applyGraphicsChoice()
+	local opt = GraphicsScaleOptions[GraphicsScaleChoiceIndex]
+	if opt.mode == "fullscreen" then
+		love.window.setFullscreen(true, "desktop")
+	else
+		love.window.setFullscreen(false)
+		local w = math.floor(SCREEN_WIDTH * (opt.scale or 1))
+		local h = math.floor(SCREEN_HIGH * (opt.scale or 1))
+		love.window.setMode(w, h, { resizable = false, highdpi = false, borderless = false })
+	end
+	-- recompute scale and offsets
+	if updateGraphicsScale then updateGraphicsScale() end
+end
 
 -- global to be used everywhere
 SCREEN_WIDTH = 512
@@ -65,6 +95,16 @@ local gameSound = nil
 
 menu = Menu.new()
 level = Level.new()
+
+-- compute scale & offsets to center the game (global so other modules can call it)
+function updateGraphicsScale()
+	local ww, wh = love.graphics.getWidth(), love.graphics.getHeight()
+	local sx = ww / SCREEN_WIDTH
+	local sy = wh / SCREEN_HIGH
+	GRAPHICS_SCALE = math.min(sx, sy)
+	WINDOW_OFFSET_X = math.floor((ww - SCREEN_WIDTH * GRAPHICS_SCALE) / 2)
+	WINDOW_OFFSET_Y = math.floor((wh - SCREEN_HIGH * GRAPHICS_SCALE) / 2)
+end
 
 -- Central table for assets (images, fonts, etc.)
 Assets = {
@@ -159,6 +199,14 @@ function love.load()
 		highdpi = false,
 		borderless = false,
 	})
+	-- expose resize handler to keep centered when window changes
+	function love.resize(w, h)
+		updateGraphicsScale()
+	end
+
+	-- initial compute: apply graphics selection and compute offsets
+	applyGraphicsChoice()
+	updateGraphicsScale()
 	-- love.window.setFullscreen(true, "desktop")
 	-- love.window.setFullscreen( true )
 
@@ -315,6 +363,9 @@ end
 --  ██   ██ ██   ██ ██   ██ ██ ███ ██
 --  ██████  ██   ██ ██   ██  ███ ███
 function love.draw()
+	love.graphics.push()
+	-- translate to center the rendered game and scale to fill available space
+	love.graphics.translate(WINDOW_OFFSET_X, WINDOW_OFFSET_Y)
 	love.graphics.scale(GRAPHICS_SCALE, GRAPHICS_SCALE)
 
 	if menu.selectionMenu == menu.MENU then
@@ -393,4 +444,6 @@ function love.draw()
 		love.graphics.setFont(Assets.fonts.vt12)
 		menu.creditsDraw()
 	end
+    -- restore graphics state
+	love.graphics.pop()
 end

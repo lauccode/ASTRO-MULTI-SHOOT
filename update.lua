@@ -13,6 +13,7 @@ local key_Pulse = false
 local keyPressed = false
 local keyPressedDebug = false
 local keyPressedDebug2 = false
+local keyPressedLR = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -74,6 +75,27 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         keyPressed = false
     end
 
+    -- If currently on the GRAPHIC_SCALE menu, allow left/right (or pad stick) to change option
+    if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
+        if love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 or gamepadIsDown('dpleft') then
+            if not keyPressedLR then
+                GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex - 1
+                if GraphicsScaleChoiceIndex < 1 then GraphicsScaleChoiceIndex = #GraphicsScaleOptions end
+                applyGraphicsChoice()
+                keyPressedLR = true
+            end
+        elseif love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 or gamepadIsDown('dpright') then
+            if not keyPressedLR then
+                GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex + 1
+                if GraphicsScaleChoiceIndex > #GraphicsScaleOptions then GraphicsScaleChoiceIndex = 1 end
+                applyGraphicsChoice()
+                keyPressedLR = true
+            end
+        else
+            keyPressedLR = false
+        end
+    end
+
     if love.keyboard.isDown("space") or gamepadIsDown('a') then
         menu.startUpdateTitleRebound()
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
@@ -96,6 +118,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
                 end
             end
         end
+        
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
             menu.selectionMenu = menu.menuValues[menu.CREDITS]
             creditsSound:setVolume(0.4)

@@ -6,9 +6,10 @@ Menu.new = function()
     self.TUTO_PAD = 2
     self.TUTO = 3
     self.TOGGLE_DEBUG = 4
-    self.CREDITS = 5
-    self.QUIT = 6
-    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "TOGGLE DEBUG", "CREDITS", "QUIT" }
+    self.GRAPHIC_SCALE = 5
+    self.CREDITS = 6
+    self.QUIT = 7
+    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "TOGGLE DEBUG", "GRAPHIC SCALE", "CREDITS", "QUIT" }
 
     self.MENU = "menu"
     self.GAMEOVER = "gameover"
@@ -164,6 +165,33 @@ Menu.new = function()
         return offsetPrint
     end
 
+    local function menuItemDrawScale(positionMenu, expectedMenu, offsetPrint)
+        local OFF_SET_PRINT_DRAW = 12
+        local menuItem = self.menuValues[expectedMenu]
+        local locked = (positionMenu == expectedMenu) and true or false
+
+        if (locked == true) then
+            love.graphics.setColor(255, 0, 0)          -- red
+            love.graphics.print("> " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            love.graphics.setColor(255, 255, 255, 255) -- reset
+            -- print current selected option name on the right
+            if GraphicsScaleOptions ~= nil and GraphicsScaleOptions[GraphicsScaleChoiceIndex] ~= nil then
+                love.graphics.setColor(255, 255, 255, 255)
+                love.graphics.print("" .. GraphicsScaleOptions[GraphicsScaleChoiceIndex].name, (SCREEN_WIDTH+260) / 2,
+                    SCREEN_HIGH / 2 + offsetPrint)
+            end
+        else
+            love.graphics.print("  " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            if GraphicsScaleOptions ~= nil and GraphicsScaleOptions[GraphicsScaleChoiceIndex] ~= nil then
+                love.graphics.print("" .. GraphicsScaleOptions[GraphicsScaleChoiceIndex].name, (SCREEN_WIDTH+260) / 2,
+                    SCREEN_HIGH / 2 + offsetPrint)
+            end
+        end
+
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
+        return offsetPrint
+    end
+
     function self.draw(toggleDebug, fontVT12)
         local offsetPrint = -50
         local OFF_SET_PRINT_DRAW = 12
@@ -191,6 +219,7 @@ Menu.new = function()
         offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO_PAD, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO, offsetPrint)
         offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
+        offsetPrint = menuItemDrawScale(self.positionMenu , self.GRAPHIC_SCALE, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu , self.CREDITS, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu , self.QUIT, offsetPrint)
 
