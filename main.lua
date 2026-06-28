@@ -64,8 +64,8 @@ GraphicsScaleOptions = {
 	{ id = "scale0_5", name = "scale 0,5", scale = 0.5 },
 }
 
--- Default selection: scale 1
-GraphicsScaleChoiceIndex = 2
+-- Default selection: scale 1.5
+GraphicsScaleChoiceIndex = 3
 
 -- Apply the selected graphics choice (toggle fullscreen or set window size)
 function applyGraphicsChoice()
