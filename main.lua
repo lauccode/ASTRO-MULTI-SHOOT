@@ -82,6 +82,30 @@ function applyGraphicsChoice()
 	if updateGraphicsScale then updateGraphicsScale() end
 end
 
+-- Music option
+MusicOptions = { "ON", "OFF" }
+MusicChoiceIndex = 1 -- default ON
+MusicEnabled = true
+
+function applyMusicChoice()
+	MusicEnabled = (MusicOptions[MusicChoiceIndex] == "ON")
+	-- set volumes for music tracks accordingly
+	if Assets and Assets.sounds then
+		for k, src in pairs(Assets.sounds) do
+			if k:match("level") or k == "credits" then
+				if MusicEnabled then
+					-- set a reasonable default for music
+					src:setVolume(0.4)
+				else
+					src:setVolume(0)
+					-- stop if currently playing
+					if src:isPlaying() then src:stop() end
+				end
+			end
+		end
+	end
+end
+
 -- global to be used everywhere
 SCREEN_WIDTH = 512
 SCREEN_HIGH = 512
@@ -207,6 +231,8 @@ function love.load()
 	-- initial compute: apply graphics selection and compute offsets
 	applyGraphicsChoice()
 	updateGraphicsScale()
+	-- apply music default
+	applyMusicChoice()
 	-- love.window.setFullscreen(true, "desktop")
 	-- love.window.setFullscreen( true )
 

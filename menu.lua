@@ -7,9 +7,10 @@ Menu.new = function()
     self.TUTO = 3
     self.TOGGLE_DEBUG = 4
     self.GRAPHIC_SCALE = 5
-    self.CREDITS = 6
-    self.QUIT = 7
-    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "TOGGLE DEBUG", "GRAPHIC SCALE", "CREDITS", "QUIT" }
+    self.MUSIC = 6
+    self.CREDITS = 7
+    self.QUIT = 8
+    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "TOGGLE DEBUG", "GRAPHIC SCALE", "MUSIC", "CREDITS", "QUIT" }
 
     self.MENU = "menu"
     self.GAMEOVER = "gameover"
@@ -145,7 +146,7 @@ Menu.new = function()
             else
                 love.graphics.setColor(255, 0, 0) -- red
             end
-            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
+            love.graphics.print("" .. (toggleDebug and "ON" or "OFF"), (SCREEN_WIDTH+260) / 2,
                 SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         else
@@ -156,7 +157,7 @@ Menu.new = function()
             else
                 love.graphics.setColor(255, 0, 0) -- red
             end
-            love.graphics.print("" .. tostring(toggleDebug), (SCREEN_WIDTH+260) / 2,
+            love.graphics.print("" .. (toggleDebug and "ON" or "OFF"), (SCREEN_WIDTH+260) / 2,
                 SCREEN_HIGH / 2 + offsetPrint)
             love.graphics.setColor(255, 255, 255, 255) -- reset
         end
@@ -192,6 +193,42 @@ Menu.new = function()
         return offsetPrint
     end
 
+    local function menuItemDrawMusic(positionMenu, expectedMenu, offsetPrint)
+        local OFF_SET_PRINT_DRAW = 12
+        local menuItem = self.menuValues[expectedMenu]
+        local locked = (positionMenu == expectedMenu) and true or false
+
+        if (locked == true) then
+            love.graphics.setColor(255, 0, 0)          -- red
+            love.graphics.print("> " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            if MusicOptions ~= nil and MusicOptions[MusicChoiceIndex] ~= nil then
+                if MusicOptions[MusicChoiceIndex] == "ON" then
+                    love.graphics.setColor(0, 255, 0) -- green
+                else
+                    love.graphics.setColor(255, 0, 0) -- red
+                end
+                love.graphics.print("" .. MusicOptions[MusicChoiceIndex], (SCREEN_WIDTH+260) / 2,
+                    SCREEN_HIGH / 2 + offsetPrint)
+                love.graphics.setColor(255, 255, 255, 255) -- reset
+            end
+        else
+            love.graphics.print("  " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
+            if MusicOptions ~= nil and MusicOptions[MusicChoiceIndex] ~= nil then
+                if MusicOptions[MusicChoiceIndex] == "ON" then
+                    love.graphics.setColor(0, 255, 0) -- green
+                else
+                    love.graphics.setColor(255, 0, 0) -- red
+                end
+                love.graphics.print("" .. MusicOptions[MusicChoiceIndex], (SCREEN_WIDTH+260) / 2,
+                    SCREEN_HIGH / 2 + offsetPrint)
+                love.graphics.setColor(255, 255, 255, 255) -- reset
+            end
+        end
+
+        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
+        return offsetPrint
+    end
+
     function self.draw(toggleDebug, fontVT12)
         local offsetPrint = -50
         local OFF_SET_PRINT_DRAW = 12
@@ -220,6 +257,8 @@ Menu.new = function()
         offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO, offsetPrint)
         offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
         offsetPrint = menuItemDrawScale(self.positionMenu , self.GRAPHIC_SCALE, offsetPrint)
+        -- Music menu item placed above credits
+        offsetPrint = menuItemDrawMusic(self.positionMenu , self.CREDITS - 1, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu , self.CREDITS, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu , self.QUIT, offsetPrint)
 

@@ -14,6 +14,8 @@ local keyPressed = false
 local keyPressedDebug = false
 local keyPressedDebug2 = false
 local keyPressedLR = false
+local keyPressedScale = false
+local keyPressedMusic = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -75,26 +77,26 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         keyPressed = false
     end
 
-    -- If currently on the GRAPHIC_SCALE menu, allow left/right (or pad stick) to change option
+    -- If currently on the GRAPHIC_SCALE menu, change graphics immediately with left/right
     if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
         if love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 or gamepadIsDown('dpleft') then
             if not keyPressedLR then
                 GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex - 1
                 if GraphicsScaleChoiceIndex < 1 then GraphicsScaleChoiceIndex = #GraphicsScaleOptions end
-                applyGraphicsChoice()
                 keyPressedLR = true
             end
         elseif love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 or gamepadIsDown('dpright') then
             if not keyPressedLR then
                 GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex + 1
                 if GraphicsScaleChoiceIndex > #GraphicsScaleOptions then GraphicsScaleChoiceIndex = 1 end
-                applyGraphicsChoice()
                 keyPressedLR = true
             end
         else
             keyPressedLR = false
         end
     end
+
+    -- Note: MUSIC is now toggled with Space/A (no left/right selection)
 
     if love.keyboard.isDown("space") or gamepadIsDown('a') then
         menu.startUpdateTitleRebound()
@@ -118,10 +120,25 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
                 end
             end
         end
+        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
+            if not keyPressedScale then
+                applyGraphicsChoice()
+                keyPressedScale = true
+            end
+        end
+        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.MUSIC]) then
+            if not keyPressedMusic then
+                -- toggle between ON and OFF
+                MusicChoiceIndex = MusicChoiceIndex + 1
+                if MusicChoiceIndex > #MusicOptions then MusicChoiceIndex = 1 end
+                applyMusicChoice()
+                keyPressedMusic = true
+            end
+        end
         
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
             menu.selectionMenu = menu.menuValues[menu.CREDITS]
-            creditsSound:setVolume(0.4)
+            -- creditsSound:setVolume(0.4)
             creditsSound:seek(0)  -- restart the sound from the beginning
             menu.startCredits() -- reset the credits scroll position
             love.audio.play(creditsSound)
@@ -131,6 +148,8 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         end
     else
         keyPressedDebug = false
+        keyPressedMusic = false
+        keyPressedScale = false
     end
 
     if love.keyboard.isDown("escape")then

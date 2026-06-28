@@ -42,7 +42,7 @@ Level.new = function()
             gameSound = Assets.sounds.level6 or love.audio.newSource("music/LukeHall-Dystopia.mp3", "stream")
             MAX_ASTEROIDS= 6
         end
-        gameSound:setVolume(0.4)
+        -- gameSound:setVolume(0.4)
         love.audio.play(gameSound)
         CreateAsteroidsFarAwayFromVaisseau(vaisseaux, asteroids, MAX_ASTEROIDS)
         return asteroids, gameSound
