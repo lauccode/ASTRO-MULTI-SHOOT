@@ -487,7 +487,7 @@ Menu.new = function()
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 4
 
         love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-        love.graphics.print("**** BONUS 'w' to select and 'x' to activate/desactivate *****", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
+        love.graphics.print("**** BONUS 'w' and 'c' to select and 'x' to activate/desactivate *****", HORIZONTAL_SHORTCUT_POSITION, VERTICAL_POSITION + OffsetPrintBonus)
         love.graphics.setColor(255, 255, 255, 255)            -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 2
 

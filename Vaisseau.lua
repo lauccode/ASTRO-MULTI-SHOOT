@@ -26,6 +26,7 @@ Vaisseau.new = function(level)
     self.missileLaserSight = self.MSL_PKG_STD
     self.missileSinus = self.MSL_PKG_STD
     self.shield = self.MSL_PKG_STD
+    self.megaBombUsed = false
 
     self.SHOOT_TIMER_LIMIT = 30/60
     self.SHOOT_MACHINE_GUN_TIMER_LIMIT = 20/60
@@ -635,6 +636,7 @@ Vaisseau.new = function(level)
     end
 
     -- Consolidated per-frame update for the vaisseau
+    -- Accept game tables so the vaisseau can execute global actions (mega bomb)
     function self.update(dt)
         if (self.missilePackLateral ~= previousMissilePackLateral) then
             startShipAnimation(previousMissilePackLateral, self.missilePackLateral)
@@ -654,6 +656,32 @@ Vaisseau.new = function(level)
         -- update muzzle flash timer and impact state
         self.updateShootMuzzleTimerCounter(dt)
         self.updateImpact(dt)
+    end
+
+    -- Request a mega bomb: mark a flag so main loop can execute it
+    function self.megaBombWeapon(isDebugMode)
+        if not isDebugMode and self.megaBombUsed then
+            return
+        end
+        self.megaBombRequested = true
+    end
+
+    -- Reset mega bomb availability for a new level
+    function self.resetMegaBomb()
+        self.megaBombUsed = false
+    end
+
+    -- Clear mega bomb request (used by main loop after executing)
+    function self.clearMegaBombRequest()
+        self.megaBombRequested = false
+    end
+
+    -- Execute megabomb given access to game tables (called from main)
+    function self.executeMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound)
+        if self.megaBombRequested and CollisionManagerMegaBomb then
+            CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, {self})
+            self:clearMegaBombRequest()
+        end
     end
 
     return self

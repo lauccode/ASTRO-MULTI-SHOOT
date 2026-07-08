@@ -283,6 +283,11 @@ function love.update(dt) -- 60 fps by defaut
 				resetGame()
 				if toggleDebug then
             		vaisseaux[1].timeShieldStart = 0 --seconds
+					if vaisseaux[1].resetMegaBomb then
+						vaisseaux[1].resetMegaBomb()
+					else
+						vaisseaux[1].megaBombUsed = false
+					end
 				else
 					resetVaisseau()
 				end
@@ -320,8 +325,8 @@ function love.update(dt) -- 60 fps by defaut
 		CollisionManagerAsteroids(dt, asteroids, asteroids)
 		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
 		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
+		CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux, toggleDebug)
 		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
-		
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
 			love.audio.stop(gameSound)

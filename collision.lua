@@ -45,6 +45,59 @@ local function objectBounce(dt, objects, objects2, objects_to_manage, objects_to
     end
 end
 
+-- Megabomb: destroy all asteroids as if each was hit by a missile
+function CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux, DEBUG_MODE)
+    if vaisseaux[1] and vaisseaux[1].megaBombRequested then
+        if not asteroids then return end
+        for i = #asteroids, 1, -1 do
+            local asteroid = asteroids[i]
+            if asteroid then
+                love.audio.stop(asteroidExplosionSound)
+                table.insert(asteroidExplosions, AsteroidExplosions.new(asteroid.position.x, asteroid.position.y))
+                if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
+                    if asteroid.asteroidDivision == 2 then
+                        if not vaisseaux[1].isAllWeaponFulllyUpgraded() then
+                            table.insert(bonuss, Bonus.new(vaisseaux[1]))
+                            bonuss[#bonuss].position.x = asteroid.position.x
+                            bonuss[#bonuss].position.y = asteroid.position.y
+                        end
+                    end
+                    for k = 1, 2 do
+                        table.insert(asteroids, Asteroid.new())
+                        local newAsteroid = asteroids[#asteroids]
+                        newAsteroid.position.x = asteroid.position.x
+                        newAsteroid.position.y = asteroid.position.y
+                        newAsteroid.imageRatio = asteroid.imageRatio / 2
+                        newAsteroid.recalculateImageRadius()
+                        newAsteroid.asteroidDivision = asteroid.asteroidDivision - 1
+                        newAsteroid.protection = newAsteroid.asteroidDivision
+                        table.insert(asteroidExplosions,
+                            AsteroidExplosions.new(newAsteroid.position.x, newAsteroid.position.y))
+                    end
+                    table.remove(asteroids, i)
+                    love.audio.play(asteroidExplosionSound)
+                else
+                    asteroid.protection = asteroid.protection - 1
+                    asteroid.asteroidImpact = true
+                    love.audio.play(asteroidExplosionSound)
+                    if asteroid.asteroidDivision < 1 and asteroid.protection < 1 then
+                        table.remove(asteroids, i)
+                        love.audio.play(asteroidExplosionSound)
+                    end
+                end
+            end
+        end
+        if vaisseaux[1].clearMegaBombRequest then
+            vaisseaux[1].clearMegaBombRequest()
+        else
+            vaisseaux[1].megaBombRequested = false
+        end
+		if not (DEBUG_MODE) then
+				vaisseaux[1].megaBombUsed = true
+		end
+    end
+end
+
 local function findFirstCollisionSimple(list1, list2)
     local objects_to_manage = {}
     local object_number = 0
