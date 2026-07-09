@@ -11,8 +11,10 @@ function MegaBomb.new(x, y)
 	self.img = nil
 	if Assets and Assets.images and Assets.images.megabomb then
 		self.img = Assets.images.megabomb
+		self.imgshader = Assets.images.megabombshader
 	elseif love.graphics and love.graphics.newImage then
 		self.img = love.graphics.newImage("sprites/mega_bomb.png")
+		self.imgshader = love.graphics.newImage("sprites/mega_bomb_shader.png")
 	end
 
 	-- shaders
@@ -56,10 +58,10 @@ function MegaBomb:draw()
 	end
 
 	-- shaders
-	love.graphics.setColor(1, 1, 1, (1 - self.l) ^ 3)
-	local s = self.l * 16
-	local o = self.img:getWidth() / 2
-	love.graphics.draw(self.img, self.x, self.y, 0, s, s, o, o)
+	love.graphics.setColor(1, 1, 1, (1 - self.ls) ^ 3)
+	local s = self.ls * 50
+	local o = self.imgshader:getWidth() / 2
+	love.graphics.draw(self.imgshader, self.x, self.y, 0, s, s, o, o)
 	love.graphics.setColor(1, 1, 1, 1)
 
 	local alpha = math.max(0, 1 - (self.l / self.maxL))
