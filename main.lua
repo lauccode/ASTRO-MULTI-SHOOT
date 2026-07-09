@@ -11,6 +11,7 @@ local Missile = require("Missile")
 local Asteroid = require("Asteroid")
 local AsteroidExplosions = require("AsteroidExplosions")
 local Bonus = require("Bonus")
+local MegaBomb = require("MegaBomb")
 
 -- Pour debugger avec zeroBrane
 -- if arg[#arg] == "-debug" then
@@ -47,6 +48,14 @@ local bonus = nil
 local particlesTransitionStage = nil
 
 local menu = nil
+
+megaBombEffects = {}
+
+function spawnMegaBombEffect(x, y)
+	if MegaBomb and MegaBomb.new then
+		table.insert(megaBombEffects, MegaBomb.new(x, y))
+	end
+end
 
 local toggleDebug = false
 
@@ -165,7 +174,8 @@ Assets = {
         bonusSinusShoot = love.graphics.newImage("sprites/bonus_sinus_shoot.png"),
 		star = love.graphics.newImage("sprites/star.png"),
 		muzzleFlash = love.graphics.newImage("sprites/muzzle_flash.png"),
-		animation12 = love.graphics.newImage("sprites/animation_1_2.png")
+		animation12 = love.graphics.newImage("sprites/animation_1_2.png"),
+		megabomb = love.graphics.newImage("sprites/mega_bomb.png")
     },
 	fonts = {
 		nerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10),
@@ -212,6 +222,7 @@ local function resetGame()
 	bonuss = {}
 	asteroidExplosions = {}
 	menu.isPresentStageDone = false
+	megaBombEffects = {}
 	-- img = love.graphics.newImage("sprites/star.png")
 	particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
 end
@@ -301,6 +312,16 @@ function love.update(dt) -- 60 fps by defaut
 		missilesUpdate(dt, vaisseaux, missiles)
 		if vaisseaux[1].update then
 			vaisseaux[1].update(dt)
+		end
+
+		for megaBombEffect_it = #megaBombEffects, 1, -1 do
+			local effect = megaBombEffects[megaBombEffect_it]
+			if effect then
+				local result = effect:update(dt)
+				if result == "kill" then
+					table.remove(megaBombEffects, megaBombEffect_it)
+				end
+			end
 		end
 
         -- update explosion
@@ -417,6 +438,12 @@ function love.draw()
 			vaisseaux[1].draw()
 			if DEBUG_MODE then
 				debugMode(vaisseaux, Assets.fonts.nerd11)
+			end
+		end
+
+		for megaBombEffect_it = 1, #megaBombEffects do
+			if megaBombEffects[megaBombEffect_it] then
+				megaBombEffects[megaBombEffect_it]:draw()
 			end
 		end
 

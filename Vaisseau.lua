@@ -664,6 +664,9 @@ Vaisseau.new = function(level)
             return
         end
         self.megaBombRequested = true
+        if spawnMegaBombEffect then
+            spawnMegaBombEffect(self.position.x, self.position.y)
+        end
     end
 
     -- Reset mega bomb availability for a new level
