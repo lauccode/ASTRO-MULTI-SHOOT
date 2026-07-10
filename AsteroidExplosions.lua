@@ -1,13 +1,18 @@
+local Vector2 = require("Vector2")
+local GameObject = require("GameObject")
+
 local AsteroidExplosions = {}
-AsteroidExplosions.new = function(X_explo, Y_explo)
-    local self = {}
+AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion)
+    local self = GameObject.new()
     local timeExplosion = 0
     local TIME_EXPLOSION_END_TIME = 100
     local TIME_EMISSION_RATE_END_TIME = 60
-    local X_explosionPos = X_explo
-    local Y_explosionPos = Y_explo
     local emissionRate = 0
     self.asteroDivisionExplosion = true
+    self.velocity = velocityExplosion
+    self.position = Vector2.new(X_explo, Y_explo)
+
+    -- self.velocity = Vector2.new(0, 0)
 
     local particlesAsteroDivExplosions = {}
     local img = Assets.images.asteroDust
@@ -29,27 +34,17 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
     end
 
     local function drawParticlesADE()
-        love.graphics.draw(particlesAsteroDivExplosions[1], X_explosionPos, Y_explosionPos)
+        love.graphics.draw(particlesAsteroDivExplosions[1], self.position.x, self.position.y)
     end
 
-    function self.draw()
-        if (self.asteroDivisionExplosion == true) then
-            if(takeExplosionPosition == false) then
-                X_explosionPos = self.position.x
-                Y_explosionPos = self.position.y
-                takeExplosionPosition = true
-            end
-            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
-                emissionRate = 0
-            else
-                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
-            end
-            drawParticlesADE()
-        end
+    function self.move(dt)
+        -- update position using velocity vector
+        self.position = self.position:add(self.velocity:scale(dt))
     end
 
     -- Update particle system parameters (do not modify in draw)
     function self.update(dt)
+        self.move(dt)
         if (self.asteroDivisionExplosion == true) then
             if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
                 emissionRate = 0
@@ -63,6 +58,17 @@ AsteroidExplosions.new = function(X_explo, Y_explo)
             particlesAsteroDivExplosions[1]:setSpeed(30, 90)
             particlesAsteroDivExplosions[1]:setSizes(1, 0.1)
             particlesAsteroDivExplosions[1]:setDirection((2 * math.pi) * math.random())
+        end
+    end
+
+    function self.draw()
+        if (self.asteroDivisionExplosion == true) then
+            if(timeExplosion >= TIME_EMISSION_RATE_END_TIME) then
+                emissionRate = 0
+            else
+                emissionRate = math.abs(150*((TIME_EMISSION_RATE_END_TIME-timeExplosion)/TIME_EMISSION_RATE_END_TIME))
+            end
+            drawParticlesADE()
         end
     end
 

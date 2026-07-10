@@ -53,7 +53,7 @@ function CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroi
             local asteroid = asteroids[i]
             if asteroid then
                 love.audio.stop(asteroidExplosionSound)
-                table.insert(asteroidExplosions, AsteroidExplosions.new(asteroid.position.x, asteroid.position.y))
+                table.insert(asteroidExplosions, AsteroidExplosions.new(asteroid.position.x, asteroid.position.y, asteroid.velocity))
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
                     if asteroid.asteroidDivision == 2 then
                         if not vaisseaux[1].isAllWeaponFulllyUpgraded() then
@@ -71,8 +71,6 @@ function CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroi
                         newAsteroid.recalculateImageRadius()
                         newAsteroid.asteroidDivision = asteroid.asteroidDivision - 1
                         newAsteroid.protection = newAsteroid.asteroidDivision
-                        table.insert(asteroidExplosions,
-                            AsteroidExplosions.new(newAsteroid.position.x, newAsteroid.position.y))
                     end
                     table.remove(asteroids, i)
                     love.audio.play(asteroidExplosionSound)
@@ -149,7 +147,7 @@ function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplo
         for i = #objects_to_manage, 1, -1 do
             for j = #objects_to_manage2, 1, -1 do
                 love.audio.stop(asteroidExplosionSound)
-                table.insert(asteroidExplosions, AsteroidExplosions.new(missiles[objects_to_manage[i]].position.x, missiles[objects_to_manage[i]].position.y))
+                table.insert(asteroidExplosions, AsteroidExplosions.new(missiles[objects_to_manage[i]].position.x, missiles[objects_to_manage[i]].position.y, missiles[objects_to_manage[i]].velocity))
                 table.remove(missiles, objects_to_manage[i])
                 local asteroid = asteroids[objects_to_manage2[j]]
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
@@ -169,7 +167,6 @@ function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplo
                         newAsteroid.recalculateImageRadius()
                         newAsteroid.asteroidDivision = asteroid.asteroidDivision - 1
                         newAsteroid.protection = newAsteroid.asteroidDivision
-                        table.insert(asteroidExplosions, AsteroidExplosions.new(newAsteroid.position.x, newAsteroid.position.y))
                     end
                     table.remove(asteroids, objects_to_manage2[j])
                     love.audio.play(asteroidExplosionSound)
