@@ -147,7 +147,10 @@ function CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplo
         for i = #objects_to_manage, 1, -1 do
             for j = #objects_to_manage2, 1, -1 do
                 love.audio.stop(asteroidExplosionSound)
-                table.insert(asteroidExplosions, AsteroidExplosions.new(missiles[objects_to_manage[i]].position.x, missiles[objects_to_manage[i]].position.y, missiles[objects_to_manage[i]].velocity))
+                table.insert(asteroidExplosions,
+                AsteroidExplosions.new(missiles[objects_to_manage[i]].position.x,
+                        missiles[objects_to_manage[i]].position.y, missiles[objects_to_manage[i]].velocity,
+                        vaisseaux[1].missilePackQuicker))
                 table.remove(missiles, objects_to_manage[i])
                 local asteroid = asteroids[objects_to_manage2[j]]
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then

@@ -2,7 +2,7 @@ local Vector2 = require("Vector2")
 local GameObject = require("GameObject")
 
 local AsteroidExplosions = {}
-AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion)
+AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion, tableMissilePackQuicker)
     local self = GameObject.new()
     local timeExplosion = 0
     local TIME_EXPLOSION_END_TIME = 100
@@ -15,7 +15,14 @@ AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion)
     -- self.velocity = Vector2.new(0, 0)
 
     local particlesAsteroDivExplosions = {}
-    local img = Assets.images.asteroDust
+    local img = Assets.images.asteroDust1
+    if(tableMissilePackQuicker == self.MSL_PKG_QUICKER) then
+        img = Assets.images.asteroDust2
+    elseif(tableMissilePackQuicker == self.MSL_PKG_MUCH_QUICKER) then
+        img = Assets.images.asteroDust3
+    else
+        img = Assets.images.asteroDust1
+    end
     table.insert(particlesAsteroDivExplosions, love.graphics.newParticleSystem(img, 450))
 
     function self.particlesAsteroDivExplosionUpdate(dt)
