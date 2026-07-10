@@ -165,7 +165,6 @@ Assets = {
         missileRed = love.graphics.newImage("sprites/missile_violet.png"),
         asteroid = love.graphics.newImage("sprites/asteroid_retro.png"),
         asteroidImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png"),
-        asteroDust = love.graphics.newImage("sprites/astero_dust.png"),
         asteroDust1 = love.graphics.newImage("sprites/astero_dust1.png"),
         asteroDust2 = love.graphics.newImage("sprites/astero_dust2.png"),
         asteroDust3 = love.graphics.newImage("sprites/astero_dust3.png"),
