@@ -47,6 +47,26 @@ function tableLength(T)
     return count
 end
 
+local lastKeyboardState = {}
+local lastGamepadButtonState = {}
+
+function keyboardWasPressed(key)
+    local isDown = love.keyboard.isDown(key)
+    local prev = lastKeyboardState[key] or false
+    lastKeyboardState[key] = isDown
+    return isDown and not prev
+end
+
+function gamepadWasPressed(name)
+    local gp = getFirstGamepad()
+    if not gp then return false end
+    local ok, isDown = pcall(function() return gp:isGamepadDown(name) end)
+    if not ok then return false end
+    local prev = lastGamepadButtonState[name] or false
+    lastGamepadButtonState[name] = isDown
+    return isDown and not prev
+end
+
 -- Gamepad helper utilities
 function getFirstGamepad()
     local js = love.joystick.getJoysticks()

@@ -19,7 +19,6 @@ local keyPressedMusic = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
-local keyPressedMegaBomb = false
 
 local keyTimerCounter = 0
 local shootTimerCounter = 0
@@ -331,15 +330,10 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
             end
         end
 
-        if love.keyboard.isDown("b") or gamepadIsDown('b') then
-            if not keyPressedMegaBomb then
-                if vaisseaux[1] and vaisseaux[1].megaBombWeapon then
-                    vaisseaux[1].megaBombWeapon(DEBUG_MODE or toggleDebug)
-                end
-                keyPressedMegaBomb = true
+        if keyboardWasPressed("b") or gamepadWasPressed('b') then
+            if vaisseaux[1] and vaisseaux[1].megaBombWeapon then
+                vaisseaux[1].megaBombWeapon(DEBUG_MODE or toggleDebug)
             end
-        else
-            keyPressedMegaBomb = false
         end
 
 
