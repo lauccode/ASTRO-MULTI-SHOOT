@@ -53,7 +53,7 @@ function CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroi
             local asteroid = asteroids[i]
             if asteroid then
                 love.audio.stop(asteroidExplosionSound)
-                table.insert(asteroidExplosions, AsteroidExplosions.new(asteroid.position.x, asteroid.position.y, asteroid.velocity))
+                table.insert(asteroidExplosions, AsteroidExplosions.new(asteroid.position.x, asteroid.position.y, asteroid.velocity, vaisseaux[1].MSL_PKG_QUICKER))
                 if asteroid.asteroidDivision > 0 and asteroid.protection < 1 then
                     if asteroid.asteroidDivision == 2 then
                         if not vaisseaux[1].isAllWeaponFulllyUpgraded() then

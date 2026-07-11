@@ -101,8 +101,8 @@ Missile.new = function(angle_missile, X_pos_vaisseau, Y_pos_vaisseau, speedX_mis
     function self.move(dt)
         if (type_missile[SINUS] == self.MSL_SINUS) then
             local beta = self.angle + (math.pi / 2)
-            local frequency = 1
-            local amplitude = 5
+            local frequency = 3  --1
+            local amplitude = 10 --5
             local phase = math.pi / 2
             if (shootSideToDo == true) then
                 phase = math.pi / 2

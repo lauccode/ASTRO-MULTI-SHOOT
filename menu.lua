@@ -582,7 +582,7 @@ Menu.new = function()
             "*********************************** You succeed to finish this small game   ***********************",
             HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintWin)
         offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
-        love.graphics.print("***********************************Press 'r' or Gamepad (B) to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
+        love.graphics.print("************************ Press 'r' or Gamepad (B) to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
             VERTICAL_POSITION + offsetPrintWin)
         offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
     end
