@@ -177,15 +177,18 @@ Menu.new = function()
             love.graphics.setColor(255, 255, 255, 255) -- reset
             -- print current selected option name on the right
             if GraphicsScaleOptions ~= nil and GraphicsScaleOptions[GraphicsScaleChoiceIndex] ~= nil then
-                love.graphics.setColor(255, 255, 255, 255)
+                love.graphics.setColor(0, 0, 255)          -- bleu
                 love.graphics.print("" .. GraphicsScaleOptions[GraphicsScaleChoiceIndex].name, (SCREEN_WIDTH+260) / 2,
-                    SCREEN_HIGH / 2 + offsetPrint)
+                SCREEN_HIGH / 2 + offsetPrint)
+                love.graphics.setColor(255, 255, 255, 255) -- reset
             end
         else
             love.graphics.print("  " .. tostring(menuItem), SCREEN_WIDTH / 2, SCREEN_HIGH / 2 + offsetPrint)
             if GraphicsScaleOptions ~= nil and GraphicsScaleOptions[GraphicsScaleChoiceIndex] ~= nil then
+                love.graphics.setColor(0, 0, 255)          -- bleu
                 love.graphics.print("" .. GraphicsScaleOptions[GraphicsScaleChoiceIndex].name, (SCREEN_WIDTH+260) / 2,
                     SCREEN_HIGH / 2 + offsetPrint)
+                love.graphics.setColor(255, 255, 255, 255) -- reset
             end
         end
 
