@@ -5,12 +5,12 @@ Menu.new = function()
     self.START = 1
     self.TUTO_PAD = 2
     self.TUTO = 3
-    self.TOGGLE_DEBUG = 4
-    self.GRAPHIC_SCALE = 5
-    self.MUSIC = 6
+    self.GRAPHIC_SCALE = 4
+    self.MUSIC = 5
+    self.TOGGLE_DEBUG = 6
     self.CREDITS = 7
     self.QUIT = 8
-    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "TOGGLE DEBUG", "GRAPHIC SCALE", "MUSIC", "CREDITS", "QUIT" }
+    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "GRAPHIC SCALE", "MUSIC", "TOGGLE DEBUG","CREDITS", "QUIT" }
 
     self.MENU = "menu"
     self.GAMEOVER = "gameover"
@@ -255,20 +255,19 @@ Menu.new = function()
         offsetPrint = menuItemDraw(self.positionMenu, self.START, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO_PAD, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO, offsetPrint)
-        offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
         offsetPrint = menuItemDrawScale(self.positionMenu , self.GRAPHIC_SCALE, offsetPrint)
-        -- Music menu item placed above credits
-        offsetPrint = menuItemDrawMusic(self.positionMenu , self.CREDITS - 1, offsetPrint)
+        offsetPrint = menuItemDrawMusic(self.positionMenu , self.MUSIC, offsetPrint)
+        offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
         offsetPrint = menuItemDraw(self.positionMenu , self.CREDITS, offsetPrint)
         offsetPrint = menuItemDraw(self.positionMenu , self.QUIT, offsetPrint)
 
-        offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
+        offsetPrint = offsetPrint - OFF_SET_PRINT_DRAW
 
         love.graphics.setFont(Assets.fonts.vt12)
-        love.graphics.print("Keyboard: UP and DOWN arrow to move and space to select", SCREEN_WIDTH / 4,
+        love.graphics.print("Keyboard: Arrow keys to move/change and space to select or ON/OFF", SCREEN_WIDTH / 4,
             SCREEN_HIGH - offsetPrint)
         offsetPrint = offsetPrint + OFF_SET_PRINT_DRAW
-        love.graphics.print("Gamepad:  left stick to move and (A) button to select", SCREEN_WIDTH / 4,
+        love.graphics.print("Gamepad:  left stick to move/change and (A) button to select or ON/OFF", SCREEN_WIDTH / 4,
             SCREEN_HIGH - offsetPrint)
     end
 
