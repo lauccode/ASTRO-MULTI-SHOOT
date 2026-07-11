@@ -90,7 +90,7 @@ Menu.new = function()
                 X_text_position, SCREEN_HIGH / 3)
         end
         love.graphics.setFont(Assets.fonts.nerd14)
-        love.graphics.print("Press 's' or Gamepad (B) to start when you are ready to fight", SCREEN_WIDTH / 8, SCREEN_HIGH / 2 + 30)
+        love.graphics.print("Press 'space' or Gamepad (A) to start when you are ready to fight", SCREEN_WIDTH / 8, SCREEN_HIGH / 2 + 30)
         love.graphics.setColor(255, 255, 255, 255) -- reset
     end
 
@@ -305,7 +305,7 @@ Menu.new = function()
         offsetPrintCredits = offsetPrintCreditsStart
 
         printNextCredit("********************************* CREDITS ***********************************", true)
-        printNextCredit("************************ 'q' or Gamepad B to quit ***************************", true)
+        printNextCredit("************************ 'space' or Gamepad A to quit ***************************", true)
         printNextCredit("")
 
         printNextCredit("V Music For level 1", true)
@@ -407,7 +407,7 @@ Menu.new = function()
         love.graphics.print("*******************************************************", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
         offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
-        love.graphics.print("*** Press 'r' or Gamepad (B) to restart and continue **", HORIZONTAL_GOVER_POSITION,
+        love.graphics.print("*** Press 'space' or Gamepad (A) to restart and continue **", HORIZONTAL_GOVER_POSITION,
             VERTICAL_POSITION + offsetPrintGameOver)
         offsetPrintGameOver = offsetPrintGameOver + OFF_SET_PRINT_GAMEOVER
     end
@@ -438,7 +438,7 @@ Menu.new = function()
         printNextPadShortcut("D-Pad right : select the right weapon (debug) --- Right stick right : N/A")
         printNextPadShortcut("D-Pad down  : on/off debug mode               --- Right stick down  : N/A")
         printNextPadShortcut("Guide  : come back to menu                    --- Start : come back to menu")
-        printNextPadShortcut("***************************   'q' or Gamepad (B) to quit *************************")
+        printNextPadShortcut("***************************  'space' or Gamepad (A) to quit  *******************")
     end
 
     function self.shortcutsAndBonus()
@@ -565,7 +565,7 @@ Menu.new = function()
         love.graphics.setColor(255, 255, 255, 255) -- reset
         OffsetPrintBonus = OffsetPrintBonus + OFF_SET_PRINT_SHORTCUTS * 3
 
-        love.graphics.print("***************************   'q' or Gamepad (B) to quit *************************",
+        love.graphics.print("***************************  'space' or Gamepad (A) to quit  *************************",
             HORIZONTAL_SHORTCUT_POSITION - 25, VERTICAL_POSITION + OffsetPrintBonus)
     end
 
@@ -585,7 +585,7 @@ Menu.new = function()
             "*********************************** You succeed to finish this small game   ***********************",
             HORIZONTAL_CONGRAT_POSITION, VERTICAL_POSITION + offsetPrintWin)
         offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
-        love.graphics.print("************************ Press 'r' or Gamepad (B) to restart and continue **********", HORIZONTAL_CONGRAT_POSITION,
+        love.graphics.print("************************ Press 'space' or Gamepad (A) to restart and continue *****", HORIZONTAL_CONGRAT_POSITION,
             VERTICAL_POSITION + offsetPrintWin)
         offsetPrintWin = offsetPrintWin + OFF_SET_PRINT_CONGRAT
     end

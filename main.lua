@@ -165,7 +165,7 @@ Assets = {
         missileRed = love.graphics.newImage("sprites/missile_violet.png"),
         asteroid = love.graphics.newImage("sprites/asteroid_retro.png"),
         asteroidImpact = love.graphics.newImage("sprites/asteroid_retro_impact.png"),
-        asteroDust1 = love.graphics.newImage("sprites/astero_dust1.png"),
+                                          asteroDust1 = love.graphics.newImage("sprites/astero_dust1.png"),
         asteroDust2 = love.graphics.newImage("sprites/astero_dust2.png"),
         asteroDust3 = love.graphics.newImage("sprites/astero_dust3.png"),
         bonusTripleShoot = love.graphics.newImage("sprites/bonus_triple_shoot.png"),
@@ -373,7 +373,7 @@ function love.update(dt) -- 60 fps by defaut
 	if menu.selectionMenu == menu.PRESENT_STAGE then
 		menu.updatePresentStage(dt)
 		particlesTransitionStage:update(dt)
-		if keyboardWasPressed("s") or gamepadWasPressed('b') then
+		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			particlesTransitionStage = nil  -- optim(TBT)
 			menu.isPresentStageDone = true
 			menu.selectionMenu = menu.menuValues[menu.START]
@@ -381,7 +381,7 @@ function love.update(dt) -- 60 fps by defaut
 	end
 
 	if menu.selectionMenu == menu.GAMEOVER or menu.selectionMenu == menu.CONGRATULATION then
-		if keyboardWasPressed("r") or gamepadWasPressed('b') then
+		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 			love.audio.stop(gameSound)
 			level.levelNumber = 1
@@ -392,20 +392,20 @@ function love.update(dt) -- 60 fps by defaut
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO_PAD] then
-		if keyboardWasPressed("q") or gamepadWasPressed('b') then
+		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 		end
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
-		if keyboardWasPressed("q") or gamepadWasPressed('b') then
+		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 		end
 	end
 
 	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
 		menu.updateResetOffsetPrintCreditsStart(dt)
-		if keyboardWasPressed("q") or gamepadWasPressed('b') then
+		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 			love.audio.stop(creditsSound)
 		end
