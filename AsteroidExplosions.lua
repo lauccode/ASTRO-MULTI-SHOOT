@@ -9,8 +9,9 @@ AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion, tableMiss
     local TIME_EMISSION_RATE_END_TIME = 60
     local emissionRate = 0
     self.asteroDivisionExplosion = true
-    self.velocity = velocityExplosion
-    self.position = Vector2.new(X_explo, Y_explo)
+    -- Copy the velocity vector so explosion motion remains independent from the asteroid
+    local velocity = Vector2.new(velocityExplosion.x, velocityExplosion.y)
+    local position = Vector2.new(X_explo, Y_explo)
 
     -- self.velocity = Vector2.new(0, 0)
 
@@ -41,12 +42,12 @@ AsteroidExplosions.new = function(X_explo, Y_explo, velocityExplosion, tableMiss
     end
 
     local function drawParticlesADE()
-        love.graphics.draw(particlesAsteroDivExplosions[1], self.position.x, self.position.y)
+        love.graphics.draw(particlesAsteroDivExplosions[1], position.x, position.y)
     end
 
     function self.move(dt)
         -- update position using velocity vector
-        self.position = self.position:add(self.velocity:scale(dt))
+        position = position:add(velocity:scale(dt))
     end
 
     -- Update particle system parameters (do not modify in draw)
