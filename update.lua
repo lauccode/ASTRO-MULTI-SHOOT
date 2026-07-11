@@ -9,13 +9,8 @@ local weaponCycleLaserSight = 0
 local weaponCycleSinus = 0
 local weaponCycleShield = 0
 
-local key_Pulse = false
 local keyPressed = false
-local keyPressedDebug = false
-local keyPressedDebug2 = false
 local keyPressedLR = false
-local keyPressedScale = false
-local keyPressedMusic = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -98,7 +93,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 
     -- Note: MUSIC is now toggled with Space/A (no left/right selection)
 
-    if love.keyboard.isDown("space") or gamepadIsDown('a') then
+    if keyboardWasPressed("space") or gamepadWasPressed('a') then
         menu.startUpdateTitleRebound()
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
             menu.selectionMenu = menu.menuValues[menu.START]
@@ -110,30 +105,20 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
             menu.selectionMenu = menu.menuValues[menu.TUTO]
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TOGGLE_DEBUG]) then
-            if not keyPressedDebug then
                 if (toggleDebug == true) then
                     toggleDebug = false
-                    keyPressedDebug = true
                 else
                     toggleDebug = true
-                    keyPressedDebug = true
                 end
-            end
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
-            if not keyPressedScale then
                 applyGraphicsChoice()
-                keyPressedScale = true
-            end
         end
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.MUSIC]) then
-            if not keyPressedMusic then
                 -- toggle between ON and OFF
                 MusicChoiceIndex = MusicChoiceIndex + 1
                 if MusicChoiceIndex > #MusicOptions then MusicChoiceIndex = 1 end
                 applyMusicChoice()
-                keyPressedMusic = true
-            end
         end
         
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
@@ -146,10 +131,6 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
         if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.QUIT]) then
             love.event.quit()
         end
-    else
-        keyPressedDebug = false
-        keyPressedMusic = false
-        keyPressedScale = false
     end
 
     if love.keyboard.isDown("escape")then
@@ -195,88 +176,57 @@ function keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebu
         else
             vaisseaux[1].accelerateFWorWW = "neutral"
         end
-        if love.keyboard.isDown("c") or gamepadIsDown('dpright') then
-            if not keyPressed then
+        if keyboardWasPressed("c") or gamepadWasPressed('dpright') then
                 selectWeaponBar = selectWeaponBar + 1
                 if selectWeaponBar > 6 then selectWeaponBar = 1 end
                 vaisseaux[1].selectWeaponBar = selectWeaponBar
-                keyPressed = true
-            end
-        elseif love.keyboard.isDown("w") or gamepadIsDown('dpleft') then
-            if not keyPressed then
+        elseif keyboardWasPressed("w") or gamepadWasPressed('dpleft') then
                 selectWeaponBar = selectWeaponBar - 1
                 if selectWeaponBar < 1 then selectWeaponBar = 6 end
                 vaisseaux[1].selectWeaponBar = selectWeaponBar
-                keyPressed = true
-            end
-        else
-            keyPressed = false
         end
         if (toggleDebug == true) then
-            if love.keyboard.isDown("d") or gamepadIsDown('dpdown') then
-                if not keyPressedDebug2 then
+            if keyboardWasPressed("d") or gamepadWasPressed('dpdown') then
                     if DEBUG_MODE == true then
                         DEBUG_MODE = false
                     elseif DEBUG_MODE == false then
                         DEBUG_MODE = true
                     end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 1 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 1 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleLateral = weaponCycleLateral + 1
                     if (weaponCycleLateral > 2) then weaponCycleLateral = 0 end
                     if (weaponCycleLateral == 0) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleLateral == 1) then vaisseaux[1].missilePackLateral = vaisseaux[1].MSL_PKG_LATERAL end
                     if (weaponCycleLateral == 2) then vaisseaux[1].missilePackLateral = vaisseaux[1]
                         .MSL_PKG_MUCH_LATERAL end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 2 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 2 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleBigger = weaponCycleBigger + 1
                     if (weaponCycleBigger > 2) then weaponCycleBigger = 0 end
                     if (weaponCycleBigger == 0) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleBigger == 1) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_BIGGER end
                     if (weaponCycleBigger == 2) then vaisseaux[1].missilePackBigger = vaisseaux[1].MSL_PKG_MUCH_BIGGER end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 3 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 3 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleQuicker = weaponCycleQuicker + 1
                     if (weaponCycleQuicker > 2) then weaponCycleQuicker = 0 end
                     if (weaponCycleQuicker == 0) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleQuicker == 1) then vaisseaux[1].missilePackQuicker = vaisseaux[1].MSL_PKG_QUICKER end
                     if (weaponCycleQuicker == 2) then vaisseaux[1].missilePackQuicker = vaisseaux[1]
                         .MSL_PKG_MUCH_QUICKER end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 4 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 4 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleLaserSight = weaponCycleLaserSight + 1
                     if (weaponCycleLaserSight > 1) then weaponCycleLaserSight = 0 end
                     if (weaponCycleLaserSight == 0) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleLaserSight == 1) then vaisseaux[1].missileLaserSight = vaisseaux[1].MSL_LASER_SIGHT end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 5 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 5 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleSinus = weaponCycleSinus + 1
                     if (weaponCycleSinus > 1) then weaponCycleSinus = 0 end
                     if (weaponCycleSinus == 0) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_PKG_STD end
                     if (weaponCycleSinus == 1) then vaisseaux[1].missileSinus = vaisseaux[1].MSL_SINUS end
-                    keyPressedDebug2 = true
-                end
-            elseif selectWeaponBar == 6 and (love.keyboard.isDown("x") or gamepadIsDown('dpup')) then
-                if not keyPressedDebug2 then
+            elseif selectWeaponBar == 6 and (keyboardWasPressed("x") or gamepadWasPressed('dpup')) then
                     weaponCycleShield = weaponCycleShield + 1
                     if (weaponCycleShield > 1) then weaponCycleShield = 0 end
                     if (weaponCycleShield == 0) then vaisseaux[1].activateShield(false) end-- deactivate infinite shield
                     if (weaponCycleShield == 1) then vaisseaux[1].activateShield(true) end-- activate infinite shield
-                    keyPressedDebug2 = true
-                end
-            else
-                keyPressedDebug2 = false
             end
         end
 
