@@ -1,7 +1,6 @@
 require("utils")
 
 local KEY_TIMER_LIMIT = 10/60               -- tempo key push (converted to seconds)
-local updateTimer = 0
 local weaponCycleLateral = 0
 local weaponCycleBigger = 0
 local weaponCycleQuicker = 0
@@ -9,8 +8,6 @@ local weaponCycleLaserSight = 0
 local weaponCycleSinus = 0
 local weaponCycleShield = 0
 
-local keyPressed = false
-local keyPressedLR = false
 local shoot_Pulse = false
 local shootMachineGun_Pulse = false
 local shootMuchMachineGun_Pulse = false
@@ -58,36 +55,20 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     end
 
     -- MENU KEYBOARD UPDATE
-    if love.keyboard.isDown("up") or gamepadIsDown('dpup') or gamepadAxisValue('lefty') < -0.5 then
-        if not keyPressed then
+    if keyboardWasPressed("up") or gamepadWasPressed('dpup') or gamepadAxisValue('lefty') < -0.5 then
             menu.positionMenu = menu.positionMenu - 1
-            keyPressed = true
-        end
-    elseif love.keyboard.isDown("down") or gamepadIsDown('dpdown') or gamepadAxisValue('lefty') > 0.5 then
-        if not keyPressed then
+    elseif keyboardWasPressed("down") or gamepadWasPressed('dpdown') or gamepadAxisValue('lefty') > 0.5 then
             menu.positionMenu = menu.positionMenu + 1
-            keyPressed = true
-        end
-    else
-        keyPressed = false
     end
 
     -- If currently on the GRAPHIC_SCALE menu, change graphics immediately with left/right
     if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
-        if love.keyboard.isDown("left") or gamepadAxisValue('leftx') < -0.5 or gamepadIsDown('dpleft') then
-            if not keyPressedLR then
+        if keyboardWasPressed("left") or gamepadAxisValue('leftx') < -0.5 or gamepadWasPressed('dpleft') then
                 GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex - 1
                 if GraphicsScaleChoiceIndex < 1 then GraphicsScaleChoiceIndex = #GraphicsScaleOptions end
-                keyPressedLR = true
-            end
-        elseif love.keyboard.isDown("right") or gamepadAxisValue('leftx') > 0.5 or gamepadIsDown('dpright') then
-            if not keyPressedLR then
+        elseif keyboardWasPressed("right") or gamepadAxisValue('leftx') > 0.5 or gamepadWasPressed('dpright') then
                 GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex + 1
                 if GraphicsScaleChoiceIndex > #GraphicsScaleOptions then GraphicsScaleChoiceIndex = 1 end
-                keyPressedLR = true
-            end
-        else
-            keyPressedLR = false
         end
     end
 
