@@ -46,7 +46,8 @@ function timerUpdate(dt, vaisseaux)
  end
 
 function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
-    local menuSize = tableLength(menu.menuValues)
+    local menuSize = tableLength(menu.values)
+    -- local menuSize = 8
 
     if (menu.positionMenu > menuSize) then
         menu.positionMenu = 1
@@ -62,7 +63,7 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
     end
 
     -- If currently on the GRAPHIC_SCALE menu, change graphics immediately with left/right
-    if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
+    if (menu.values[menu.positionMenu].label == menu.values.GRAPHIC_SCALE.label) then
         if keyboardWasPressed("left") or gamepadAxisValue('leftx') < -0.5 or gamepadWasPressed('dpleft') then
                 GraphicsScaleChoiceIndex = GraphicsScaleChoiceIndex - 1
                 if GraphicsScaleChoiceIndex < 1 then GraphicsScaleChoiceIndex = #GraphicsScaleOptions end
@@ -76,40 +77,40 @@ function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 
     if keyboardWasPressed("space") or gamepadWasPressed('a') then
         menu.startUpdateTitleRebound()
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.START]) then
-            menu.selectionMenu = menu.menuValues[menu.START]
+        if (menu.values[menu.positionMenu].label == menu.values.START.label) then
+            menu.selectionMenu = menu.values.START.label
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TUTO_PAD]) then
-            menu.selectionMenu = menu.menuValues[menu.TUTO_PAD]
+        if (menu.values[menu.positionMenu].label == menu.values.TUTO_PAD.label) then
+            menu.selectionMenu = menu.values.TUTO_PAD.label
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TUTO]) then
-            menu.selectionMenu = menu.menuValues[menu.TUTO]
+        if (menu.values[menu.positionMenu].label == menu.values.TUTO.label) then
+            menu.selectionMenu = menu.values.TUTO.label
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.TOGGLE_DEBUG]) then
+        if (menu.values[menu.positionMenu].label == menu.values.TOGGLE_DEBUG.label) then
                 if (toggleDebug == true) then
                     toggleDebug = false
                 else
                     toggleDebug = true
                 end
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.GRAPHIC_SCALE]) then
+        if (menu.values[menu.positionMenu].label == menu.values.GRAPHIC_SCALE.label) then
                 applyGraphicsChoice()
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.MUSIC]) then
+        if (menu.values[menu.positionMenu].label == menu.values.MUSIC.label) then
                 -- toggle between ON and OFF
                 MusicChoiceIndex = MusicChoiceIndex + 1
                 if MusicChoiceIndex > #MusicOptions then MusicChoiceIndex = 1 end
                 applyMusicChoice()
         end
         
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.CREDITS]) then
-            menu.selectionMenu = menu.menuValues[menu.CREDITS]
+        if (menu.values[menu.positionMenu].label == menu.values.CREDITS.label) then
+            menu.selectionMenu = menu.values.CREDITS.label
             -- creditsSound:setVolume(0.4)
             creditsSound:seek(0)  -- restart the sound from the beginning
             menu.startCredits() -- reset the credits scroll position
             love.audio.play(creditsSound)
         end
-        if (menu.menuValues[menu.positionMenu] == menu.menuValues[menu.QUIT]) then
+        if (menu.values[menu.positionMenu].label == menu.values.QUIT.label) then
             love.event.quit()
         end
     end

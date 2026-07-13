@@ -262,7 +262,7 @@ function love.load()
     -- gameSound:setVolume(0.4)
 
 	DEBUG_MODE = false
-	menu.positionMenu = menu.START
+	menu.positionMenu = menu.values.START.id
 
 	-- level.levelNumber = 1
 	level.levelDone = false
@@ -284,7 +284,7 @@ function love.update(dt) -- 60 fps by defaut
 		DEBUG_MODE, toggleDebug, creditsSound = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.START] then
+	if menu.selectionMenu == menu.values.START.label then
 		if menu.isPresentStageDone == false then
 			menu.selectionMenu = menu.PRESENT_STAGE
 			menu.timerPresentStage = 1
@@ -369,14 +369,13 @@ function love.update(dt) -- 60 fps by defaut
 			menu.isPresentStageDone = false
 		end
 	end
-
 	if menu.selectionMenu == menu.PRESENT_STAGE then
 		menu.updatePresentStage(dt)
 		particlesTransitionStage:update(dt)
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			particlesTransitionStage = nil  -- optim(TBT)
 			menu.isPresentStageDone = true
-			menu.selectionMenu = menu.menuValues[menu.START]
+			menu.selectionMenu = menu.values.START.label
 		end
 	end
 
@@ -391,19 +390,19 @@ function love.update(dt) -- 60 fps by defaut
 		end
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.TUTO_PAD] then
+	if menu.selectionMenu == menu.values.TUTO_PAD.label then
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 		end
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
+	if menu.selectionMenu == menu.values.TUTO.label then
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
 		end
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
+	if menu.selectionMenu == menu.values.CREDITS.label then
 		menu.updateResetOffsetPrintCreditsStart(dt)
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
 			menu.selectionMenu = menu.MENU -- come back to menu
@@ -433,7 +432,7 @@ function love.draw()
 		menu.presentStage(level.levelNumber, particlesTransitionStage, Assets.fonts.nerd10)
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.START] then
+	if menu.selectionMenu == menu.values.START.label then
 		love.graphics.draw(EspacePng, 0, 0, 0)
 
 		-- VAISSEAU DRAW
@@ -491,17 +490,17 @@ function love.draw()
 		menu.congratulation()
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.TUTO_PAD] then
+	if menu.selectionMenu == menu.values.TUTO_PAD.label then
 		-- love.graphics.setFont(Assets.fonts.vt12)
 		menu.gamepadShortcuts()
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.TUTO] then
+	if menu.selectionMenu == menu.values.TUTO.label then
 		love.graphics.setFont(Assets.fonts.vt12)
 		menu.shortcutsAndBonus()
 	end
 
-	if menu.selectionMenu == menu.menuValues[menu.CREDITS] then
+	if menu.selectionMenu == menu.values.CREDITS.label then
 		love.graphics.setFont(Assets.fonts.vt12)
 		menu.creditsDraw()
 	end

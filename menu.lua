@@ -2,15 +2,35 @@ Menu = {}
 Menu.new = function()
     local self = {}
 
-    self.START = 1
-    self.TUTO_PAD = 2
-    self.TUTO = 3
-    self.GRAPHIC_SCALE = 4
-    self.MUSIC = 5
-    self.TOGGLE_DEBUG = 6
-    self.CREDITS = 7
-    self.QUIT = 8
-    self.menuValues = { "START", "GAMEPAD SHORTCUTS", "KEYBOARD SHORTCUTS AND BONUS", "GRAPHIC SCALE", "MUSIC", "TOGGLE DEBUG","CREDITS", "QUIT" }
+    local START_str = "START"
+    local GAMEPAD_SHORTCUTS_str = "GAMEPAD SHORTCUTS"
+    local KEYBOARD_SHORTCUTS_AND_BONUS_str = "KEYBOARD SHORTCUTS AND BONUS"
+    local GRAPHIC_SCALE_str = "GRAPHIC SCALE"
+    local MUSIC_str = "MUSIC"
+    local TOGGLE_DEBUG_str = "TOGGLE DEBUG"
+    local CREDITS_str = "CREDITS"
+    local QUIT_str = "QUIT"
+
+    self.values = {
+        START = { id = 1, label = START_str },
+        TUTO_PAD = { id = 2, label = GAMEPAD_SHORTCUTS_str },
+        TUTO = { id = 3, label = KEYBOARD_SHORTCUTS_AND_BONUS_str },
+        GRAPHIC_SCALE = { id = 4, label = GRAPHIC_SCALE_str },
+        MUSIC = { id = 5, label = MUSIC_str },
+        TOGGLE_DEBUG = { id = 6, label = TOGGLE_DEBUG_str },
+        CREDITS = { id = 7, label = CREDITS_str },
+        QUIT = { id = 8, label = QUIT_str },
+
+        -- numeric entry
+        [1] = { label = START_str },
+        [2] = { label = GAMEPAD_SHORTCUTS_str },
+        [3] = { label = KEYBOARD_SHORTCUTS_AND_BONUS_str },
+        [4] = { label = GRAPHIC_SCALE_str },
+        [5] = { label = MUSIC_str },
+        [6] = { label = TOGGLE_DEBUG_str },
+        [7] = { label = CREDITS_str },
+        [8] = { label = QUIT_str }
+    }
 
     self.MENU = "menu"
     self.GAMEOVER = "gameover"
@@ -118,7 +138,7 @@ Menu.new = function()
 
     local function menuItemDraw(positionMenu,expectedMenu, offsetPrint)
         local OFF_SET_PRINT_DRAW = 12
-        local menuItem = self.menuValues[expectedMenu]
+        local menuItem = self.values[expectedMenu].label
         local locked = (positionMenu == expectedMenu) and true or false
 
         if (locked == true) then
@@ -134,7 +154,7 @@ Menu.new = function()
 
     local function menuItemDrawToggle(positionMenu,expectedMenu, offsetPrint, toggleDebug)
         local OFF_SET_PRINT_DRAW = 12
-        local menuItem = self.menuValues[expectedMenu]
+        local menuItem = self.values[expectedMenu].label
         local locked = (positionMenu == expectedMenu) and true or false
 
         if (locked == true) then
@@ -168,7 +188,7 @@ Menu.new = function()
 
     local function menuItemDrawScale(positionMenu, expectedMenu, offsetPrint)
         local OFF_SET_PRINT_DRAW = 12
-        local menuItem = self.menuValues[expectedMenu]
+        local menuItem = self.values[expectedMenu].label
         local locked = (positionMenu == expectedMenu) and true or false
 
         if (locked == true) then
@@ -198,7 +218,7 @@ Menu.new = function()
 
     local function menuItemDrawMusic(positionMenu, expectedMenu, offsetPrint)
         local OFF_SET_PRINT_DRAW = 12
-        local menuItem = self.menuValues[expectedMenu]
+        local menuItem = self.values[expectedMenu].label
         local locked = (positionMenu == expectedMenu) and true or false
 
         if (locked == true) then
@@ -255,14 +275,14 @@ Menu.new = function()
         -- love.graphics.print("Vertical acceleration : " .. tostring(verticalAcceleration), 50, 50)
         -- love.graphics.print("Rebound time          : " .. tostring(reboundTimer), 50, 60)
 
-        offsetPrint = menuItemDraw(self.positionMenu, self.START, offsetPrint)
-        offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO_PAD, offsetPrint)
-        offsetPrint = menuItemDraw(self.positionMenu ,self.TUTO, offsetPrint)
-        offsetPrint = menuItemDrawScale(self.positionMenu , self.GRAPHIC_SCALE, offsetPrint)
-        offsetPrint = menuItemDrawMusic(self.positionMenu , self.MUSIC, offsetPrint)
-        offsetPrint = menuItemDrawToggle(self.positionMenu ,self.TOGGLE_DEBUG, offsetPrint, toggleDebug)
-        offsetPrint = menuItemDraw(self.positionMenu , self.CREDITS, offsetPrint)
-        offsetPrint = menuItemDraw(self.positionMenu , self.QUIT, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu, self.values.START.id, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu, self.values.TUTO_PAD.id, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu, self.values.TUTO.id, offsetPrint)
+        offsetPrint = menuItemDrawScale(self.positionMenu , self.values.GRAPHIC_SCALE.id, offsetPrint)
+        offsetPrint = menuItemDrawMusic(self.positionMenu , self.values.MUSIC.id, offsetPrint)
+        offsetPrint = menuItemDrawToggle(self.positionMenu, self.values.TOGGLE_DEBUG.id, offsetPrint, toggleDebug)
+        offsetPrint = menuItemDraw(self.positionMenu , self.values.CREDITS.id, offsetPrint)
+        offsetPrint = menuItemDraw(self.positionMenu , self.values.QUIT.id, offsetPrint)
 
         offsetPrint = offsetPrint - OFF_SET_PRINT_DRAW
 
