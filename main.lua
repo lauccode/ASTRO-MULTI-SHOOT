@@ -101,7 +101,7 @@ function applyMusicChoice()
 	-- set volumes for music tracks accordingly
 	if Assets and Assets.sounds then
 		for k, src in pairs(Assets.sounds) do
-			if k:match("level") or k == "credits" or k == "menu" then
+			if k:match("level") or k == "credits" or k == "menu" or k == "presentStage" then
 				if MusicEnabled then
 					-- set a reasonable default for music
 					src:setVolume(0.4)
@@ -125,6 +125,7 @@ local shootSound = nil
 local asteroidExplosionSound= nil
 local creditsSound = nil
 local menuMusic = nil
+local presentStageMusic = nil
 local gameSound = nil
 
 menu = Menu.new()
@@ -198,6 +199,7 @@ Assets = {
 		bonusCollect = love.audio.newSource("sound/freesound_community-coin-upaif-14631.mp3", "static"),
         credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
 		menu = love.audio.newSource("music/nathanielthomasbrack-8-bit-loop-189494.mp3", "stream"),
+		presentStage = love.audio.newSource("music/bombinsound-football-football-soccer-game-music-08-second-490554.mp3", "stream"),
         level1 = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream"),
         level2 = love.audio.newSource("music/Jaunter-Reset.mp3", "stream"),
         level3 = love.audio.newSource("music/KarolPiczak-LesChampsEtoiles.mp3", "stream"),
@@ -214,6 +216,16 @@ local function updateMenuMusic()
 		end
 	elseif menuMusic:isPlaying() then
 		menuMusic:stop()
+	end
+end
+
+local function updatePresentStageMusic()
+	if menu.selectionMenu == menu.PRESENT_STAGE then
+		if MusicEnabled and not presentStageMusic:isPlaying() then
+			presentStageMusic:play()
+		end
+	elseif presentStageMusic:isPlaying() then
+		presentStageMusic:stop()
 	end
 end
 
@@ -237,7 +249,6 @@ local function resetGame()
 	missiles = {}
 	bonuss = {}
 	asteroidExplosions = {}
-	menu.isPresentStageDone = false
 	megaBombEffects = {}
 	-- img = love.graphics.newImage("sprites/star.png")
 	particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
@@ -272,7 +283,10 @@ function love.load()
 	creditsSound = Assets.sounds.credits
 	menuMusic = Assets.sounds.menu
 	menuMusic:setLooping(true)
+	presentStageMusic = Assets.sounds.presentStage
+	presentStageMusic:setLooping(true)
 	updateMenuMusic()
+	updatePresentStageMusic()
 
     -- gameSound = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream")
     -- gameSound:setVolume(0.4)
@@ -302,10 +316,17 @@ function love.update(dt) -- 60 fps by defaut
 
 	if menu.selectionMenu == menu.values.START.label then
 		if menu.isPresentStageDone == false then
+			if gameSound ~= nil then
+				love.audio.stop(gameSound)
+			end
+			if particlesTransitionStage == nil then
+				particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
+			end
 			menu.selectionMenu = menu.PRESENT_STAGE
 			menu.timerPresentStage = 1
 		end
 
+		if menu.isPresentStageDone then
 		-- level manager
 		if level.levelDone == false then
 			if level.levelNumber > 1 then
@@ -384,6 +405,7 @@ function love.update(dt) -- 60 fps by defaut
 			level.levelDone = false
 			menu.isPresentStageDone = false
 		end
+		end
 	end
 	if menu.selectionMenu == menu.PRESENT_STAGE then
 		menu.updatePresentStage(dt)
@@ -426,6 +448,7 @@ function love.update(dt) -- 60 fps by defaut
 		end
 	end
 	updateMenuMusic()
+	updatePresentStageMusic()
 end
 
 --  ██████  ██████   █████  ██     ██
@@ -450,7 +473,9 @@ function love.draw()
 	end
 
 	if menu.selectionMenu == menu.values.START.label then
-		love.graphics.draw(EspacePng, 0, 0, 0)
+		if EspacePng ~= nil then
+			love.graphics.draw(EspacePng, 0, 0, 0)
+		end
 
 		-- VAISSEAU DRAW
 		if vaisseaux[1] ~= nil then

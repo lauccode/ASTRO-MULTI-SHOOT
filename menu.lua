@@ -334,6 +334,12 @@ Menu.new = function()
         printNextCredit("Pixabay license: https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=189494")
         printNextCredit("")
 
+        printNextCredit("V bombinsound-football-football-soccer-game-music-08-second-490554.mp3", true)
+        printNextCredit("Sound Effect by Bomb Sound from Pixabay")
+        printNextCredit("Sound Effect from https://pixabay.com/users/bombinsound-54782632/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=490554")
+        printNextCredit("Pixabay license: https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=490554")
+        printNextCredit("")
+
         printNextCredit("V Music For level 1", true)
         printNextCredit("Titre:  Starcade")
         printNextCredit("Auteur: Blue Navi")
