@@ -127,6 +127,7 @@ local creditsSound = nil
 local menuMusic = nil
 local presentStageMusic = nil
 local gameSound = nil
+local gameOverFollowupPending = false
 
 menu = Menu.new()
 level = Level.new()
@@ -197,6 +198,8 @@ Assets = {
         shoot = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "static"),
 		vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
 		bonusCollect = love.audio.newSource("sound/freesound_community-coin-upaif-14631.mp3", "static"),
+		gameOver = love.audio.newSource("sound/freesound_community-080205_life-lost-game-over-89697.mp3", "static"),
+		gameOverFollowup = love.audio.newSource("sound/tuomas_data-game-over-31-179699.mp3", "static"),
         credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
 		menu = love.audio.newSource("music/nathanielthomasbrack-8-bit-loop-189494.mp3", "stream"),
 		presentStage = love.audio.newSource("music/bombinsound-football-football-soccer-game-music-08-second-490554.mp3", "stream"),
@@ -391,6 +394,8 @@ function love.update(dt) -- 60 fps by defaut
 		if gameOver then
 			menu.selectionMenu = menu.GAMEOVER
 			love.audio.stop(gameSound)
+			love.audio.play(Assets.sounds.gameOver)
+			gameOverFollowupPending = true
 			level.levelNumber = 1
 			level.levelDone = false
 			menu.isPresentStageDone = false
@@ -446,6 +451,10 @@ function love.update(dt) -- 60 fps by defaut
 			menu.selectionMenu = menu.MENU -- come back to menu
 			love.audio.stop(creditsSound)
 		end
+	end
+	if gameOverFollowupPending and not Assets.sounds.gameOver:isPlaying() then
+		love.audio.play(Assets.sounds.gameOverFollowup)
+		gameOverFollowupPending = false
 	end
 	updateMenuMusic()
 	updatePresentStageMusic()

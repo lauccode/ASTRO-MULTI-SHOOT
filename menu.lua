@@ -416,6 +416,18 @@ Menu.new = function()
         printNextCredit("https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=14631")
         printNextCredit("")
 
+        printNextCredit("V freesound_community-080205_life-lost-game-over-89697.mp3", true)
+        printNextCredit("Sound Effect by freesound_community from Pixabay")
+        printNextCredit("Sound Effect from https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=89697")
+        printNextCredit("Pixabay license: https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=89697")
+        printNextCredit("")
+
+        printNextCredit("V tuomas_data-game-over-31-179699.mp3", true)
+        printNextCredit("Sound Effect by Tuomas_Data from Pixabay")
+        printNextCredit("Sound Effect from https://pixabay.com/users/tuomas_data-40753689/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=179699")
+        printNextCredit("Pixabay license: https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=179699")
+        printNextCredit("")
+
         printNextCredit("V BACKGROUNDS", true)
         printNextCredit("Backgrounds are coming from :")
         printNextCredit("https://screamingbrainstudios.itch.io/seamless-space-backgrounds")
