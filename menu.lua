@@ -328,6 +328,12 @@ Menu.new = function()
         printNextCredit("************************ 'space' or Gamepad A to quit ***************************", true)
         printNextCredit("")
 
+        printNextCredit("V nathanielthomasbrack-8-bit-loop-189494.mp3", true)
+        printNextCredit("Sound Effect by Nathaniel Brack from Pixabay")
+        printNextCredit("Sound Effect from https://pixabay.com/users/nathanielthomasbrack-42191861/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=189494")
+        printNextCredit("Pixabay license: https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=189494")
+        printNextCredit("")
+
         printNextCredit("V Music For level 1", true)
         printNextCredit("Titre:  Starcade")
         printNextCredit("Auteur: Blue Navi")

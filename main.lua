@@ -101,7 +101,7 @@ function applyMusicChoice()
 	-- set volumes for music tracks accordingly
 	if Assets and Assets.sounds then
 		for k, src in pairs(Assets.sounds) do
-			if k:match("level") or k == "credits" then
+			if k:match("level") or k == "credits" or k == "menu" then
 				if MusicEnabled then
 					-- set a reasonable default for music
 					src:setVolume(0.4)
@@ -124,6 +124,7 @@ local vaisseauImpactSound = nil
 local shootSound = nil
 local asteroidExplosionSound= nil
 local creditsSound = nil
+local menuMusic = nil
 local gameSound = nil
 
 menu = Menu.new()
@@ -196,6 +197,7 @@ Assets = {
 		vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
 		bonusCollect = love.audio.newSource("sound/freesound_community-coin-upaif-14631.mp3", "static"),
         credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
+		menu = love.audio.newSource("music/nathanielthomasbrack-8-bit-loop-189494.mp3", "stream"),
         level1 = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream"),
         level2 = love.audio.newSource("music/Jaunter-Reset.mp3", "stream"),
         level3 = love.audio.newSource("music/KarolPiczak-LesChampsEtoiles.mp3", "stream"),
@@ -204,6 +206,16 @@ Assets = {
         level6 = love.audio.newSource("music/LukeHall-Dystopia.mp3", "stream"),
     }
 }
+
+local function updateMenuMusic()
+	if menu.selectionMenu == menu.MENU then
+		if MusicEnabled and not menuMusic:isPlaying() then
+			menuMusic:play()
+		end
+	elseif menuMusic:isPlaying() then
+		menuMusic:stop()
+	end
+end
 
 -- ██       ██████   █████  ██████
 -- ██      ██    ██ ██   ██ ██   ██
@@ -258,6 +270,9 @@ function love.load()
 	vaisseauImpactSound = Assets.sounds.vaisseauImpact
 	vaisseauImpactSound:setVolume(1)
 	creditsSound = Assets.sounds.credits
+	menuMusic = Assets.sounds.menu
+	menuMusic:setLooping(true)
+	updateMenuMusic()
 
     -- gameSound = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream")
     -- gameSound:setVolume(0.4)
@@ -410,6 +425,7 @@ function love.update(dt) -- 60 fps by defaut
 			love.audio.stop(creditsSound)
 		end
 	end
+	updateMenuMusic()
 end
 
 --  ██████  ██████   █████  ██     ██
