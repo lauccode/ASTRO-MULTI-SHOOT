@@ -258,7 +258,7 @@ function CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaissea
 end
 
 -- Vaisseaux <-> Bonus
-function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
+function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss, bonusCollectSound)
     local objects_to_manage, object_number, objects_to_manage2, object_number2 = findFirstCollisionSimple(vaisseaux, bonuss)
     if vaisseaux[objects_to_manage[object_number]] and bonuss[objects_to_manage2[object_number2]] then
         for i = #objects_to_manage, 1, -1 do
@@ -291,6 +291,7 @@ function CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
                 if bonus.bonus == bonus.MSL_SINUS then
                     vaisseau.missileSinus = vaisseau.MSL_SINUS
                 end
+                love.audio.play(bonusCollectSound)
                 table.remove(bonuss, objects_to_manage2[j])
             end
         end

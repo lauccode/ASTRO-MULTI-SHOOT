@@ -193,7 +193,8 @@ Assets = {
     sounds = {
         explosionAsteroid = love.audio.newSource("sound/explosion_asteroid-101886.mp3", "static"),
         shoot = love.audio.newSource("sound/8-bit-cannon-fire-96505.mp3", "static"),
-        vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
+		vaisseauImpact = love.audio.newSource("sound/hurt_c_08-102842.mp3", "static"),
+		bonusCollect = love.audio.newSource("sound/freesound_community-coin-upaif-14631.mp3", "static"),
         credits = love.audio.newSource("music/retro-wave-style-track-59892.mp3", "stream"),
         level1 = love.audio.newSource("music/BlueNavi-Starcade.mp3", "stream"),
         level2 = love.audio.newSource("music/Jaunter-Reset.mp3", "stream"),
@@ -348,7 +349,7 @@ function love.update(dt) -- 60 fps by defaut
 		-----------------------------------------
 		CollisionManagerAsteroids(dt, asteroids, asteroids)
 		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
-		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss)
+		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss, Assets.sounds.bonusCollect)
 		CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux, toggleDebug)
 		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
 		if gameOver then

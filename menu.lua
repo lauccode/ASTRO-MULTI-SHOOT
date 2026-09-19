@@ -397,6 +397,13 @@ Menu.new = function()
         printNextCredit("Pixabay license://pixabay.com/sound-effects/retro-wave-style-track-59892/")
         printNextCredit("")
 
+        printNextCredit("V freesound_community-coin-upaif-14631.mp3", true)
+        printNextCredit("Sound Effect by freesound_community")
+        printNextCredit("https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=14631")
+        printNextCredit("from Pixabay")
+        printNextCredit("https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=14631")
+        printNextCredit("")
+
         printNextCredit("V BACKGROUNDS", true)
         printNextCredit("Backgrounds are coming from :")
         printNextCredit("https://screamingbrainstudios.itch.io/seamless-space-backgrounds")
