@@ -310,21 +310,25 @@ Menu.new = function()
     local function printNextCredit(stringToPrint, setRedColor)
         local OFF_SET_PRINT_CREDITS = 10
         local HORIZONTAL_POSITION = 50
+        local MAX_CREDIT_WIDTH = SCREEN_WIDTH - HORIZONTAL_POSITION - 12
         setRedColor = setRedColor or false
+        local _, wrappedLines = love.graphics.getFont():getWrap(stringToPrint, MAX_CREDIT_WIDTH)
         if (setRedColor) then
             love.graphics.setColor(255 / 255, 165 / 255, 0 / 255) -- orange
-            love.graphics.print(stringToPrint, HORIZONTAL_POSITION, SCREEN_HIGH + offsetPrintCredits)
-            love.graphics.setColor(255, 255, 255, 255)            -- reset
-        else
-            love.graphics.print(stringToPrint, HORIZONTAL_POSITION, SCREEN_HIGH + offsetPrintCredits)
         end
-        offsetPrintCredits = offsetPrintCredits + OFF_SET_PRINT_CREDITS
+        for _, line in ipairs(wrappedLines) do
+            love.graphics.print(line, HORIZONTAL_POSITION, SCREEN_HIGH + offsetPrintCredits)
+            offsetPrintCredits = offsetPrintCredits + OFF_SET_PRINT_CREDITS
+        end
+        if (setRedColor) then
+            love.graphics.setColor(255, 255, 255, 255)            -- reset
+        end
     end
 
     function self.creditsDraw()
         offsetPrintCredits = offsetPrintCreditsStart
 
-        printNextCredit("********************************* CREDITS ***********************************", true)
+        printNextCredit("********************************* CREDITS ***************************************", true)
         printNextCredit("************************ 'space' or Gamepad A to quit ***************************", true)
         printNextCredit("")
 
