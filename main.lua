@@ -309,122 +309,29 @@ end
 -- ██    ██ ██      ██   ██ ██   ██    ██    ██
 --  ██████  ██      ██████  ██   ██    ██    ███████
 
-function love.update(dt) -- 60 fps by defaut
-	timerUpdate(dt, vaisseaux)
-
-	if menu.selectionMenu == menu.MENU then
+local function updateMainMenu(selection, dt)
+	if selection == menu.MENU then
 		menu.updateTitleRebound(dt)
 		DEBUG_MODE, toggleDebug, creditsSound = keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
 	end
+end
 
-	if menu.selectionMenu == menu.values.START.label then
-		if menu.isPresentStageDone == false then
-			if gameSound ~= nil then
-				love.audio.stop(gameSound)
-			end
-			if particlesTransitionStage == nil then
-				particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
-			end
-			menu.selectionMenu = menu.PRESENT_STAGE
-			menu.timerPresentStage = 1
-		end
-
-		if menu.isPresentStageDone then
-		-- level manager
-		if level.levelDone == false then
-			if level.levelNumber > 1 then
-				-- love.load() -- reset all before new level
-				resetGame()
-				if toggleDebug then
-            		vaisseaux[1].timeShieldStart = 0 --seconds
-					if vaisseaux[1].resetMegaBomb then
-						vaisseaux[1].resetMegaBomb()
-					else
-						vaisseaux[1].megaBombUsed = false
-					end
-				else
-					resetVaisseau()
-				end
-			end
-			asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
-			level.levelDone = true
-		end
-		DEBUG_MODE, gameSound = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, shootSound, dt)
-
-		asteroidsUpdate(dt, asteroids)
-		missilesUpdate(dt, vaisseaux, missiles)
-		if vaisseaux[1].update then
-			vaisseaux[1].update(dt)
-		end
-
-		for megaBombEffect_it = #megaBombEffects, 1, -1 do
-			local effect = megaBombEffects[megaBombEffect_it]
-			if effect then
-				local result = effect:update(dt)
-				if result == "kill" then
-					table.remove(megaBombEffects, megaBombEffect_it)
-				end
-			end
-		end
-
-        -- update explosion
-        local removeAsteroidExplosionNumber = nil
-        for asteroDivExplosion_it = 1, #asteroidExplosions do
-            if asteroidExplosions[asteroDivExplosion_it].asteroDivisionExplosion == false then
-                removeAsteroidExplosionNumber = asteroDivExplosion_it
-            end
-			asteroidExplosions[asteroDivExplosion_it].particlesExplosionLifeDurationUpdate(dt)
-			asteroidExplosions[asteroDivExplosion_it].particlesAsteroDivExplosionUpdate(dt)
-			if asteroidExplosions[asteroDivExplosion_it].update then
-				asteroidExplosions[asteroDivExplosion_it].update(dt)
-			end
-        end
-        if (removeAsteroidExplosionNumber ~= nil) then
-                table.remove(asteroidExplosions, removeAsteroidExplosionNumber) -- remove objects from table
-        end
-
-		-----------------------------------------
-		-- COLLISION MANAGER (REFACTORED) --
-		-----------------------------------------
-		CollisionManagerAsteroids(dt, asteroids, asteroids)
-		CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
-		CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss, Assets.sounds.bonusCollect)
-		CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux, toggleDebug)
-		local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
-		if gameOver then
-			menu.selectionMenu = menu.GAMEOVER
-			love.audio.stop(gameSound)
-			love.audio.play(Assets.sounds.gameOver)
-			gameOverFollowupPending = true
-			level.levelNumber = 1
-			level.levelDone = false
-			menu.isPresentStageDone = false
-		elseif level.levelNumber == level.MAX_LEVEL_NUMBER then
-			menu.selectionMenu = menu.CONGRATULATION
-			love.audio.stop(gameSound)
-			level.levelNumber = 1
-			level.levelDone = false
-			menu.isPresentStageDone = false
-		elseif next(asteroids) == nil then
-			level.levelNumber = level.levelNumber + 1
-			level.levelDone = false
-			menu.isPresentStageDone = false
-		end
-		end
-	end
-	if menu.selectionMenu == menu.PRESENT_STAGE then
+local function updatePresentStageMenu(selection, dt)
+	if selection == menu.PRESENT_STAGE then
 		menu.updatePresentStage(dt)
 		particlesTransitionStage:update(dt)
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
-			particlesTransitionStage = nil  -- optim(TBT)
+			particlesTransitionStage = nil
 			menu.isPresentStageDone = true
 			menu.selectionMenu = menu.values.START.label
 		end
 	end
+end
 
-	if menu.selectionMenu == menu.GAMEOVER or menu.selectionMenu == menu.CONGRATULATION then
+local function updateEndScreenMenu(selection)
+	if selection == menu.GAMEOVER or selection == menu.CONGRATULATION then
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
-			menu.selectionMenu = menu.MENU -- come back to menu
+			menu.selectionMenu = menu.MENU
 			love.audio.stop(gameSound)
 			level.levelNumber = 1
 			level.levelDone = false
@@ -432,26 +339,145 @@ function love.update(dt) -- 60 fps by defaut
 			resetVaisseau()
 		end
 	end
+end
 
-	if menu.selectionMenu == menu.values.TUTO_PAD.label then
+local function updateTutorialMenu(selection)
+	if selection == menu.values.TUTO_PAD.label or selection == menu.values.TUTO.label then
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
-			menu.selectionMenu = menu.MENU -- come back to menu
+			menu.selectionMenu = menu.MENU
 		end
 	end
+end
 
-	if menu.selectionMenu == menu.values.TUTO.label then
-		if keyboardWasPressed("space") or gamepadWasPressed('a') then
-			menu.selectionMenu = menu.MENU -- come back to menu
-		end
-	end
-
-	if menu.selectionMenu == menu.values.CREDITS.label then
+local function updateCreditsMenu(selection, dt)
+	if selection == menu.values.CREDITS.label then
 		menu.updateResetOffsetPrintCreditsStart(dt)
 		if keyboardWasPressed("space") or gamepadWasPressed('a') then
-			menu.selectionMenu = menu.MENU -- come back to menu
+			menu.selectionMenu = menu.MENU
 			love.audio.stop(creditsSound)
 		end
 	end
+end
+
+local function updateMenuScreens(dt)
+	local selection = menu.selectionMenu
+	updateMainMenu(selection, dt)
+	updatePresentStageMenu(selection, dt)
+	updateEndScreenMenu(selection)
+	updateTutorialMenu(selection)
+	updateCreditsMenu(selection, dt)
+end
+
+local function startPresentStage()
+	if gameSound ~= nil then
+		love.audio.stop(gameSound)
+	end
+	if particlesTransitionStage == nil then
+		particlesTransitionStage = love.graphics.newParticleSystem(Assets.images.star, 450)
+	end
+	menu.selectionMenu = menu.PRESENT_STAGE
+	menu.timerPresentStage = 1
+end
+
+local function initializeLevel()
+	if level.levelNumber > 1 then
+		resetGame()
+		if toggleDebug then
+			vaisseaux[1].timeShieldStart = 0
+			if vaisseaux[1].resetMegaBomb then
+				vaisseaux[1].resetMegaBomb()
+			else
+				vaisseaux[1].megaBombUsed = false
+			end
+		else
+			resetVaisseau()
+		end
+	end
+	asteroids, gameSound = level.levelManager(vaisseaux, asteroids, gameSound)
+	level.levelDone = true
+end
+
+local function updateGameEntities(dt)
+	asteroidsUpdate(dt, asteroids)
+	missilesUpdate(dt, vaisseaux, missiles)
+	if vaisseaux[1].update then
+		vaisseaux[1].update(dt)
+	end
+end
+
+local function updateMegaBombEffects(dt)
+	for megaBombEffect_it = #megaBombEffects, 1, -1 do
+		local effect = megaBombEffects[megaBombEffect_it]
+		if effect then
+			local result = effect:update(dt)
+			if result == "kill" then
+				table.remove(megaBombEffects, megaBombEffect_it)
+			end
+		end
+	end
+end
+
+local function updateAsteroidExplosions(dt)
+	local removeAsteroidExplosionNumber = nil
+	for asteroDivExplosion_it = 1, #asteroidExplosions do
+		local explosion = asteroidExplosions[asteroDivExplosion_it]
+		if explosion.asteroDivisionExplosion == false then
+			removeAsteroidExplosionNumber = asteroDivExplosion_it
+		end
+		explosion.particlesExplosionLifeDurationUpdate(dt)
+		explosion.particlesAsteroDivExplosionUpdate(dt)
+		if explosion.update then
+			explosion.update(dt)
+		end
+	end
+	if removeAsteroidExplosionNumber ~= nil then
+		table.remove(asteroidExplosions, removeAsteroidExplosionNumber)
+	end
+end
+
+function love.update(dt) -- 60 fps by defaut
+	timerUpdate(dt, vaisseaux)
+	updateMenuScreens(dt)
+
+	if menu.selectionMenu == menu.values.START.label then
+		if menu.isPresentStageDone == false then
+			startPresentStage()
+		else
+			if not level.levelDone then
+				initializeLevel()
+			end
+			DEBUG_MODE, gameSound = keyboardUpdate(vaisseaux, missiles, DEBUG_MODE, menu, level, toggleDebug, gameSound, shootSound, dt)
+			updateGameEntities(dt)
+			updateMegaBombEffects(dt)
+			updateAsteroidExplosions(dt)
+
+			CollisionManagerAsteroids(dt, asteroids, asteroids)
+			CollisionManagerAsteroidsAndMissiles(missiles, asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux)
+			CollisionManagerVaisseauxAndBonus(dt, level, vaisseaux, bonuss, Assets.sounds.bonusCollect)
+			CollisionManagerMegaBomb(asteroids, asteroidExplosions, bonuss, asteroidExplosionSound, vaisseaux, toggleDebug)
+			local gameOver = CollisionManagerVaisseauxAndAsteroids(dt, vaisseaux, asteroids, vaisseauImpactSound)
+			if gameOver then
+				menu.selectionMenu = menu.GAMEOVER
+				love.audio.stop(gameSound)
+				love.audio.play(Assets.sounds.gameOver)
+				gameOverFollowupPending = true
+				level.levelNumber = 1
+				level.levelDone = false
+				menu.isPresentStageDone = false
+			elseif level.levelNumber == level.MAX_LEVEL_NUMBER then
+				menu.selectionMenu = menu.CONGRATULATION
+				love.audio.stop(gameSound)
+				level.levelNumber = 1
+				level.levelDone = false
+				menu.isPresentStageDone = false
+			elseif next(asteroids) == nil then
+				level.levelNumber = level.levelNumber + 1
+				level.levelDone = false
+				menu.isPresentStageDone = false
+			end
+		end
+	end
+
 	if gameOverFollowupPending and not Assets.sounds.gameOver:isPlaying() then
 		love.audio.play(Assets.sounds.gameOverFollowup)
 		gameOverFollowupPending = false

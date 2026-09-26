@@ -46,20 +46,19 @@ function timerUpdate(dt, vaisseaux)
  end
 
 function keyboardMenuUpdate(DEBUG_MODE, menu, toggleDebug, creditsSound)
-    local menuSize = tableLength(menu.values)
-    -- local menuSize = 8
-
-    if (menu.positionMenu > menuSize) then
-        menu.positionMenu = 1
-    elseif (menu.positionMenu < 1) then
-        menu.positionMenu = menuSize
-    end
+    local menuSize = #menu.values
 
     -- MENU KEYBOARD UPDATE
     if keyboardWasPressed("up") or gamepadWasPressed('dpup') or gamepadAxisValue('lefty') < -0.5 then
             menu.positionMenu = menu.positionMenu - 1
     elseif keyboardWasPressed("down") or gamepadWasPressed('dpdown') or gamepadAxisValue('lefty') > 0.5 then
             menu.positionMenu = menu.positionMenu + 1
+    end
+
+    if menu.positionMenu > menuSize then
+        menu.positionMenu = 1
+    elseif menu.positionMenu < 1 then
+        menu.positionMenu = menuSize
     end
 
     -- If currently on the GRAPHIC_SCALE menu, change graphics immediately with left/right
