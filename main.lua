@@ -181,7 +181,7 @@ Assets = {
 		muzzleFlash = love.graphics.newImage("sprites/muzzle_flash.png"),
 		animation12 = love.graphics.newImage("sprites/animation_1_2.png"),
 		megabomb = love.graphics.newImage("sprites/mega_bomb.png"),
-		megabombshader = love.graphics.newImage("sprites/mega_bomb_shader.png")
+		megabombshader = love.graphics.newImage("sprites/mega_bomb_shader_skull.png")
     },
 	fonts = {
 		nerd10 = love.graphics.newFont("fonts/HeavyData/HeavyDataNerdFont-Regular.ttf", 10),

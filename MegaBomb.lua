@@ -6,8 +6,8 @@ function MegaBomb.new(x, y)
 	self.x = x or 0
 	self.y = y or 0
 	self.l = 0.08
-	self.maxL = 1.5
-	self.growthSpeed = 0.028
+	self.maxL = 3
+	self.growthSpeed = 0.018
 	self.img = nil
 	if Assets and Assets.images and Assets.images.megabomb then
 		self.img = Assets.images.megabomb
@@ -49,20 +49,13 @@ function MegaBomb:update(dt)
 
 	-- shaders
 	self.ls = self.ls + 0.015
-	if self.ls >= 1 then return "kill" end
+	if self.ls >= 5 then return "kill" end
 end
 
 function MegaBomb:draw()
 	if not self.img then
 		return
 	end
-
-	-- shaders
-	love.graphics.setColor(1, 1, 1, (1 - self.ls) ^ 3)
-	local s = self.ls * 50
-	local o = self.imgshader:getWidth() / 2
-	love.graphics.draw(self.imgshader, self.x, self.y, 0, s, s, o, o)
-	love.graphics.setColor(1, 1, 1, 1)
 
 	local alpha = math.max(0, 1 - (self.l / self.maxL))
 	love.graphics.setColor(1, 1, 1, alpha ^ 1.2)
@@ -73,6 +66,14 @@ function MegaBomb:draw()
 	love.graphics.setColor(1, 1, 1, alpha ^ 2 * 0.5)
 	local s2 = self.l * 16
 	love.graphics.draw(self.img, self.x, self.y, 0, s2, s2, o, o)
+	love.graphics.setColor(1, 1, 1, 1)
+
+	-- shaders
+	-- love.graphics.setColor(1, 1, 1, (1 - self.ls) ^ 3)
+	love.graphics.setColor(1, 1, 1, (1 - self.ls))
+	local s = self.ls * 10
+	local o = self.imgshader:getWidth() / 2
+	love.graphics.draw(self.imgshader, self.x, self.y, 0, s, s, o, o)
 	love.graphics.setColor(1, 1, 1, 1)
 
 end
